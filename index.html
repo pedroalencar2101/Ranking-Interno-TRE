@@ -377,8 +377,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+
     <script>
-        // Renderização Dinâmica 
+        // ==========================================
+        // 1. INICIALIZAÇÃO DO FIREBASE (Suas chaves)
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0",
+            authDomain: "tre-ranking.firebaseapp.com",
+            projectId: "tre-ranking",
+            storageBucket: "tre-ranking.firebasestorage.app",
+            messagingSenderId: "1008986456536",
+            appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad"
+        };
+
+        // Ligar os motores do Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // ==========================================
+        // 2. DADOS E RENDERIZAÇÃO DO PÓDIO
+        // ==========================================
         const dadosRanking = [
             { posicao: 1, nick: "G4VET4", pontos: 185 }, { posicao: 2, nick: "benjlfbaby", pontos: 150 }, { posicao: 3, nick: "BeGomes94.", pontos: 130 },
             { posicao: 4, nick: "Granno", pontos: 110 }, { posicao: 5, nick: "@Allyzon", pontos: 95 }, { posicao: 6, nick: "andrej0128s", pontos: 80 },
@@ -391,6 +414,7 @@
 
         const podiumContainer = document.getElementById('podium-container');
         const ordemPodio = [dadosRanking[1], dadosRanking[0], dadosRanking[2]]; 
+
         ordemPodio.forEach(membro => {
             if(!membro) return;
             let orderClass = membro.posicao === 1 ? "order-2" : membro.posicao === 2 ? "order-1" : "order-3";
@@ -441,19 +465,13 @@
         });
 
         // ==========================================
-        // LÓGICA DE INTERAÇÕES E MODAIS
+        // 3. LÓGICA DE INTERAÇÕES E MODAIS
         // ==========================================
         function toggleModal(id) {
             const modal = document.getElementById(id);
-            
-            // Lógica para resetar a view do modal de login
-            if(id === 'modal-login' && modal.classList.contains('opacity-0')){
-                switchView('login'); 
-            }
+            if(id === 'modal-login' && modal.classList.contains('opacity-0')){ switchView('login'); }
 
-            // Seleciona a caixa interna responsável pela animação de Scale
             const content = modal.querySelector('div.relative.transform');
-            
             if (modal.classList.contains('opacity-0')) {
                 modal.classList.remove('opacity-0', 'invisible');
                 setTimeout(() => content.classList.replace('scale-95', 'scale-100'), 10);
@@ -463,47 +481,34 @@
             }
         }
 
-        // NOVO MOTOR DE TROCA DE TELAS (BLINDADO CONTRA COLAPSO DE CONTAINER)
         function switchView(view) {
             const viewLogin = document.getElementById('view-login');
             const viewRegister = document.getElementById('view-register');
             const viewFeedback = document.getElementById('view-feedback');
 
-            // Primeiro: Fade Out na view atual
             viewLogin.classList.add('opacity-0');
             viewRegister.classList.add('opacity-0');
             viewFeedback.classList.add('opacity-0');
             
             setTimeout(() => {
-                // Esconde as telas e as remove do fluxo (para o container adaptar o tamanho a nova tela)
-                viewLogin.classList.add('hidden');
-                viewLogin.classList.remove('block');
+                viewLogin.classList.add('hidden'); viewLogin.classList.remove('block');
+                viewRegister.classList.add('hidden'); viewRegister.classList.remove('block'); viewRegister.classList.add('translate-x-4');
+                viewFeedback.classList.add('hidden'); viewFeedback.classList.remove('flex'); viewFeedback.classList.add('translate-y-4');
                 
-                viewRegister.classList.add('hidden');
-                viewRegister.classList.remove('block');
-                viewRegister.classList.add('translate-x-4');
-                
-                viewFeedback.classList.add('hidden');
-                viewFeedback.classList.remove('flex');
-                viewFeedback.classList.add('translate-y-4');
-                
-                // Mostra a tela selecionada e aplica o fadeIn
                 if(view === 'login') {
-                    viewLogin.classList.remove('hidden');
-                    viewLogin.classList.add('block');
+                    viewLogin.classList.remove('hidden'); viewLogin.classList.add('block');
                     setTimeout(() => viewLogin.classList.remove('opacity-0'), 50);
                 } else if(view === 'register') {
-                    viewRegister.classList.remove('hidden');
-                    viewRegister.classList.add('block');
+                    viewRegister.classList.remove('hidden'); viewRegister.classList.add('block');
                     setTimeout(() => viewRegister.classList.remove('opacity-0', 'translate-x-4'), 50);
                 } else if(view === 'feedback') {
-                    viewFeedback.classList.remove('hidden');
-                    viewFeedback.classList.add('flex');
+                    viewFeedback.classList.remove('hidden'); viewFeedback.classList.add('flex');
                     setTimeout(() => viewFeedback.classList.remove('opacity-0', 'translate-y-4'), 50);
                 }
             }, 200);
         }
 
+        // Lógica Falsa de Cadastro (Substituiremos pelo Firebase Auth depois)
         function enviarCadastro(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-cadastro');
@@ -515,11 +520,13 @@
             }, 1000);
         }
 
+        // Lógica Falsa de Login (Substituiremos pelo Firebase Auth depois)
         function realizarLogin(e) {
             e.preventDefault();
             window.location.href = 'admin.html';
         }
 
+        // Grade de Atividades
         const activityCards = document.querySelectorAll('.js-activity-card');
         const hiddenInput = document.getElementById('form-categoria-hidden');
         activityCards.forEach(card => {
@@ -541,7 +548,51 @@
             toggleDropdown();
         }
 
-        // ANIMAÇÕES GSAP
+        // ==========================================
+        // 4. ENVIO PARA O FIREBASE
+        // ==========================================
+        const form = document.getElementById('form-atividade');
+        const btnEnviar = document.getElementById('btn-enviar-form');
+        const feedback = document.getElementById('feedback-form');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            btnEnviar.disabled = true;
+            btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+            
+            const nickValue = document.getElementById('form-nick').value;
+            const provaValue = document.getElementById('form-prova').value;
+            const categoriaValue = hiddenInput.value;
+
+            // Salvando no Banco de Dados (Firestore)
+            db.collection("postagens").add({
+                nick: nickValue,
+                categoria: categoriaValue,
+                prova: provaValue,
+                status: "Pendente",
+                dataEnvio: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                feedback.innerText = "Sucesso! Postagem enviada para análise.";
+                feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
+                form.reset();
+                activityCards.forEach(c => c.classList.remove('active'));
+                hiddenInput.value = "";
+            })
+            .catch(error => {
+                console.error("Erro ao enviar:", error);
+                feedback.innerText = "Erro ao enviar. Tente novamente.";
+                feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+            })
+            .finally(() => {
+                btnEnviar.disabled = false;
+                btnEnviar.innerHTML = 'Enviar Postagem para Análise';
+            });
+        });
+
+        // ==========================================
+        // 5. ANIMAÇÕES GSAP
+        // ==========================================
         window.addEventListener('load', () => {
             const tl = gsap.timeline();
             tl.to("#anim-header", { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" })
@@ -552,5 +603,4 @@
 
         VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 6, speed: 1200, glare: true, "max-glare": 0.1 });
     </script>
-</body>
 </html>
