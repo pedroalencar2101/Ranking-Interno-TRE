@@ -6,7 +6,7 @@
     <title>Ranking Oficial | Treinadores</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
@@ -16,15 +16,9 @@
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         tre: {
-                            bgDark: '#120203', // Mais profundo para destacar o vermelho
                             brand: '#D31522',
                             brandHover: '#FA1C2A',
-                            glassNav: 'rgba(58, 10, 14, 0.75)', // Vermelho translúcido para a navbar
-                        },
-                        medal: {
-                            gold: '#FFD700',
-                            silver: '#E3E4E5',
-                            bronze: '#CD7F32'
+                            glassNav: 'rgba(58, 10, 14, 0.75)',
                         }
                     }
                 }
@@ -39,74 +33,48 @@
             min-height: 100vh;
             background-attachment: fixed;
         }
-
-        /* Efeito Glassmorphism Premium */
         .glass-panel {
             background: rgba(25, 5, 6, 0.5);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.4s ease;
         }
-
         .glass-panel:hover {
             background: rgba(45, 8, 11, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.12);
             transform: translateY(-4px);
         }
-
-        /* Navbar Específica */
         .glass-navbar {
             background: theme('colors.tre.glassNav');
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(211, 21, 34, 0.2);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
-
-        /* Botões reativos */
-        .btn-reactive {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-reactive:hover {
-            transform: translateY(-2px) scale(1.03);
-        }
-
-        /* Brilhos e bordas dos pedestais */
         .pedestal-gold { border-top: 2px solid #FFD700; box-shadow: 0 -15px 40px -15px rgba(255, 215, 0, 0.25); }
         .pedestal-silver { border-top: 2px solid #E3E4E5; box-shadow: 0 -15px 40px -15px rgba(227, 228, 229, 0.15); }
         .pedestal-bronze { border-top: 2px solid #CD7F32; box-shadow: 0 -15px 40px -15px rgba(205, 127, 50, 0.15); }
-        
-        /* Física do Avatar (Efeito de respiração e salto) */
-        .avatar-container {
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.6));
-        }
-        .group:hover .avatar-container {
-            transform: translateY(-20px) scale(1.1);
-            filter: drop-shadow(0 25px 30px rgba(0,0,0,0.8)) brightness(1.1);
-        }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand selection:text-white pb-24 overflow-x-hidden">
 
     <header class="sticky top-0 z-50 w-full glass-navbar">
         <div class="container mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="#" class="flex items-center btn-reactive hover:opacity-80 transition-opacity">
-                <img src="trelogo.png" alt="Logo Treinadores" class="h-12 object-contain" onerror="this.src='https://via.placeholder.com/150x50/D31522/FFFFFF?text=LOGO+TRE'">
+            <a href="#" class="flex items-center hover:opacity-80 transition-opacity">
+                <img src="trelogo.png" alt="Logo" class="h-12 object-contain" onerror="this.src='https://via.placeholder.com/150x50/D31522/FFFFFF?text=LOGO'">
             </a>
             
             <nav class="hidden md:flex gap-8 text-sm font-semibold text-white/80 items-center">
-                <a href="#" class="hover:text-white hover:text-tre-brand transition-colors">Início</a>
+                <a href="#" class="hover:text-tre-brand transition-colors">Início</a>
                 <a href="#" class="hover:text-white transition-colors">Sobre (Regras)</a>
             </nav>
 
             <div class="flex items-center gap-4">
-                <a href="#" class="btn-reactive bg-tre-brand text-white px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide shadow-[0_0_20px_rgba(211,21,34,0.4)] border border-red-500/50 hover:bg-tre-brandHover flex items-center gap-2">
+                <a href="#" class="bg-tre-brand text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-[0_0_20px_rgba(211,21,34,0.4)] border border-red-500/50 hover:bg-tre-brandHover transition-all hover:-translate-y-0.5 flex items-center gap-2">
                     <i class="fa-solid fa-bolt"></i> Postagem de Atividade
                 </a>
-                <a href="admin.html" class="hidden sm:flex bg-black/40 border border-white/10 btn-reactive px-4 py-2.5 rounded-xl text-sm font-semibold items-center gap-2 hover:bg-white/10 hover:text-tre-brand transition-colors">
+                <a href="admin.html" class="hidden sm:flex bg-black/40 border border-white/10 px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-white/10 hover:text-tre-brand transition-all hover:-translate-y-0.5 flex items-center gap-2">
                     <i class="fa-solid fa-lock text-xs"></i> Restrito
                 </a>
             </div>
@@ -119,25 +87,21 @@
     </section>
 
     <section class="container mx-auto px-6 py-12">
-        <div class="flex flex-col md:flex-row items-end justify-center gap-6 md:gap-8 max-w-5xl mx-auto mt-32" id="podium-container">
-            </div>
+        <div class="flex flex-col md:flex-row items-end justify-center gap-6 md:gap-8 max-w-5xl mx-auto mt-32" id="podium-container"></div>
     </section>
 
     <section class="container mx-auto px-6 py-16">
         <div class="max-w-4xl mx-auto">
             <h2 class="text-sm font-black tracking-widest uppercase text-white/30 mb-6 pl-4 border-l-2 border-tre-brand">Alto Escalão e Demais Membros</h2>
-            
             <div class="glass-panel rounded-3xl overflow-hidden p-1">
                 <table class="w-full text-left border-collapse">
-                    <tbody id="list-container">
-                        </tbody>
+                    <tbody id="list-container"></tbody>
                 </table>
             </div>
         </div>
     </section>
 
     <script>
-        // Dados Estruturais Autênticos (Baseados no seu print de hierarquia)
         const dadosRanking = [
             { posicao: 1, nick: "G4VET4", pontos: 185, cargo: "Treinador / Supervisor" },
             { posicao: 2, nick: "benjlfbaby", pontos: 150, cargo: "Líder" },
@@ -149,53 +113,32 @@
             { posicao: 8, nick: "AGUA.1598", pontos: 60, cargo: "Ministro" }
         ];
 
-        // Geração da URL do Avatar (Com tratamento para manter a proporção exata)
         function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
             return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
         }
 
-        // 1. RENDERIZAR O PÓDIO
         const podiumContainer = document.getElementById('podium-container');
-        const top3 = dadosRanking.slice(0, 3);
-        const ordemPodio = [top3[1], top3[0], top3[2]]; // Ordem visual: 2º, 1º, 3º
+        const ordemPodio = [dadosRanking[1], dadosRanking[0], dadosRanking[2]];
 
         ordemPodio.forEach(membro => {
             if(!membro) return;
 
-            let alturaPedestal, corMedalha, classePedestal;
-            
-            if (membro.posicao === 1) {
-                alturaPedestal = "h-64 md:h-72 z-20";
-                corMedalha = "text-medal-gold";
-                classePedestal = "pedestal-gold bg-gradient-to-b from-[#4A3B00]/40 to-transparent";
-            } else if (membro.posicao === 2) {
-                alturaPedestal = "h-52 md:h-60 z-10";
-                corMedalha = "text-medal-silver";
-                classePedestal = "pedestal-silver bg-gradient-to-b from-[#2A2B2D]/60 to-transparent";
-            } else {
-                alturaPedestal = "h-48 md:h-56 z-10";
-                corMedalha = "text-medal-bronze";
-                classePedestal = "pedestal-bronze bg-gradient-to-b from-[#4A2D10]/50 to-transparent";
-            }
+            let alturaPedestal = membro.posicao === 1 ? "h-64 md:h-72 z-20" : membro.posicao === 2 ? "h-52 md:h-60 z-10" : "h-48 md:h-56 z-10";
+            let corMedalha = membro.posicao === 1 ? "text-[#FFD700]" : membro.posicao === 2 ? "text-[#E3E4E5]" : "text-[#CD7F32]";
+            let classePedestal = membro.posicao === 1 ? "pedestal-gold bg-gradient-to-b from-[#4A3B00]/40 to-transparent" : membro.posicao === 2 ? "pedestal-silver bg-gradient-to-b from-[#2A2B2D]/60 to-transparent" : "pedestal-bronze bg-gradient-to-b from-[#4A2D10]/50 to-transparent";
 
-            // A estrutura geométrica foi totalmente refeita para evitar quebras de texto (whitespace-nowrap) e sobreposições
-            const cardHtml = `
+            podiumContainer.innerHTML += `
                 <div class="relative w-full md:w-[22rem] flex flex-col items-center group mt-24 md:mt-0">
-                    
-                    <div class="absolute bottom-[calc(100%-2rem)] left-1/2 -translate-x-1/2 z-30 pointer-events-none avatar-container">
+                    <div class="absolute bottom-[calc(100%-2rem)] left-1/2 -translate-x-1/2 z-30 pointer-events-none transition-all duration-500 ease-out group-hover:-translate-y-5 group-hover:scale-110 drop-shadow-[0_15px_20px_rgba(0,0,0,0.6)] group-hover:drop-shadow-[0_25px_30px_rgba(0,0,0,0.8)]">
                         <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="w-full h-full object-contain">
                     </div>
-
                     <div class="glass-panel w-full rounded-[2rem] ${alturaPedestal} ${classePedestal} flex flex-col items-center p-6 relative">
-                        
                         <div class="mt-8 mb-auto text-center w-full">
                             <span class="font-black text-xl tracking-[0.2em] whitespace-nowrap ${corMedalha} drop-shadow-md">${membro.posicao}º LUGAR</span>
                         </div>
-
                         <div class="text-center w-full mt-auto">
                             <h3 class="text-2xl md:text-3xl font-black tracking-tight text-white whitespace-nowrap group-hover:text-tre-brand transition-colors">${membro.nick}</h3>
                             <p class="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1 mb-4 whitespace-nowrap">${membro.cargo}</p>
-                            
                             <div class="inline-flex items-center justify-center bg-black/40 border border-white/5 rounded-2xl px-6 py-2 shadow-inner">
                                 <span class="text-2xl font-black">${membro.pontos}</span> <span class="text-sm font-semibold text-white/40 ml-1.5 uppercase">Pts</span>
                             </div>
@@ -203,36 +146,31 @@
                     </div>
                 </div>
             `;
-            podiumContainer.innerHTML += cardHtml;
         });
 
-        // 2. RENDERIZAR A LISTA GERAL
         const listContainer = document.getElementById('list-container');
-        const restoLista = dadosRanking.slice(3);
-
-        restoLista.forEach(membro => {
-            const rowHtml = `
+        
+        dadosRanking.slice(3).forEach(membro => {
+            listContainer.innerHTML += `
                 <tr class="group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default">
                     <td class="p-5 md:px-8 text-center font-black text-xl text-white/20 group-hover:text-tre-brand transition-colors w-16 md:w-24">
                         ${membro.posicao}º
                     </td>
                     <td class="p-5 flex items-center gap-5 md:gap-6">
                         <div class="w-14 h-14 rounded-full bg-black/40 border-2 border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors shadow-lg">
-                            <img src="${getAvatarUrl(membro.nick, 'm', 'wlk', 'std')}" alt="${membro.nick}" 
-                                 class="absolute -top-3 left-1/2 -translate-x-1/2 group-hover:scale-110 transition-transform duration-500">
+                            <img src="${getAvatarUrl(membro.nick, 'm', 'wlk', 'std')}" alt="${membro.nick}" class="absolute -top-3 left-1/2 -translate-x-1/2 transition-transform duration-500 group-hover:scale-110">
                         </div>
                         <div class="flex flex-col">
-                            <span class="font-bold text-lg tracking-wide group-hover:translate-x-2 transition-transform duration-300">${membro.nick}</span>
+                            <span class="font-bold text-lg tracking-wide transition-transform duration-300 group-hover:translate-x-2">${membro.nick}</span>
                             <span class="text-xs text-tre-brand font-bold uppercase tracking-widest">${membro.cargo}</span>
                         </div>
                     </td>
                     <td class="p-5 md:px-8 text-right w-32 md:w-40">
-                        <span class="font-black text-2xl text-white group-hover:text-tre-brand transition-colors">${membro.pontos}</span> 
+                        <span class="font-black text-2xl text-white transition-colors group-hover:text-tre-brand">${membro.pontos}</span> 
                         <span class="text-xs font-semibold text-white/40 uppercase ml-1">Pts</span>
                     </td>
                 </tr>
             `;
-            listContainer.innerHTML += rowHtml;
         });
     </script>
 </body>
