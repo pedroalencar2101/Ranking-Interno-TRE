@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Comando | Ministério RCC</title>
+    <title>Painel de Comando Central (PCC) | Ministério RCC</title>
     
     <link rel="icon" type="image/png" href="logotre.png?v=2">
     <link rel="apple-touch-icon" href="logotre.png?v=2">
@@ -19,6 +19,10 @@
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         tre: { brand: '#D31522', brandHover: '#FA1C2A', bgPanel: 'rgba(20, 4, 5, 0.5)', glassNav: 'rgba(25, 3, 4, 0.85)' }
+                    },
+                    boxShadow: {
+                        'vivid': '0 0 20px -5px rgba(211, 21, 34, 0.4)',
+                        'gold': '0 0 30px -5px rgba(255, 215, 0, 0.3)',
                     }
                 }
             }
@@ -47,18 +51,40 @@
             background: linear-gradient(145deg, rgba(35, 6, 8, 0.4) 0%, rgba(10, 1, 2, 0.6) 100%);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 1rem;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .glass-card:hover { border-color: rgba(211, 21, 34, 0.3); transform: translateY(-2px); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
+        .glass-card:hover { border-color: rgba(211, 21, 34, 0.3); transform: translateY(-3px); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.6); }
 
         .nav-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
         .nav-item.active { background: rgba(211, 21, 34, 0.1); border-left: 3px solid #D31522; color: white; }
         .nav-item:hover:not(.active) { background: rgba(255, 255, 255, 0.05); }
 
+        /* Animação Vivid/Alive do Perfil */
+        .vivid-perfil {
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-origin: center;
+        }
+        .vivid-perfil:hover {
+            background: rgba(211, 21, 34, 0.15);
+            border-color: rgba(211, 21, 34, 0.3);
+            box-shadow: theme('boxShadow.vivid');
+            transform: scale(1.02);
+        }
+        .vivid-perfil img { transition: transform 0.5s ease; }
+        .vivid-perfil:hover img { transform: rotate(15deg) scale(1.1); }
+
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #D31522; }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: theme('colors.tre.brand'); outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
 
         /* Loader de Segurança */
         #auth-loader { z-index: 9999; }
@@ -66,44 +92,54 @@
 </head>
 <body class="antialiased selection:bg-tre-brand selection:text-white flex h-screen">
 
-    <div id="auth-loader" class="fixed inset-0 bg-[#0A0102] flex flex-col items-center justify-center transition-opacity duration-500">
-        <i class="fa-solid fa-shield-halved text-4xl text-tre-brand mb-4 animate-pulse"></i>
-        <h2 class="text-white font-black tracking-widest uppercase text-sm">Verificando Credenciais</h2>
-        <p class="text-white/40 text-xs mt-2">Área Restrita do Ministério</p>
+    <div id="auth-loader" class="fixed inset-0 bg-[#0A0102] flex flex-col items-center justify-center backdrop-blur-3xl transition-opacity duration-700">
+        <img src="trelogo.png" alt="Logo TRE" class="h-16 mb-6 animate-pulse" onerror="this.src='https://via.placeholder.com/80x80/D31522/FFFFFF?text=TRE'">
+        <i class="fa-solid fa-user-shield text-4xl text-tre-brand mb-4"></i>
+        <h2 class="text-white font-black tracking-widest uppercase text-sm">Validando Acesso Ministerial</h2>
+        <p class="text-white/40 text-xs mt-2">Área Central de Comando | PCC</p>
     </div>
 
-    <aside id="sidebar" class="glass-panel w-64 h-full flex flex-col fixed md:relative z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 border-r border-white/5">
-        <div class="p-6 border-b border-white/5 flex items-center justify-between">
+    <aside id="sidebar" class="glass-panel w-72 h-full flex flex-col fixed md:relative z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 border-r border-white/5">
+        <div class="p-6 border-b border-white/5 flex items-center gap-4">
+            <img src="trelogo.png" alt="TRE" class="h-10 object-contain" onerror="this.src='https://via.placeholder.com/50x50/D31522/FFFFFF?text=TRE'">
             <div>
-                <h1 class="text-xl font-black text-white tracking-tighter leading-none">PAINEL</h1>
-                <p class="text-[9px] text-tre-brand font-bold uppercase tracking-widest mt-1">Ministério RCC</p>
+                <h1 class="text-xl font-black text-white tracking-tighter leading-none">PAINEL COMANDO</h1>
+                <p class="text-[9px] text-tre-brand font-bold uppercase tracking-widest mt-1">Ministério RCC | PCC</p>
             </div>
-            <button onclick="toggleSidebar()" class="md:hidden text-white/50 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <button onclick="toggleSidebar()" class="md:hidden text-white/50 hover:text-white ml-auto"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
 
         <nav class="flex-grow py-6 flex flex-col gap-2">
-            <button onclick="switchTab('auditoria', this)" class="nav-item active w-full text-left px-6 py-3 text-sm font-semibold text-white/70 flex items-center gap-3">
+            <button onclick="switchTab('auditoria', this)" class="nav-item active w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
                 <i class="fa-solid fa-clipboard-check w-5 text-center"></i> Auditoria de Atividades
             </button>
-            <button onclick="switchTab('acessos', this)" class="nav-item w-full text-left px-6 py-3 text-sm font-semibold text-white/70 flex items-center gap-3">
-                <i class="fa-solid fa-users w-5 text-center"></i> Solicitações de Acesso
+            <button onclick="switchTab('acessos', this)" class="nav-item w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
+                <i class="fa-solid fa-user-lock w-5 text-center"></i> Solicitações de Acesso
             </button>
-            <button onclick="switchTab('config', this)" class="nav-item w-full text-left px-6 py-3 text-sm font-semibold text-white/70 flex items-center gap-3">
-                <i class="fa-solid fa-gear w-5 text-center"></i> Configurações <span class="text-[8px] bg-white/10 px-1.5 py-0.5 rounded text-white/40 ml-auto">Em breve</span>
+            <button onclick="switchTab('lista-admin', this)" class="nav-item w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
+                <i class="fa-solid fa-users-crown w-5 text-center"></i> Lista Usuários ADMIN
+            </button>
+            <button onclick="switchTab('historico', this)" class="nav-item w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
+                <i class="fa-solid fa-box-archive w-5 text-center"></i> Histórico de Postagens
+            </button>
+            <button onclick="switchTab('config', this)" class="nav-item w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
+                <i class="fa-solid fa-sliders w-5 text-center"></i> Configurações do Sistema
             </button>
         </nav>
 
         <div class="p-6 border-t border-white/5">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                    <i class="fa-solid fa-user-shield text-xs text-white/60"></i>
+            <button onclick="toggleModal('modal-perfil')" class="w-full glass-card vivid-perfil p-4 flex items-center gap-3.5 mb-4 border border-white/10 hover:border-tre-brand/30 transition-all cursor-pointer">
+                <div class="w-12 h-12 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
+                    <img id="sidebar-avatar" src="https://via.placeholder.com/80x80/0A0102/FFFFFF?text=???" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-700">
                 </div>
                 <div>
-                    <p class="text-xs font-bold text-white" id="admin-user-email">Carregando...</p>
-                    <p class="text-[9px] text-white/40 uppercase tracking-widest">Liderança</p>
+                    <p class="text-sm font-black text-white group-hover:text-tre-brand" id="admin-user-nick">Carregando...</p>
+                    <p class="text-[9px] text-white/40 uppercase tracking-widest">Usuário Liderança</p>
                 </div>
-            </div>
-            <button onclick="logout()" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white text-xs font-bold py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                <i class="fa-solid fa-chevron-right text-xs text-white/20 ml-auto group-hover:text-white transition-colors"></i>
+            </button>
+
+            <button onclick="logout()" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white text-xs font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Encerrar Sessão
             </button>
         </div>
@@ -111,76 +147,189 @@
 
     <main class="flex-1 flex flex-col h-full relative overflow-hidden">
         
-        <header class="glass-panel h-16 flex items-center justify-between px-6 border-b border-white/5 md:hidden">
+        <header class="glass-panel h-16 flex items-center justify-between px-6 border-b border-white/5 md:hidden flex-shrink-0">
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebar()" class="text-white/70 hover:text-white"><i class="fa-solid fa-bars text-lg"></i></button>
+                <img src="trelogo.png" alt="TRE" class="h-6" onerror="this.src='https://via.placeholder.com/30x30/D31522/FFFFFF?text=TRE'">
                 <span class="font-black text-sm tracking-widest uppercase">Comando</span>
             </div>
             <a href="index.html" class="text-xs font-bold text-white/50 hover:text-tre-brand transition-colors"><i class="fa-solid fa-house"></i> Site</a>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 md:p-10 custom-scrollbar">
-            <a href="index.html" class="hidden md:inline-flex items-center gap-2 text-xs font-bold text-white/30 hover:text-white transition-colors mb-8 uppercase tracking-widest">
+        <div class="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12 custom-scrollbar space-y-12">
+            <a href="index.html" class="hidden md:inline-flex items-center gap-2 text-xs font-bold text-white/30 hover:text-white transition-colors uppercase tracking-widest">
                 <i class="fa-solid fa-arrow-left"></i> Voltar ao Site Principal
             </a>
 
             <div id="tab-auditoria" class="tab-content block">
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4 pb-6 border-b border-white/5">
                     <div>
-                        <h2 class="text-2xl md:text-4xl font-black tracking-tight text-white uppercase mb-1">Auditoria</h2>
+                        <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
+                            <i class="fa-solid fa-clipboard-check text-tre-brand"></i> Auditoria de Atividades
+                        </h2>
                         <p class="text-white/40 text-xs md:text-sm">Postagens de atividades aguardando validação para o ranking.</p>
                     </div>
-                    <div class="glass-panel px-4 py-2 rounded-lg border border-white/10 flex items-center gap-3">
-                        <i class="fa-solid fa-clock-rotate-left text-amber-500"></i>
+                    <div class="glass-panel px-5 py-2.5 rounded-lg border border-amber-500/20 flex items-center gap-3.5">
+                        <i class="fa-solid fa-clock-rotate-left text-amber-500 text-lg"></i>
                         <span class="text-sm font-bold text-white" id="count-atividades">0 Pendentes</span>
                     </div>
                 </div>
 
-                <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     </div>
                 
-                <div id="empty-atividades" class="hidden flex-col items-center justify-center py-20 text-center">
-                    <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 border border-white/10"><i class="fa-solid fa-check-double text-2xl text-white/20"></i></div>
-                    <h3 class="text-lg font-bold text-white/50">Tudo limpo!</h3>
-                    <p class="text-sm text-white/30 mt-1">Nenhuma atividade pendente de análise.</p>
+                <div id="empty-atividades" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
+                    <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
+                    <h3 class="text-xl font-black uppercase text-white tracking-widest">Tudo Limpo!</h3>
+                    <p class="text-sm text-white/40 mt-1 max-w-sm">Nenhuma atividade pendente de análise.</p>
                 </div>
             </div>
 
             <div id="tab-acessos" class="tab-content hidden opacity-0">
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4 pb-6 border-b border-white/5">
                     <div>
-                        <h2 class="text-2xl md:text-4xl font-black tracking-tight text-white uppercase mb-1">Acessos</h2>
-                        <p class="text-white/40 text-xs md:text-sm">Membros solicitando acesso à área restrita.</p>
+                        <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
+                            <i class="fa-solid fa-user-lock text-tre-brand"></i> Acessos
+                        </h2>
+                        <p class="text-white/40 text-xs md:text-sm">Membros solicitando acesso à área restrita do Ministério.</p>
                     </div>
-                    <div class="glass-panel px-4 py-2 rounded-lg border border-white/10 flex items-center gap-3">
-                        <i class="fa-solid fa-user-clock text-amber-500"></i>
+                    <div class="glass-panel px-5 py-2.5 rounded-lg border border-amber-500/20 flex items-center gap-3.5">
+                        <i class="fa-solid fa-user-clock text-amber-500 text-lg"></i>
                         <span class="text-sm font-bold text-white" id="count-acessos">0 Pendentes</span>
                     </div>
                 </div>
 
-                <div id="grid-acessos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div id="grid-acessos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     </div>
 
-                <div id="empty-acessos" class="hidden flex-col items-center justify-center py-20 text-center">
-                    <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 border border-white/10"><i class="fa-solid fa-user-shield text-2xl text-white/20"></i></div>
+                <div id="empty-acessos" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
+                    <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/5 shadow-inner"><i class="fa-solid fa-user-shield text-4xl text-white/20"></i></div>
                     <h3 class="text-lg font-bold text-white/50">Nenhuma solicitação</h3>
                     <p class="text-sm text-white/30 mt-1">Não há novos pedidos de acesso no momento.</p>
                 </div>
             </div>
 
-            <div id="tab-config" class="tab-content hidden opacity-0">
-                <h2 class="text-2xl md:text-4xl font-black tracking-tight text-white uppercase mb-4">Configurações</h2>
-                <div class="glass-card p-8 text-center border-dashed border-2 border-white/10">
-                    <i class="fa-solid fa-person-digging text-4xl text-tre-brand mb-4"></i>
-                    <h3 class="text-lg font-bold text-white">Módulo em Construção</h3>
-                    <p class="text-sm text-white/50 mt-2">Em breve você poderá editar o Quadro de Pontos e categorias diretamente por aqui.</p>
+            <div id="tab-lista-admin" class="tab-content hidden opacity-0">
+                <div class="mb-10 pb-6 border-b border-white/5">
+                    <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
+                        <i class="fa-solid fa-users-crown text-tre-brand"></i> Lista Liderança
+                    </h2>
+                    <p class="text-white/40 text-xs md:text-sm">Membros com acesso administrativo ao Salão de Comando.</p>
+                </div>
+
+                <div id="grid-admin-list" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5">
+                    </div>
+            </div>
+
+            <div id="tab-historico" class="tab-content hidden opacity-0">
+                <div class="mb-10 pb-6 border-b border-white/5">
+                    <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
+                        <i class="fa-solid fa-box-archive text-tre-brand"></i> Histórico Mensal
+                    </h2>
+                    <p class="text-white/40 text-xs md:text-sm">Arquivo completo de todas as postagens julgadas pela Liderança.</p>
+                </div>
+
+                <div class="glass-panel-simple p-5 flex flex-wrap gap-3 mb-8 rounded-xl border border-white/5 relative z-20">
+                    <div class="relative">
+                        <button id="btn-filter-mes" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 text-white cursor-pointer focus:outline-none hover:text-white transition-colors">
+                            <i class="fa-solid fa-calendar-alt text-amber-500"></i> 
+                            <span id="texto-filter-mes">Abril 2026</span> 
+                            <i id="icone-filter-seta" class="fa-solid fa-chevron-down text-xs ml-1 text-white/40 transition-transform duration-300"></i>
+                        </button>
+                        <div id="menu-filter-meses" class="absolute left-0 top-full mt-2 w-48 glass-panel-simple !bg-[#0A0102]/95 rounded-lg opacity-0 invisible translate-y-2 transition-all duration-300 overflow-hidden flex flex-col text-sm shadow-2xl z-50">
+                            <button onclick="selecionarFilterMes(this)" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Abril 2026</button>
+                            <button onclick="selecionarFilterMes(this)" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Maio 2026</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl">
+                    <div class="overflow-x-auto pb-2">
+                        <table class="w-full text-left border-collapse min-w-full text-sm">
+                            <thead class="bg-white/5 text-[10px] uppercase font-black tracking-widest text-white/40 border-b border-white/5">
+                                <tr>
+                                    <th class="p-4 px-6">Nick</th>
+                                    <th class="p-4">Atividade Cadastrada</th>
+                                    <th class="p-4">Data Postagem</th>
+                                    <th class="p-4 text-center">Status</th>
+                                    <th class="p-4">Admin Responsável</th>
+                                    <th class="p-4">Data Julgamento</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-historico-list">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="empty-historico" class="hidden flex-col items-center justify-center py-20 text-center glass-card p-10 border-dashed border-2 border-white/5">
+                    <i class="fa-solid fa-folder-open text-4xl text-white/20 mb-4"></i>
+                    <h3 class="text-lg font-bold text-white/50">Sem histórico</h3>
+                    <p class="text-sm text-white/30 mt-1">Nenhuma postagem arquivada para este mês.</p>
+                </div>
+            </div>
+
+            <div id="tab-config" class="tab-content hidden opacity-0 relative">
+                <div class="mb-10 pb-6 border-b border-white/5">
+                    <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
+                        <i class="fa-solid fa-sliders text-tre-brand"></i> Configurações
+                    </h2>
+                    <p class="text-white/40 text-xs md:text-sm">Módulo de controle central para editar o Quadro de Pontos e categorias da Companhia.</p>
+                </div>
+
+                <div class="glass-card p-6 md:p-8 space-y-10 relative z-10">
+                    <div class="text-center">
+                        <i class="fa-solid fa-person-digging text-4xl text-amber-500 mb-4"></i>
+                        <h3 class="text-lg font-bold text-white">Quadro de Pontos Central (CRUD Firestore)</h3>
+                        <p class="text-sm text-white/50 mt-2 max-w-lg mx-auto">Em breve você poderá mudar o valor da pontuação, adicionar atividades, retirá-las e alterar categorias e setores responsáveis direto por aqui. *Módulo em implementação.*</p>
+                    </div>
                 </div>
             </div>
 
         </div>
     </main>
 
-    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden md:hidden transition-opacity duration-300"></div>
+
+    <div id="modal-perfil" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-perfil')"></div>
+        <div class="relative w-full max-w-lg bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-8 transform scale-95 transition-all duration-300 overflow-hidden flex flex-col items-center">
+            <button onclick="toggleModal('modal-perfil')" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-tre-brand transition-colors z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div class="vivid-perfil-circle w-32 h-32 md:w-40 md:h-40 bg-[#0A0102] rounded-full overflow-hidden border-4 border-tre-brand relative mb-6 shadow- gold">
+                <img id="modal-avatar" src="https://via.placeholder.com/200x200/0A0102/FFFFFF?text=???" class="absolute -top-3 left-1/2 -translate-x-1/2 scale-110">
+            </div>
+            <h3 class="text-2xl font-black text-white group-hover:text-tre-brand mb-1" id="modal-perfil-nick">Nickname</h3>
+            <p class="text-[10px] text-white/40 uppercase tracking-widest mb-6">Usuário Liderança Ministério TRE</p>
+            <div class="w-full space-y-2 mb-6 text-left p-4 rounded-xl bg-white/5 border border-white/10">
+                <p class="text-sm text-white/70"><i class="fa-solid fa-calendar-check text-tre-brand mr-2"></i>Registrado desde: <span class="font-bold text-white" id="modal-perfil-dataRegistro">data formatada</span></p>
+            </div>
+            <div class="w-full space-y-1.5 mb-6 text-left">
+                <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Descrição Profissional / Biografia</label>
+                <textarea id="perfil-descricao" rows="4" placeholder="Adicione uma descrição sobre você no sistema (Max 300 caracteres)..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium custom-scrollbar"></textarea>
+            </div>
+            <button id="btn-save-perfil" onclick="salvarDescricaoPerfil(event)" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">
+                Salvar Biografia
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-reject-atividades" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-reject-atividades')"></div>
+        <div class="relative w-full max-w-md bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-all duration-300 overflow-hidden text-center">
+            <button onclick="toggleModal('modal-reject-atividades')" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-tre-brand transition-colors z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <div class="w-20 h-20 bg-red-500/10 border-2 border-red-500/30 rounded-full flex items-center justify-center mb-6 mx-auto"><i class="fa-solid fa-comment-slash text-3xl text-red-500"></i></div>
+            <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-3">Rejeitar Postagem</h2>
+            <p class="text-white/60 text-sm mb-6 leading-relaxed">Informe ao treinador o motivo técnico da rejeição para que ele possa corrigir o requerimento.</p>
+            <input type="hidden" id="form-reject-docId">
+            <input type="text" id="reject-motivo" required placeholder="Ex: Prova sem data / Categoria incorreta..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium text-center mb-6">
+            <div class="flex gap-2">
+                <button onclick="toggleModal('modal-reject-atividades')" class="flex-1 bg-white/5 py-3 rounded-lg text-white font-bold border border-white/10 text-xs">Cancelar</button>
+                <button onclick="confirmarRejeicaoPostagem(event)" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-lg transition-all text-xs flex justify-center items-center gap-2">
+                    Confirmar Rejeição
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
@@ -204,24 +353,42 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-       // ==========================================
-        // 2. GUARDA DE AUTENTICAÇÃO (O Leão de Chácara)
+        let currentUserNick = "LIDERANÇA"; // Cache do Nick do Admin
+
+        // ==========================================
+        // 2. GUARDA DE AUTENTICAÇÃO DUPLA (Auth Guard + Permissão)
         // ==========================================
         auth.onAuthStateChanged((user) => {
             const loader = document.getElementById('auth-loader');
             
             if (user) {
                 // O usuário tem a senha certa, mas ele foi aprovado? Vamos olhar no banco!
-                db.collection("solicitacoes_acesso").doc(user.uid).get()
+                db.collection("usuarios_admin").doc(user.uid).get()
                 .then((doc) => {
                     if (doc.exists && doc.data().status === "Aprovado") {
-                        // APROVADO! Deixa entrar e puxa o Nick dele.
-                        document.getElementById('admin-user-email').innerText = doc.data().nick.toUpperCase();
+                        // APROVADO! Deixa entrar e puxa o Perfil VIVO.
+                        currentUserNick = doc.data().nick;
                         
+                        // Atualiza interface do perfil na sidebar
+                        document.getElementById('admin-user-nick').innerText = currentUserNick.toUpperCase();
+                        document.getElementById('modal-perfil-nick').innerText = currentUserNick;
+                        const avatarUrl = getAvatarUrl(currentUserNick, 'm', 'std', 'std');
+                        document.getElementById('sidebar-avatar').src = avatarUrl;
+                        document.getElementById('modal-avatar').src = avatarUrl;
+                        document.getElementById('perfil-descricao').value = doc.data().descricao || "";
+                        
+                        // Formatar dataRegistro
+                        let dataStr = "Recente";
+                        if(doc.data().dataRegistro) {
+                            const d = doc.data().dataRegistro.toDate();
+                            dataStr = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+                        }
+                        document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
+
                         // Esconde a tela de carregamento de segurança
                         gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
                         
-                        // Puxa os dados ao vivo do painel
+                        // Puxar os dados ao vivo do painel
                         iniciarEscutas();
                     } else {
                         // PENDENTE OU REJEITADO! Chuta ele pra fora.
@@ -245,19 +412,35 @@
             auth.signOut().then(() => { window.location.href = 'index.html'; });
         }
 
+        // Função Útil: Formatar Habbo Imaging
+        function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
+            return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
+        }
+
         // ==========================================
         // 3. LÓGICA DE UI E ABAS
         // ==========================================
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            
             if (sidebar.classList.contains('-translate-x-full')) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
             } else {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
+            }
+        }
+
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            const content = modal.querySelector('div.relative.transform');
+            if (modal.classList.contains('opacity-0')) {
+                modal.classList.remove('opacity-0', 'invisible');
+                setTimeout(() => content.classList.replace('scale-95', 'scale-100'), 10);
+            } else {
+                content.classList.replace('scale-100', 'scale-95');
+                setTimeout(() => modal.classList.add('opacity-0', 'invisible'), 200);
             }
         }
 
@@ -270,19 +453,57 @@
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.add('hidden');
                 el.classList.remove('block');
+                el.classList.add('opacity-0');
             });
             
             const target = document.getElementById('tab-' + tabId);
             target.classList.remove('hidden');
             target.classList.add('block');
             
-            gsap.fromTo(target, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+            gsap.fromTo(target, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
 
             if(window.innerWidth < 768) toggleSidebar(); // Fecha menu mobile ao clicar
         }
 
+        // Dropdown Histórico Meses
+        function toggleFilterDropdown() {
+            const m = document.getElementById('menu-filter-meses');
+            const s = document.getElementById('icone-filter-seta');
+            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2');
+            s.classList.toggle('rotate-180');
+        }
+        function selecionarFilterMes(el) {
+            document.getElementById('texto-filter-mes').innerText = el.innerText;
+            toggleFilterDropdown();
+            carregarHistoricoTabela(el.innerText);
+        }
+
+        // Salvar Biografia Perfil VIVO
+        function salvarDescricaoPerfil(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-perfil');
+            const desc = document.getElementById('perfil-descricao').value.trim();
+            const uid = auth.currentUser.uid;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+            db.collection("usuarios_admin").doc(uid).update({ descricao: desc })
+                .then(() => {
+                    btn.innerHTML = 'Salvar Biografia';
+                    btn.disabled = false;
+                    toggleModal('modal-perfil');
+                    alert("Biografia salva com sucesso!");
+                }).catch((err) => {
+                    console.error("Erro biografia:", err);
+                    alert("Erro ao salvar biografia.");
+                    btn.disabled = false;
+                    btn.innerHTML = 'Salvar Biografia';
+                });
+        }
+
         // ==========================================
-        // 4. SISTEMA DE AUDITORIA (Tempo Real)
+        // 4. SISTEMAS DE AUDITORIA E DADOS (Real Time)
         // ==========================================
         function iniciarEscutas() {
             // Escutando Postagens de Atividade Pendentes
@@ -291,57 +512,24 @@
                   const grid = document.getElementById('grid-atividades');
                   const emptyState = document.getElementById('empty-atividades');
                   document.getElementById('count-atividades').innerText = `${querySnapshot.size} Pendentes`;
-                  
-                  grid.innerHTML = ''; // Limpa a grid
-                  
-                  if (querySnapshot.empty) {
-                      emptyState.classList.remove('hidden');
-                      emptyState.classList.add('flex');
-                  } else {
-                      emptyState.classList.add('hidden');
-                      emptyState.classList.remove('flex');
-                      
-                      querySnapshot.forEach((doc) => {
-                          const data = doc.data();
-                          // Formatar data
-                          let dataStr = "Agora";
-                          if(data.dataEnvio) {
-                              const d = data.dataEnvio.toDate();
-                              dataStr = `${d.getDate()}/${d.getMonth()+1} às ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
-                          }
-
+                  grid.innerHTML = ''; // Limpa a grid (O onSnapshot cuida do Vanish Card automático)
+                  if (querySnapshot.empty) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); } else { emptyState.classList.add('hidden'); emptyState.classList.remove('flex');
+                      querySnapshot.forEach((doc) => { const data = doc.data(); let dataStr = "Agora"; if(data.dataEnvio) { const d = data.dataEnvio.toDate(); dataStr = `${d.getDate()}/${d.getMonth()+1} às ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`; }
                           grid.innerHTML += `
-                              <div class="glass-card p-5 flex flex-col h-full" id="doc-${doc.id}">
+                              <div class="glass-card p-5 flex flex-col h-full" id="card-${doc.id}">
                                   <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5">
-                                      <div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0">
-                                          <img src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=${data.nick}&action=std&direction=2&head_direction=2&gesture=sml&size=m" class="absolute -top-2 left-1/2 -translate-x-1/2">
-                                      </div>
-                                      <div>
-                                          <h4 class="font-bold text-white tracking-wide">${data.nick}</h4>
-                                          <p class="text-[10px] text-white/40 uppercase tracking-widest"><i class="fa-regular fa-clock"></i> ${dataStr}</p>
-                                      </div>
+                                      <div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0"><img src="${getAvatarUrl(data.nick, 'm', 'std', 'sml')}" class="absolute -top-2 left-1/2 -translate-x-1/2"></div>
+                                      <div><h4 class="font-bold text-white tracking-wide">${data.nick}</h4><p class="text-[10px] text-white/40 uppercase tracking-widest"><i class="fa-regular fa-clock"></i> ${dataStr}</p></div>
                                   </div>
-                                  
-                                  <div class="flex-grow mb-5">
-                                      <span class="inline-block bg-white/5 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white/70 uppercase mb-2">Categoria</span>
-                                      <p class="text-sm font-semibold text-tre-brand leading-tight">${data.categoria}</p>
-                                  </div>
-
+                                  <div class="flex-grow mb-5"><span class="inline-block bg-white/5 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white/40 uppercase mb-2">Categoria</span><p class="text-sm font-semibold text-tre-brand leading-tight">${data.categoria}</p></div>
                                   <div class="flex flex-col gap-2 mt-auto">
-                                      <a href="${data.prova}" target="_blank" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-bold py-2.5 rounded-lg transition-colors flex justify-center items-center gap-2">
-                                          <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Prova
-                                      </a>
+                                      <a href="${data.prova}" target="_blank" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-bold py-2.5 rounded-lg transition-colors flex justify-center items-center gap-2"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Prova</a>
                                       <div class="flex gap-2">
-                                          <button onclick="julgarDoc('postagens', '${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg transition-colors">
-                                              <i class="fa-solid fa-check"></i> Aprovar
-                                          </button>
-                                          <button onclick="julgarDoc('postagens', '${doc.id}', 'Rejeitado')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg transition-colors">
-                                              <i class="fa-solid fa-xmark"></i> Rejeitar
-                                          </button>
+                                          <button onclick="julgarDoc('postagens', '${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg transition-colors"><i class="fa-solid fa-check"></i> Aprovar</button>
+                                          <button onclick="iniciarRejeicaoPostagem('${doc.id}')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg transition-colors"><i class="fa-solid fa-xmark"></i> Rejeitar</button>
                                       </div>
                                   </div>
-                              </div>
-                          `;
+                              </div>`;
                       });
                   }
               });
@@ -352,79 +540,186 @@
                   const grid = document.getElementById('grid-acessos');
                   const emptyState = document.getElementById('empty-acessos');
                   document.getElementById('count-acessos').innerText = `${querySnapshot.size} Pendentes`;
-                  
                   grid.innerHTML = '';
-                  
-                  if (querySnapshot.empty) {
-                      emptyState.classList.remove('hidden');
-                      emptyState.classList.add('flex');
-                  } else {
-                      emptyState.classList.add('hidden');
-                      emptyState.classList.remove('flex');
-                      
-                      querySnapshot.forEach((doc) => {
-                          const data = doc.data();
-                          let dataStr = "Recente";
-                          if(data.dataSolicitacao) {
-                              const d = data.dataSolicitacao.toDate();
-                              dataStr = `${d.getDate()}/${d.getMonth()+1} às ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
-                          }
-
+                  if (querySnapshot.empty) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); } else { emptyState.classList.add('hidden'); emptyState.classList.remove('flex');
+                      querySnapshot.forEach((doc) => { const data = doc.data(); let dataStr = "Recente"; if(data.dataSolicitacao) { const d = data.dataSolicitacao.toDate(); dataStr = `${d.getDate()}/${d.getMonth()+1} às ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`; }
                           grid.innerHTML += `
-                              <div class="glass-card p-5 flex flex-col h-full" id="doc-${doc.id}">
+                              <div class="glass-card p-5 flex flex-col h-full" id="card-${doc.id}">
                                   <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5">
-                                      <div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0">
-                                          <img src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=${data.nick}&action=std&direction=2&head_direction=2&gesture=sml&size=m" class="absolute -top-2 left-1/2 -translate-x-1/2">
-                                      </div>
-                                      <div>
-                                          <h4 class="font-bold text-white tracking-wide">${data.nick}</h4>
-                                          <p class="text-[10px] text-white/40 uppercase tracking-widest"><i class="fa-regular fa-clock"></i> ${dataStr}</p>
-                                      </div>
+                                      <div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0"><img src="${getAvatarUrl(data.nick, 'm', 'std', 'sml')}" class="absolute -top-2 left-1/2 -translate-x-1/2"></div>
+                                      <div><h4 class="font-bold text-white tracking-wide">${data.nick}</h4><p class="text-[10px] text-white/40 uppercase tracking-widest"><i class="fa-regular fa-clock"></i> ${dataStr}</p></div>
                                   </div>
-                                  
-                                  <div class="flex-grow mb-5">
-                                      <p class="text-sm text-white/70">Solicitou acesso ao painel de liderança.</p>
-                                  </div>
-
+                                  <div class="flex-grow mb-5"><p class="text-sm text-white/70">Solicitou acesso administrativo Ministério TRE.</p></div>
                                   <div class="flex gap-2 mt-auto">
-                                      <button onclick="julgarDoc('solicitacoes_acesso', '${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg transition-colors">
-                                          Liberar Acesso
-                                      </button>
-                                      <button onclick="julgarDoc('solicitacoes_acesso', '${doc.id}', 'Rejeitado')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg transition-colors">
-                                          Negar
-                                      </button>
+                                      <button onclick="julgarDoc('solicitacoes_acesso', '${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg transition-colors">Liberar Acesso</button>
+                                      <button onclick="julgarDoc('solicitacoes_acesso', '${doc.id}', 'Rejeitado')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg transition-colors">Negar</button>
                                   </div>
-                              </div>
-                          `;
+                              </div>`;
                       });
                   }
               });
+
+            // Escutando Lista ADMIN (Usuarios_admin status == Aprovado)
+            db.collection("usuarios_admin").where("status", "==", "Aprovado")
+              .onSnapshot((querySnapshot) => {
+                  const grid = document.getElementById('grid-admin-list');
+                  grid.innerHTML = '';
+                  querySnapshot.forEach((doc) => {
+                      const data = doc.data();
+                      // Mini-cards vivos/alive interativos
+                      grid.innerHTML += `
+                          <button onclick="abrirDetalhesAdminDoc('${doc.id}')" class="vivid-perfil h-24 glass-card p-3 flex flex-col items-center justify-center text-center gap-2 border border-white/5 cursor-pointer">
+                              <div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
+                                  <img src="${getAvatarUrl(data.nick, 'm', 'std', 'std')}" class="absolute -top-1 left-1/2 -translate-x-1/2">
+                              </div>
+                              <p class="text-[11px] font-black text-white group-hover:text-tre-brand truncate w-full">${data.nick}</p>
+                          </button>`;
+                  });
+              });
+            
+            // Carregar Histórico Tabela Inicial (Mês Atual)
+            carregarHistoricoTabela("Abril 2026");
         }
 
         // ==========================================
-        // 5. MOTOR DE JULGAMENTO (Aprovar/Rejeitar)
+        // 5. MOTOR DE JULGAMENTO (Aprovar/Rejeitar) & REJEIÇÃO MOTIVO
         // ==========================================
+
         function julgarDoc(colecao, docId, novoStatus) {
             // Efeito visual de loading no card
-            const card = document.getElementById(`doc-${docId}`);
-            card.style.opacity = '0.5';
-            card.style.pointerEvents = 'none';
+            const card = document.getElementById(`card-${docId}`);
+            if(card) { card.style.opacity = '0.5'; card.style.pointerEvents = 'none'; }
 
-            db.collection(colecao).doc(docId).update({
-                status: novoStatus,
-                dataJulgamento: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                // A animação GSAP remove o card da tela suavemente (O onSnapshot acima já limpa do banco vivo, isso é só pro visual)
-                gsap.to(card, { scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => card.remove() });
-                
-                // NOTA FUTURA: Aqui é onde adicionaríamos a lógica matemática para somar os pontos 
-                // do jogador na coleção "usuarios" caso seja 'postagens' e o status seja 'Aprovado'.
-            }).catch((error) => {
-                console.error("Erro ao julgar:", error);
-                alert("Erro de comunicação com o servidor.");
-                card.style.opacity = '1';
-                card.style.pointerEvents = 'auto';
-            });
+            const updates = { status: novoStatus, dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(), julgadoPor: currentUserNick };
+
+            // Trancamento de regras de negócio: Quando aprovado, card some (onSnapshot). 
+            // Para Rejeição, precisamos abrir o modal de Motivo antes.
+            
+            db.collection(colecao).doc(docId).update(updates)
+                .catch((error) => { console.error("Erro julgar:", error); alert("Erro comunicação servidor."); if(card) { card.style.opacity = '1'; card.style.pointerEvents = 'auto'; } });
+        }
+
+        // Fluxo de Rejeição com Motivo
+        function iniciarRejeicaoPostagem(docId) {
+            document.getElementById('form-reject-docId').value = docId;
+            document.getElementById('reject-motivo').value = '';
+            toggleModal('modal-reject-atividades');
+        }
+
+        function confirmarRejeicaoPostagem(e) {
+            e.preventDefault();
+            const btn = document.querySelector('#modal-reject-atividades #btn-cadastro');
+            const docId = document.getElementById('form-reject-docId').value;
+            const motivo = document.getElementById('reject-motivo').value.trim();
+
+            if(!motivo) { alert("Informe o motivo técnico da rejeição."); return; }
+            
+            toggleModal('modal-reject-atividades'); // Fecha modal motivo
+
+            const card = document.getElementById(`card-${docId}`);
+            if(card) { card.style.opacity = '0.5'; card.style.pointerEvents = 'none'; }
+
+            db.collection("postagens").doc(docId).update({
+                status: "Rejeitado",
+                motivoRejeicao: motivo, // Novo campo pedido
+                dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(),
+                julgadoPor: currentUserNick
+            })
+            .catch((error) => { console.error("Erro rejeitar:", error); alert("Erro rejeição servidor."); if(card) { card.style.opacity = '1'; card.style.pointerEvents = 'auto'; } });
+        }
+
+        // ==========================================
+        // 6. HISTÓRICO MENSAL DETALHADO (Table & Filter)
+        // ==========================================
+        function carregarHistoricoTabela(mesFilter) {
+            const list = document.getElementById('table-historico-list');
+            const empty Historico = document.getElementById('empty-historico');
+            list.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-white/30"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Buscando Arquivos...</td></tr>';
+            emptyHistorico.classList.add('hidden');
+
+            // Query complexa: O ranking é mensal. Precisamos filtrar pela dataJulgamento. 
+            // Firestore Compat query for month range can be tricky without precise timestamps.
+            // Simplified here: Load all non-pending and filter by JS for current simplification. 
+            db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado"])
+              .get()
+              .then((querySnapshot) => {
+                  list.innerHTML = '';
+                  
+                  if (querySnapshot.empty) {
+                      emptyHistorico.classList.remove('hidden');
+                      emptyHistorico.classList.add('flex');
+                      return;
+                  }
+
+                  let postsMostrados = 0;
+                  querySnapshot.forEach((doc) => {
+                      const data = doc.data();
+                      
+                      // Filtro simplificado no JS pelo nome do mês (ex: dataJulgamento -> d/m/y format -> compara com mesFilter)
+                      // Isso não é otimizado no backend mas funciona para o nível atual.
+                      let dataJulgStr = "FALHA DATA";
+                      if(data.dataJulgamento) {
+                          const d = data.dataJulgamento.toDate();
+                          // Simulação filtro Mês: Se d/m/y format contains mesFilter name...
+                          // Here just getting full date for table:
+                          dataJulgStr = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} às ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+                      }
+
+                      // TODO: Implement proper Month filter logic in JS comparing dataJulgStr month to mesFilter.
+
+                      postsMostrados++;
+                      let statusClass = data.status === "Aprovado" ? "emerald" : "red";
+                      let statusIcon = data.status === "Aprovado" ? "check" : "xmark";
+                      let motivoTd = data.motivoRejeicao ? `<br><span class="text-[10px] text-white/40">Motivo: ${data.motivoRejeicao}</span>` : "";
+
+                      list.innerHTML += `
+                          <tr class="group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default text-white/80">
+                              <td class="p-4 px-6 flex items-center gap-3 font-bold group-hover:text-white truncate">
+                                  <div class="w-8 h-8 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors"><img src="${getAvatarUrl(data.nick, 'm', 'std', 'sml')}" class="absolute -top-1 left-1/2 -translate-x-1/2"></div>
+                                  ${data.nick}
+                              </td>
+                              <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${data.categoria}</td>
+                              <td class="p-4 text-white/50 text-[11px] font-mono whitespace-nowrap">${data.dataEnvio ? data.dataEnvio.toDate().toLocaleString() : 'N/A'}</td>
+                              <td class="p-4 text-center">
+                                  <span class="inline-flex items-center gap-1.5 point-badge point-${statusClass} text-${statusClass}-400">
+                                      <i class="fa-solid fa-${statusIcon}"></i> ${data.status}
+                                  </span>
+                              </td>
+                              <td class="p-4 text-xs font-semibold whitespace-nowrap">${data.julgadoPor || 'N/A'}${motivoTd}</td>
+                              <td class="p-4 text-white/50 text-[11px] font-mono whitespace-nowrap">${dataJulgStr}</td>
+                          </tr>`;
+                  });
+
+                  if(postsMostrados === 0) { emptyHistorico.classList.remove('hidden'); emptyHistorico.classList.add('flex'); }
+              }).catch(err => { console.error("Erro histórico:", err); list.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-red-400">Erro comunicação servidor.</td></tr>'; });
+        }
+
+        // ==========================================
+        // 7. UTILIDADES E MODAIS LISTA ADMIN
+        // ==========================================
+        function abrirDetalhesAdminDoc(docId) {
+            db.collection("usuarios_admin").doc(docId).get()
+              .then((doc) => {
+                  const data = doc.data();
+                  // Reutilizamos modal-perfil mas desativamos edição biografia e mudamos título/botão
+                  document.getElementById('modal-perfil-nick').innerText = data.nick;
+                  const avatarUrl = getAvatarUrl(data.nick, 'l', 'std', 'std');
+                  document.getElementById('modal-avatar').src = avatarUrl;
+                  document.getElementById('perfil-descricao').value = data.descricao || "";
+                  document.getElementById('perfil-descricao').readOnly = true; // Desativa edição
+                  
+                  let dataStr = "Recente";
+                  if(data.dataRegistro) { const d = data.dataRegistro.toDate(); dataStr = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`; }
+                  document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
+
+                  // Altera UI do modal para visualização de terceiro
+                  document.querySelector('#modal-perfil h2')?.remove(); // remove anterior
+                  document.querySelector('#modal-perfil button#btn-save-perfil').classList.add('hidden'); // esconde botão salvar
+                  const title = `<h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4 w-full">Detalhes Liderança</h2>`;
+                  document.querySelector('#modal-perfil .relative div#perfil-descricao').parentElement.insertAdjacentHTML('beforebegin', title);
+
+                  toggleModal('modal-perfil');
+              });
         }
     </script>
 </body>
