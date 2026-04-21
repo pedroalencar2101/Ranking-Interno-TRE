@@ -37,7 +37,7 @@
             min-height: 100vh;
             background-attachment: fixed;
             font-size: 15px;
-            overflow: hidden; /* Evita scroll duplo com o layout admin */
+            overflow: hidden;
         }
         
         .glass-panel {
@@ -59,7 +59,6 @@
         .nav-item.active { background: rgba(211, 21, 34, 0.1); border-left: 3px solid #D31522; color: white; }
         .nav-item:hover:not(.active) { background: rgba(255, 255, 255, 0.05); }
 
-        /* Animação Vivid/Alive do Perfil */
         .vivid-perfil {
             transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
             transform-origin: center;
@@ -86,7 +85,6 @@
         }
         .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: theme('colors.tre.brand'); outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
 
-        /* Loader de Segurança */
         #auth-loader { z-index: 9999; }
     </style>
 </head>
@@ -132,7 +130,7 @@
                 <div class="w-12 h-12 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
                     <img id="sidebar-avatar" src="https://via.placeholder.com/80x80/0A0102/FFFFFF?text=???" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-700">
                 </div>
-                <div>
+                <div class="text-left">
                     <p class="text-sm font-black text-white group-hover:text-tre-brand" id="admin-user-nick">Carregando...</p>
                     <p class="text-[9px] text-white/40 uppercase tracking-widest">Usuário Liderança</p>
                 </div>
@@ -175,8 +173,7 @@
                     </div>
                 </div>
 
-                <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    </div>
+                <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
                 
                 <div id="empty-atividades" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
                     <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
@@ -199,8 +196,7 @@
                     </div>
                 </div>
 
-                <div id="grid-acessos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    </div>
+                <div id="grid-acessos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
 
                 <div id="empty-acessos" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
                     <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/5 shadow-inner"><i class="fa-solid fa-user-shield text-4xl text-white/20"></i></div>
@@ -217,8 +213,7 @@
                     <p class="text-white/40 text-xs md:text-sm">Membros com acesso administrativo ao Salão de Comando.</p>
                 </div>
 
-                <div id="grid-admin-list" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5">
-                    </div>
+                <div id="grid-admin-list" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5"></div>
             </div>
 
             <div id="tab-historico" class="tab-content hidden opacity-0">
@@ -256,8 +251,7 @@
                                     <th class="p-4">Data Julgamento</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-historico-list">
-                                </tbody>
+                            <tbody id="table-historico-list"></tbody>
                         </table>
                     </div>
                 </div>
@@ -295,7 +289,12 @@
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-perfil')"></div>
         <div class="relative w-full max-w-lg bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-8 transform scale-95 transition-all duration-300 overflow-hidden flex flex-col items-center">
             <button onclick="toggleModal('modal-perfil')" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-tre-brand transition-colors z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <div class="vivid-perfil-circle w-32 h-32 md:w-40 md:h-40 bg-[#0A0102] rounded-full overflow-hidden border-4 border-tre-brand relative mb-6 shadow- gold">
+            
+            <div id="modal-perfil-title-container" class="w-full hidden">
+                <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4 w-full">Detalhes Liderança</h2>
+            </div>
+
+            <div class="vivid-perfil-circle w-32 h-32 md:w-40 md:h-40 bg-[#0A0102] rounded-full overflow-hidden border-4 border-tre-brand relative mb-6 shadow-vivid">
                 <img id="modal-avatar" src="https://via.placeholder.com/200x200/0A0102/FFFFFF?text=???" class="absolute -top-3 left-1/2 -translate-x-1/2 scale-110">
             </div>
             <h3 class="text-2xl font-black text-white group-hover:text-tre-brand mb-1" id="modal-perfil-nick">Nickname</h3>
@@ -339,7 +338,7 @@
 
     <script>
         // ==========================================
-        // 1. INICIALIZAÇÃO FIREBASE (Mesmas chaves)
+        // 1. INICIALIZAÇÃO FIREBASE 
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0",
@@ -353,57 +352,36 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        let currentUserNick = "LIDERANÇA"; // Cache do Nick do Admin
+        let currentUserNick = "LIDERANÇA"; 
 
         // ==========================================
-        // 2. GUARDA DE AUTENTICAÇÃO DUPLA (Auth Guard + Permissão)
+        // 2. GUARDA DE AUTENTICAÇÃO DUPLA
         // ==========================================
         auth.onAuthStateChanged((user) => {
             const loader = document.getElementById('auth-loader');
             
             if (user) {
-                // O usuário tem a senha certa, mas ele foi aprovado? Vamos olhar no banco!
-                db.collection("usuarios_admin").doc(user.uid).get()
+                db.collection("solicitacoes_acesso").doc(user.uid).get()
                 .then((doc) => {
                     if (doc.exists && doc.data().status === "Aprovado") {
-                        // APROVADO! Deixa entrar e puxa o Perfil VIVO.
-                        currentUserNick = doc.data().nick;
+                        currentUserNick = doc.data().nick || "Admin";
                         
-                        // Atualiza interface do perfil na sidebar
                         document.getElementById('admin-user-nick').innerText = currentUserNick.toUpperCase();
-                        document.getElementById('modal-perfil-nick').innerText = currentUserNick;
-                        const avatarUrl = getAvatarUrl(currentUserNick, 'm', 'std', 'std');
-                        document.getElementById('sidebar-avatar').src = avatarUrl;
-                        document.getElementById('modal-avatar').src = avatarUrl;
-                        document.getElementById('perfil-descricao').value = doc.data().descricao || "";
+                        prepararModalPerfilMeu(doc.data());
                         
-                        // Formatar dataRegistro
-                        let dataStr = "Recente";
-                        if(doc.data().dataRegistro) {
-                            const d = doc.data().dataRegistro.toDate();
-                            dataStr = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
-                        }
-                        document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
-
-                        // Esconde a tela de carregamento de segurança
                         gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
-                        
-                        // Puxar os dados ao vivo do painel
                         iniciarEscutas();
                     } else {
-                        // PENDENTE OU REJEITADO! Chuta ele pra fora.
                         auth.signOut().then(() => {
                             alert("Acesso Negado: Sua conta ainda não foi aprovada pelo Ministério.");
                             window.location.href = 'index.html';
                         });
                     }
                 }).catch((error) => {
-                    console.error("Erro ao verificar permissão:", error);
+                    console.error("Erro verificação:", error);
                     auth.signOut().then(() => { window.location.href = 'index.html'; });
                 });
-
             } else {
-                // Não está logado, chuta pro início.
                 window.location.href = 'index.html';
             }
         });
@@ -412,13 +390,12 @@
             auth.signOut().then(() => { window.location.href = 'index.html'; });
         }
 
-        // Função Útil: Formatar Habbo Imaging
         function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
             return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
         }
 
         // ==========================================
-        // 3. LÓGICA DE UI E ABAS
+        // 3. UI, ABAS E FILTROS
         // ==========================================
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -445,74 +422,107 @@
         }
 
         function switchTab(tabId, btnElement) {
-            // Atualiza botões da sidebar
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // Troca o conteúdo (com fade in do GSAP)
             document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('block');
-                el.classList.add('opacity-0');
+                el.classList.add('hidden'); el.classList.remove('block'); el.classList.add('opacity-0');
             });
             
             const target = document.getElementById('tab-' + tabId);
-            target.classList.remove('hidden');
-            target.classList.add('block');
-            
+            target.classList.remove('hidden'); target.classList.add('block');
             gsap.fromTo(target, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
 
-            if(window.innerWidth < 768) toggleSidebar(); // Fecha menu mobile ao clicar
+            if(window.innerWidth < 768) toggleSidebar(); 
         }
 
-        // Dropdown Histórico Meses
         function toggleFilterDropdown() {
             const m = document.getElementById('menu-filter-meses');
             const s = document.getElementById('icone-filter-seta');
             m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2');
             s.classList.toggle('rotate-180');
         }
+
         function selecionarFilterMes(el) {
             document.getElementById('texto-filter-mes').innerText = el.innerText;
             toggleFilterDropdown();
             carregarHistoricoTabela(el.innerText);
         }
 
-        // Salvar Biografia Perfil VIVO
+        // ==========================================
+        // 4. PERFIL VIVO (Modo Meu Perfil vs Modo Terceiro)
+        // ==========================================
+        function prepararModalPerfilMeu(data) {
+            document.getElementById('modal-perfil-nick').innerText = data.nick;
+            const avatarUrl = getAvatarUrl(data.nick, 'm', 'std', 'std');
+            document.getElementById('sidebar-avatar').src = avatarUrl;
+            document.getElementById('modal-avatar').src = getAvatarUrl(data.nick, 'l', 'std', 'std');
+            
+            const txtDesc = document.getElementById('perfil-descricao');
+            txtDesc.value = data.descricao || "";
+            txtDesc.readOnly = false;
+            
+            let dataStr = "Recente";
+            if(data.dataSolicitacao) {
+                const d = data.dataSolicitacao.toDate();
+                dataStr = `${d.getDate()}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}`;
+            }
+            document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
+
+            document.getElementById('modal-perfil-title-container').classList.add('hidden');
+            document.getElementById('btn-save-perfil').classList.remove('hidden');
+        }
+
         function salvarDescricaoPerfil(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-save-perfil');
             const desc = document.getElementById('perfil-descricao').value.trim();
             const uid = auth.currentUser.uid;
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
 
-            db.collection("usuarios_admin").doc(uid).update({ descricao: desc })
+            db.collection("solicitacoes_acesso").doc(uid).update({ descricao: desc })
                 .then(() => {
-                    btn.innerHTML = 'Salvar Biografia';
-                    btn.disabled = false;
-                    toggleModal('modal-perfil');
-                    alert("Biografia salva com sucesso!");
+                    btn.innerHTML = 'Salvar Biografia'; btn.disabled = false;
+                    toggleModal('modal-perfil'); alert("Biografia salva com sucesso!");
                 }).catch((err) => {
-                    console.error("Erro biografia:", err);
-                    alert("Erro ao salvar biografia.");
-                    btn.disabled = false;
-                    btn.innerHTML = 'Salvar Biografia';
+                    console.error("Erro biografia:", err); alert("Erro ao salvar biografia.");
+                    btn.disabled = false; btn.innerHTML = 'Salvar Biografia';
                 });
         }
 
+        function abrirDetalhesAdminDoc(docId) {
+            db.collection("solicitacoes_acesso").doc(docId).get()
+              .then((doc) => {
+                  const data = doc.data();
+                  document.getElementById('modal-perfil-nick').innerText = data.nick;
+                  document.getElementById('modal-avatar').src = getAvatarUrl(data.nick, 'l', 'std', 'std');
+                  
+                  const txtDesc = document.getElementById('perfil-descricao');
+                  txtDesc.value = data.descricao || "";
+                  txtDesc.readOnly = true; 
+                  
+                  let dataStr = "Recente";
+                  if(data.dataSolicitacao) { const d = data.dataSolicitacao.toDate(); dataStr = `${d.getDate()}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}`; }
+                  document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
+
+                  document.getElementById('modal-perfil-title-container').classList.remove('hidden');
+                  document.getElementById('btn-save-perfil').classList.add('hidden');
+
+                  toggleModal('modal-perfil');
+              });
+        }
+
         // ==========================================
-        // 4. SISTEMAS DE AUDITORIA E DADOS (Real Time)
+        // 5. ESCUTAS EM TEMPO REAL (AUDITORIA, ACESSO, ADMINS)
         // ==========================================
         function iniciarEscutas() {
-            // Escutando Postagens de Atividade Pendentes
-            db.collection("postagens").where("status", "==", "Pendente")
-              .onSnapshot((querySnapshot) => {
+            // Auditoria
+            db.collection("postagens").where("status", "==", "Pendente").onSnapshot((querySnapshot) => {
                   const grid = document.getElementById('grid-atividades');
                   const emptyState = document.getElementById('empty-atividades');
                   document.getElementById('count-atividades').innerText = `${querySnapshot.size} Pendentes`;
-                  grid.innerHTML = ''; // Limpa a grid (O onSnapshot cuida do Vanish Card automático)
+                  grid.innerHTML = ''; 
                   if (querySnapshot.empty) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); } else { emptyState.classList.add('hidden'); emptyState.classList.remove('flex');
                       querySnapshot.forEach((doc) => { const data = doc.data(); let dataStr = "Agora"; if(data.dataEnvio) { const d = data.dataEnvio.toDate(); dataStr = `${d.getDate()}/${d.getMonth()+1} às ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`; }
                           grid.innerHTML += `
@@ -534,9 +544,8 @@
                   }
               });
 
-            // Escutando Solicitações de Acesso Pendentes
-            db.collection("solicitacoes_acesso").where("status", "==", "Pendente")
-              .onSnapshot((querySnapshot) => {
+            // Acessos
+            db.collection("solicitacoes_acesso").where("status", "==", "Pendente").onSnapshot((querySnapshot) => {
                   const grid = document.getElementById('grid-acessos');
                   const emptyState = document.getElementById('empty-acessos');
                   document.getElementById('count-acessos').innerText = `${querySnapshot.size} Pendentes`;
@@ -559,16 +568,14 @@
                   }
               });
 
-            // Escutando Lista ADMIN (Usuarios_admin status == Aprovado)
-            db.collection("usuarios_admin").where("status", "==", "Aprovado")
-              .onSnapshot((querySnapshot) => {
+            // Lista ADMINs Aprovados
+            db.collection("solicitacoes_acesso").where("status", "==", "Aprovado").onSnapshot((querySnapshot) => {
                   const grid = document.getElementById('grid-admin-list');
                   grid.innerHTML = '';
                   querySnapshot.forEach((doc) => {
                       const data = doc.data();
-                      // Mini-cards vivos/alive interativos
                       grid.innerHTML += `
-                          <button onclick="abrirDetalhesAdminDoc('${doc.id}')" class="vivid-perfil h-24 glass-card p-3 flex flex-col items-center justify-center text-center gap-2 border border-white/5 cursor-pointer">
+                          <button onclick="abrirDetalhesAdminDoc('${doc.id}')" class="vivid-perfil h-24 glass-card p-3 flex flex-col items-center justify-center text-center gap-2 border border-white/5 cursor-pointer group">
                               <div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
                                   <img src="${getAvatarUrl(data.nick, 'm', 'std', 'std')}" class="absolute -top-1 left-1/2 -translate-x-1/2">
                               </div>
@@ -577,29 +584,20 @@
                   });
               });
             
-            // Carregar Histórico Tabela Inicial (Mês Atual)
             carregarHistoricoTabela("Abril 2026");
         }
 
         // ==========================================
-        // 5. MOTOR DE JULGAMENTO (Aprovar/Rejeitar) & REJEIÇÃO MOTIVO
+        // 6. MOTOR DE JULGAMENTO & REJEIÇÃO
         // ==========================================
-
         function julgarDoc(colecao, docId, novoStatus) {
-            // Efeito visual de loading no card
             const card = document.getElementById(`card-${docId}`);
             if(card) { card.style.opacity = '0.5'; card.style.pointerEvents = 'none'; }
-
-            const updates = { status: novoStatus, dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(), julgadoPor: currentUserNick };
-
-            // Trancamento de regras de negócio: Quando aprovado, card some (onSnapshot). 
-            // Para Rejeição, precisamos abrir o modal de Motivo antes.
             
-            db.collection(colecao).doc(docId).update(updates)
+            db.collection(colecao).doc(docId).update({ status: novoStatus, dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(), julgadoPor: currentUserNick })
                 .catch((error) => { console.error("Erro julgar:", error); alert("Erro comunicação servidor."); if(card) { card.style.opacity = '1'; card.style.pointerEvents = 'auto'; } });
         }
 
-        // Fluxo de Rejeição com Motivo
         function iniciarRejeicaoPostagem(docId) {
             document.getElementById('form-reject-docId').value = docId;
             document.getElementById('reject-motivo').value = '';
@@ -608,64 +606,42 @@
 
         function confirmarRejeicaoPostagem(e) {
             e.preventDefault();
-            const btn = document.querySelector('#modal-reject-atividades #btn-cadastro');
             const docId = document.getElementById('form-reject-docId').value;
             const motivo = document.getElementById('reject-motivo').value.trim();
 
             if(!motivo) { alert("Informe o motivo técnico da rejeição."); return; }
-            
-            toggleModal('modal-reject-atividades'); // Fecha modal motivo
+            toggleModal('modal-reject-atividades');
 
             const card = document.getElementById(`card-${docId}`);
             if(card) { card.style.opacity = '0.5'; card.style.pointerEvents = 'none'; }
 
             db.collection("postagens").doc(docId).update({
-                status: "Rejeitado",
-                motivoRejeicao: motivo, // Novo campo pedido
-                dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(),
-                julgadoPor: currentUserNick
-            })
-            .catch((error) => { console.error("Erro rejeitar:", error); alert("Erro rejeição servidor."); if(card) { card.style.opacity = '1'; card.style.pointerEvents = 'auto'; } });
+                status: "Rejeitado", motivoRejeicao: motivo, dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(), julgadoPor: currentUserNick
+            }).catch((error) => { console.error("Erro rejeitar:", error); alert("Erro rejeição servidor."); if(card) { card.style.opacity = '1'; card.style.pointerEvents = 'auto'; } });
         }
 
         // ==========================================
-        // 6. HISTÓRICO MENSAL DETALHADO (Table & Filter)
+        // 7. HISTÓRICO MENSAL DETALHADO
         // ==========================================
         function carregarHistoricoTabela(mesFilter) {
             const list = document.getElementById('table-historico-list');
-            const empty Historico = document.getElementById('empty-historico');
+            const emptyHistorico = document.getElementById('empty-historico');
             list.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-white/30"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Buscando Arquivos...</td></tr>';
             emptyHistorico.classList.add('hidden');
 
-            // Query complexa: O ranking é mensal. Precisamos filtrar pela dataJulgamento. 
-            // Firestore Compat query for month range can be tricky without precise timestamps.
-            // Simplified here: Load all non-pending and filter by JS for current simplification. 
-            db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado"])
-              .get()
+            db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado"]).get()
               .then((querySnapshot) => {
                   list.innerHTML = '';
-                  
-                  if (querySnapshot.empty) {
-                      emptyHistorico.classList.remove('hidden');
-                      emptyHistorico.classList.add('flex');
-                      return;
-                  }
+                  if (querySnapshot.empty) { emptyHistorico.classList.remove('hidden'); emptyHistorico.classList.add('flex'); return; }
 
                   let postsMostrados = 0;
                   querySnapshot.forEach((doc) => {
                       const data = doc.data();
-                      
-                      // Filtro simplificado no JS pelo nome do mês (ex: dataJulgamento -> d/m/y format -> compara com mesFilter)
-                      // Isso não é otimizado no backend mas funciona para o nível atual.
-                      let dataJulgStr = "FALHA DATA";
+                      let dataJulgStr = "N/A";
                       if(data.dataJulgamento) {
                           const d = data.dataJulgamento.toDate();
-                          // Simulação filtro Mês: Se d/m/y format contains mesFilter name...
-                          // Here just getting full date for table:
                           dataJulgStr = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} às ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
                       }
-
-                      // TODO: Implement proper Month filter logic in JS comparing dataJulgStr month to mesFilter.
 
                       postsMostrados++;
                       let statusClass = data.status === "Aprovado" ? "emerald" : "red";
@@ -681,9 +657,7 @@
                               <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${data.categoria}</td>
                               <td class="p-4 text-white/50 text-[11px] font-mono whitespace-nowrap">${data.dataEnvio ? data.dataEnvio.toDate().toLocaleString() : 'N/A'}</td>
                               <td class="p-4 text-center">
-                                  <span class="inline-flex items-center gap-1.5 point-badge point-${statusClass} text-${statusClass}-400">
-                                      <i class="fa-solid fa-${statusIcon}"></i> ${data.status}
-                                  </span>
+                                  <span class="inline-flex items-center gap-1.5 point-badge point-${statusClass} text-${statusClass}-400"><i class="fa-solid fa-${statusIcon}"></i> ${data.status}</span>
                               </td>
                               <td class="p-4 text-xs font-semibold whitespace-nowrap">${data.julgadoPor || 'N/A'}${motivoTd}</td>
                               <td class="p-4 text-white/50 text-[11px] font-mono whitespace-nowrap">${dataJulgStr}</td>
@@ -692,34 +666,6 @@
 
                   if(postsMostrados === 0) { emptyHistorico.classList.remove('hidden'); emptyHistorico.classList.add('flex'); }
               }).catch(err => { console.error("Erro histórico:", err); list.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-red-400">Erro comunicação servidor.</td></tr>'; });
-        }
-
-        // ==========================================
-        // 7. UTILIDADES E MODAIS LISTA ADMIN
-        // ==========================================
-        function abrirDetalhesAdminDoc(docId) {
-            db.collection("usuarios_admin").doc(docId).get()
-              .then((doc) => {
-                  const data = doc.data();
-                  // Reutilizamos modal-perfil mas desativamos edição biografia e mudamos título/botão
-                  document.getElementById('modal-perfil-nick').innerText = data.nick;
-                  const avatarUrl = getAvatarUrl(data.nick, 'l', 'std', 'std');
-                  document.getElementById('modal-avatar').src = avatarUrl;
-                  document.getElementById('perfil-descricao').value = data.descricao || "";
-                  document.getElementById('perfil-descricao').readOnly = true; // Desativa edição
-                  
-                  let dataStr = "Recente";
-                  if(data.dataRegistro) { const d = data.dataRegistro.toDate(); dataStr = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`; }
-                  document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
-
-                  // Altera UI do modal para visualização de terceiro
-                  document.querySelector('#modal-perfil h2')?.remove(); // remove anterior
-                  document.querySelector('#modal-perfil button#btn-save-perfil').classList.add('hidden'); // esconde botão salvar
-                  const title = `<h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4 w-full">Detalhes Liderança</h2>`;
-                  document.querySelector('#modal-perfil .relative div#perfil-descricao').parentElement.insertAdjacentHTML('beforebegin', title);
-
-                  toggleModal('modal-perfil');
-              });
         }
     </script>
 </body>
