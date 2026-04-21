@@ -110,7 +110,7 @@
         </nav>
 
         <div class="p-6 border-t border-white/5">
-            <button onclick="toggleModal('modal-perfil')" class="w-full glass-card vivid-perfil p-4 flex items-center gap-3.5 mb-4 border border-white/10 hover:border-tre-brand/30 transition-all cursor-pointer">
+            <button onclick="abrirMeuPerfil()" class="w-full glass-card vivid-perfil p-4 flex items-center gap-3.5 mb-4 border border-white/10 hover:border-tre-brand/30 transition-all cursor-pointer">
                 <div class="w-12 h-12 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
                     <img id="sidebar-avatar" src="https://via.placeholder.com/80x80/0A0102/FFFFFF?text=???" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500">
                 </div>
@@ -309,7 +309,7 @@
             </div>
             <div class="w-full space-y-1.5 mb-6 text-left">
                 <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Descrição Profissional / Biografia</label>
-                <textarea id="perfil-descricao" rows="4" placeholder="Adicione uma descrição sobre você (Max 300 caracteres)..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium custom-scrollbar"></textarea>
+                <textarea id="perfil-descricao" rows="4" placeholder="Adicione uma descrição sobre você no sistema (Max 300 caracteres)..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium custom-scrollbar"></textarea>
             </div>
             <button id="btn-save-perfil" onclick="salvarDescricaoPerfil(event)" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">
                 Salvar Biografia
@@ -406,7 +406,7 @@
         const auth = firebase.auth();
 
         let currentUserNick = "LIDERANÇA"; 
-        let quadroPontosGlobal = []; // Array do Quadro de Pontos vivo
+        let quadroPontosGlobal = []; 
 
         // ==========================================
         // 2. GUARDA DE AUTENTICAÇÃO DUPLA
@@ -420,7 +420,6 @@
                     if (doc.exists && doc.data().status === "Aprovado") {
                         currentUserNick = doc.data().nick || "Admin";
                         document.getElementById('admin-user-nick').innerText = currentUserNick.toUpperCase();
-                        prepararModalPerfilMeu(doc.data());
                         
                         gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
                         
@@ -520,26 +519,60 @@
         }
 
         // ==========================================
-        // 4. PERFIL VIVO E MODAL
+        // 4. PERFIL VIVO (LÓGICA BLINDADA)
         // ==========================================
-        function prepararModalPerfilMeu(data) {
-            document.getElementById('modal-perfil-nick').innerText = data.nick;
-            document.getElementById('sidebar-avatar').src = getAvatarUrl(data.nick, 'm', 'std', 'std');
-            document.getElementById('modal-avatar').src = getAvatarUrl(data.nick, 'l', 'std', 'std');
-            
-            const txtDesc = document.getElementById('perfil-descricao');
-            txtDesc.value = data.descricao || "";
-            txtDesc.readOnly = false;
-            
-            let dataStr = "Recente";
-            if(data.dataSolicitacao) {
-                const d = data.dataSolicitacao.toDate();
-                dataStr = `${d.getDate()}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}`;
-            }
-            document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
+        
+        // Abre o perfil do próprio usuário editável
+        function abrirMeuPerfil() {
+            db.collection("solicitacoes_acesso").doc(auth.currentUser.uid).get()
+              .then((doc) => {
+                  const data = doc.data();
+                  document.getElementById('modal-perfil-nick').innerText = data.nick;
+                  document.getElementById('sidebar-avatar').src = getAvatarUrl(data.nick, 'm', 'std', 'std');
+                  document.getElementById('modal-avatar').src = getAvatarUrl(data.nick, 'l', 'std', 'std');
+                  
+                  const txtDesc = document.getElementById('perfil-descricao');
+                  txtDesc.value = data.descricao || "";
+                  txtDesc.readOnly = false;
+                  txtDesc.placeholder = "Adicione uma descrição sobre você no sistema (Max 300 caracteres)...";
+                  
+                  let dataStr = "Recente";
+                  if(data.dataSolicitacao) { const d = data.dataSolicitacao.toDate(); dataStr = `${d.getDate()}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}`; }
+                  document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
 
-            document.getElementById('modal-perfil-title-container').classList.add('hidden');
-            document.getElementById('btn-save-perfil').classList.remove('hidden');
+                  document.getElementById('modal-perfil-title-container').classList.add('hidden');
+                  document.getElementById('btn-save-perfil').classList.remove('hidden');
+                  toggleModal('modal-perfil');
+              });
+        }
+
+        // Abre detalhes de outro usuário da lista
+        function abrirDetalhesAdminDoc(docId) {
+            if(docId === auth.currentUser.uid) {
+                abrirMeuPerfil(); // Se for você mesmo, abre a edição
+                return;
+            }
+            
+            db.collection("solicitacoes_acesso").doc(docId).get()
+              .then((doc) => {
+                  const data = doc.data();
+                  document.getElementById('modal-perfil-nick').innerText = data.nick;
+                  document.getElementById('modal-avatar').src = getAvatarUrl(data.nick, 'l', 'std', 'std');
+                  
+                  const txtDesc = document.getElementById('perfil-descricao');
+                  txtDesc.value = data.descricao || "";
+                  txtDesc.readOnly = true; 
+                  txtDesc.placeholder = data.descricao ? "" : "Nenhuma biografia registrada.";
+                  
+                  let dataStr = "Recente";
+                  if(data.dataSolicitacao) { const d = data.dataSolicitacao.toDate(); dataStr = `${d.getDate()}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}`; }
+                  document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
+
+                  document.getElementById('modal-perfil-title-container').classList.remove('hidden');
+                  document.getElementById('btn-save-perfil').classList.add('hidden');
+
+                  toggleModal('modal-perfil');
+              });
         }
 
         function salvarDescricaoPerfil(e) {
@@ -558,28 +591,6 @@
                     console.error("Erro biografia:", err); alert("Erro ao salvar biografia.");
                     btn.disabled = false; btn.innerHTML = 'Salvar Biografia';
                 });
-        }
-
-        function abrirDetalhesAdminDoc(docId) {
-            db.collection("solicitacoes_acesso").doc(docId).get()
-              .then((doc) => {
-                  const data = doc.data();
-                  document.getElementById('modal-perfil-nick').innerText = data.nick;
-                  document.getElementById('modal-avatar').src = getAvatarUrl(data.nick, 'l', 'std', 'std');
-                  
-                  const txtDesc = document.getElementById('perfil-descricao');
-                  txtDesc.value = data.descricao || "";
-                  txtDesc.readOnly = true; 
-                  
-                  let dataStr = "Recente";
-                  if(data.dataSolicitacao) { const d = data.dataSolicitacao.toDate(); dataStr = `${d.getDate()}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}`; }
-                  document.getElementById('modal-perfil-dataRegistro').innerText = dataStr;
-
-                  document.getElementById('modal-perfil-title-container').classList.remove('hidden');
-                  document.getElementById('btn-save-perfil').classList.add('hidden');
-
-                  toggleModal('modal-perfil');
-              });
         }
 
         // ==========================================
@@ -613,7 +624,7 @@
 
                 list.innerHTML += `
                     <tr class="group border-b border-white/5 hover:bg-white/5 transition-colors text-white/80">
-                        <td class="p-4 px-6 font-bold text-[11px] uppercase tracking-wider text-white/50 group-hover:text-white">${ativ.grupo}</td>
+                        <td class="p-4 px-6 font-bold text-[11px] uppercase tracking-wider text-white/50 group-hover:text-white">[${ativ.grupo}]</td>
                         <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${ativ.nome}</td>
                         <td class="p-4 text-center"><span class="inline-flex items-center point-badge point-${badgeClass}">${ptSinal}</span></td>
                         <td class="p-4 text-xs font-semibold whitespace-nowrap uppercase">${ativ.responsavel}</td>
@@ -680,7 +691,6 @@
         // 6. ESCUTAS EM TEMPO REAL (AUDITORIA E ADMINS)
         // ==========================================
         function iniciarEscutas() {
-            // Auditoria
             db.collection("postagens").where("status", "==", "Pendente").onSnapshot((querySnapshot) => {
                   const grid = document.getElementById('grid-atividades');
                   const emptyState = document.getElementById('empty-atividades');
@@ -707,7 +717,6 @@
                   }
               });
 
-            // Acessos Pendentes
             db.collection("solicitacoes_acesso").where("status", "==", "Pendente").onSnapshot((querySnapshot) => {
                   const grid = document.getElementById('grid-acessos');
                   const emptyState = document.getElementById('empty-acessos');
@@ -731,7 +740,6 @@
                   }
               });
 
-            // Lista ADMINs Aprovados
             db.collection("solicitacoes_acesso").where("status", "==", "Aprovado").onSnapshot((querySnapshot) => {
                   const grid = document.getElementById('grid-admin-list');
                   grid.innerHTML = '';
@@ -800,6 +808,7 @@
                   let postsMostrados = 0;
                   querySnapshot.forEach((doc) => {
                       const data = doc.data();
+                      
                       let dataJulgStr = "N/A";
                       if(data.dataJulgamento) {
                           const d = data.dataJulgamento.toDate();
@@ -837,7 +846,7 @@
 
                   if(postsMostrados === 0) { emptyHistorico.classList.remove('hidden'); emptyHistorico.classList.add('flex'); }
                   
-                  filtrarHistoricoBusca(); // Mantém o filtro de texto
+                  filtrarHistoricoBusca(); 
               }).catch(err => { console.error("Erro histórico:", err); list.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-red-400">Erro comunicação servidor.</td></tr>'; });
         }
     </script>
