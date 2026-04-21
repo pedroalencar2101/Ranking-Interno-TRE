@@ -43,7 +43,7 @@
             background-attachment: fixed;
             font-size: 15px;
             overflow-x: hidden;
-            scroll-behavior: smooth; /* Rolagem suave nativa */
+            scroll-behavior: smooth;
         }
         
         .glass-navbar {
@@ -109,9 +109,15 @@
         .glow-silver { background: #E3E4E5; }
         .glow-bronze { background: #CD7F32; }
 
+        /* Scrollbar Customizada */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0A0102; }
         ::-webkit-scrollbar-thumb { background: #D31522; rounded: 3px; }
+        
+        /* Scrollbar para os modais */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand selection:text-white flex flex-col" id="topo">
@@ -163,6 +169,10 @@
                     </div>
                 </div>
 
+                <button onclick="toggleModal('modal-pontos')" class="glass-panel-simple px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 text-yellow-400 border-yellow-500/20 hover:bg-yellow-500/10 transition-all shadow-lg cursor-pointer">
+                    <i class="fa-solid fa-star"></i> Quadro de Pontos
+                </button>
+
                 <a href="LINK_DA_PLANILHA_AQUI" target="_blank" class="glass-panel-simple px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10 transition-all shadow-lg">
                     <i class="fa-solid fa-file-excel"></i> Transparência
                 </a>
@@ -201,18 +211,14 @@
     </footer>
 
     <div id="modal-regras" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleModal('modal-regras')"></div>
-        
-        <div class="relative w-full max-w-2xl bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-transform duration-300" id="modal-content">
-            
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-md" onclick="toggleModal('modal-regras')"></div>
+        <div class="relative w-full max-w-2xl bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-transform duration-300">
             <button onclick="toggleModal('modal-regras')" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-tre-brand transition-colors">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
-
-            <h2 class="text-2xl md:text-3xl font-black tracking-tight text-white uppercase mb-2 border-b border-white/10 pb-4">
+            <h2 class="text-xl md:text-3xl font-black tracking-tight text-white uppercase mb-2 border-b border-white/10 pb-4">
                 <i class="fa-solid fa-book-open text-tre-brand mr-2"></i> Regras do Ranking
             </h2>
-            
             <div class="mt-6 space-y-4 text-sm md:text-base text-white/70 leading-relaxed max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
                 <p>O Ranking Interno da Companhia dos Treinadores é o reflexo do esforço e dedicação do nosso corpo executivo. Para garantir a transparência, observe as regras abaixo:</p>
                 <ul class="list-none space-y-3">
@@ -226,13 +232,180 @@
                     </li>
                     <li class="flex items-start gap-3">
                         <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-1"></i>
-                        <span><strong>Fraude:</strong> Qualquer tentativa de adulteração nas provas resultará em punição severa e zeramento no ranking mensal.</span>
+                        <span><strong>Fraude:</strong> Qualquer tentativa de adulteração nas provas resultará em punição severa e zeramento no ranking.</span>
                     </li>
                 </ul>
             </div>
-            
             <div class="mt-8 pt-4 border-t border-white/10 text-right">
                 <button onclick="toggleModal('modal-regras')" class="bg-white/5 hover:bg-white/10 text-white px-6 py-2 rounded-xl text-sm font-semibold transition-colors border border-white/10">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-pontos" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-pontos')"></div>
+        <div class="relative w-full max-w-5xl bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-5 md:p-8 transform scale-95 transition-transform duration-300">
+            <button onclick="toggleModal('modal-pontos')" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-tre-brand transition-colors z-10">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <h2 class="text-xl md:text-3xl font-black tracking-tight text-white uppercase mb-4 border-b border-white/10 pb-4">
+                <i class="fa-solid fa-list-ol text-yellow-500 mr-2"></i> Quadro de Pontos
+            </h2>
+            
+            <div class="mt-4 max-h-[65vh] overflow-y-auto pr-2 custom-scrollbar grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                
+                <div class="bg-[#050101] border border-white/5 rounded-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-[#35060A] to-transparent px-4 py-2 border-b border-white/10">
+                        <h3 class="font-bold text-sm text-white/90 tracking-wider">[A] OUVIDORIA</h3>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Projeto Aprovado na Ouvidoria</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+6</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Sugestão Aprovada na Ouvidoria</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+4</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Correção Aprovada na Ouvidoria</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+2</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Projeto Aprovado (Grupo Interno)</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+4</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Grupo Int.</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Sugestão Aprovada (Grupo Interno)</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+2</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Grupo Int.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#050101] border border-white/5 rounded-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-[#35060A] to-transparent px-4 py-2 border-b border-white/10">
+                        <h3 class="font-bold text-sm text-white/90 tracking-wider">[B] DESTAQUES</h3>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Destaque (Treinador)</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+4</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Destaque (Supervisor)</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+4</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Destaque (Ministro)</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+8</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Destaque (Liderança)</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+2</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Grupo Int.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#050101] border border-white/5 rounded-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-[#35060A] to-transparent px-4 py-2 border-b border-white/10">
+                        <h3 class="font-bold text-sm text-white/90 tracking-wider">[C] HIERARQUIA E METAS</h3>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Promoção Oficial</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+5</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Meta Cumprida (Treinador/Sup)</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+2</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Rebaixamento Oficial</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded text-[10px] font-bold">-5</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Meta Negativa (Geral)</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded text-[10px] font-bold">-2</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#050101] border border-white/5 rounded-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-[#35060A] to-transparent px-4 py-2 border-b border-white/10">
+                        <h3 class="font-bold text-sm text-white/90 tracking-wider">[D] DIVERSOS</h3>
+                    </div>
+                    <div class="p-3 space-y-1">
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Ministração de Aula Geral</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+6</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">CDC</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Presença em Reunião/Evento</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+2</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">CDC</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Quebra de Recorde</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold">+6</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+                            <span class="text-[11px] md:text-xs text-white/70">Advertência / Notificação</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded text-[10px] font-bold">-3</span>
+                                <span class="text-[9px] text-white/30 uppercase tracking-widest w-16 text-right">Conselho</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -242,7 +415,7 @@
 
     <script>
         // ==========================================
-        // DADOS E RENDERIZAÇÃO
+        // DADOS E RENDERIZAÇÃO DO PÓDIO
         // ==========================================
         const dadosRanking = [
             { posicao: 1, nick: "G4VET4", pontos: 185 },
@@ -323,10 +496,10 @@
         });
 
         // ==========================================
-        // LÓGICA DE INTERAÇÕES (Botões e Menus)
+        // LÓGICA DE INTERAÇÕES (Botões e Modais)
         // ==========================================
 
-        // Dropdown Lógica
+        // Lógica do Dropdown de Mês
         const menuMeses = document.getElementById('menu-meses');
         const iconeSeta = document.getElementById('icone-seta');
         const textoMes = document.getElementById('texto-mes');
@@ -342,10 +515,8 @@
         function selecionarMes(elemento) {
             textoMes.innerText = elemento.innerText;
             toggleDropdown();
-            // Aqui você pode futuramente adicionar lógica para carregar dados do banco!
         }
 
-        // Fechar dropdown ao clicar fora
         document.addEventListener('click', (event) => {
             if (!btnMes.contains(event.target) && !menuMeses.contains(event.target)) {
                 menuMeses.classList.add('opacity-0', 'invisible', 'translate-y-2');
@@ -353,20 +524,21 @@
             }
         });
 
-        // Modal Lógica
+        // Lógica de Modais Universais (Regras e Quadro de Pontos)
         function toggleModal(modalID) {
             const modal = document.getElementById(modalID);
-            const content = document.getElementById('modal-content');
+            // Procura a caixa de conteúdo dentro do modal chamado
+            const content = modal.querySelector('div.relative'); 
             
             if (modal.classList.contains('opacity-0')) {
-                // Abrir
+                // Abre o Modal
                 modal.classList.remove('opacity-0', 'invisible');
                 setTimeout(() => {
                     content.classList.remove('scale-95');
                     content.classList.add('scale-100');
                 }, 10);
             } else {
-                // Fechar
+                // Fecha o Modal
                 content.classList.remove('scale-100');
                 content.classList.add('scale-95');
                 setTimeout(() => {
