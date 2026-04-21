@@ -64,6 +64,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* Cubos 3D (Z-depth) */
         .tilt-card {
             transform-style: preserve-3d;
             background: linear-gradient(145deg, rgba(35, 6, 8, 0.7) 0%, rgba(10, 1, 2, 0.85) 100%);
@@ -81,6 +82,7 @@
         }
         .tilt-card:hover .neon-glow { opacity: 0.25; }
 
+        /* Ancoragem do Avatar */
         .z-avatar {
             transform-origin: bottom center; 
             transform: translateX(-50%) translateZ(2px); 
@@ -102,6 +104,7 @@
         .glow-silver { background: #E3E4E5; }
         .glow-bronze { background: #CD7F32; }
 
+        /* Inputs e Cards de Atividade Glass */
         .glass-input {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -257,16 +260,18 @@
                     <i class="fa-solid fa-triangle-exclamation mr-1"></i> Área exclusiva do Ministério
                 </div>
 
+                <div id="login-feedback" class="hidden mb-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30"></div>
+
                 <form id="form-login" class="space-y-4" onsubmit="realizarLogin(event)">
                     <div class="space-y-1.5">
                         <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label>
-                        <input type="text" required placeholder="Seu nick..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
+                        <input type="text" id="login-nick" required placeholder="Seu nick..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
                     </div>
                     <div class="space-y-1.5">
                         <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Senha de Acesso</label>
-                        <input type="password" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
+                        <input type="password" id="login-senha" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
                     </div>
-                    <button type="submit" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm">
+                    <button type="submit" id="btn-login-submit" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">
                         Entrar no Painel
                     </button>
                 </form>
@@ -282,22 +287,28 @@
                     <i class="fa-solid fa-user-plus text-tre-brand"></i> Solicitar Acesso
                 </h2>
                 
+                <div id="reg-feedback" class="hidden mb-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30"></div>
+
                 <form id="form-cadastro" class="space-y-4" onsubmit="enviarCadastro(event)">
                     <div class="space-y-1.5">
                         <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label>
-                        <input type="text" required placeholder="Ex: G4VET4" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
+                        <input type="text" id="reg-nick" required placeholder="Ex: G4VET4" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
                     </div>
+                    
                     <div class="space-y-1.5">
                         <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Criar Senha</label>
-                        <input type="password" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
+                        <input type="password" id="reg-senha" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
                     </div>
-                    <button type="submit" id="btn-cadastro" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm">
+                    
+                    <button type="submit" id="btn-cadastro" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">
                         Enviar Solicitação
                     </button>
                 </form>
 
                 <div class="mt-4 text-center border-t border-white/5 pt-4">
-                    <button onclick="switchView('login')" class="text-white/50 text-xs hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-arrow-left mr-1"></i> Voltar para Login</button>
+                    <button type="button" onclick="switchView('login')" class="text-white/50 text-xs hover:text-white transition-colors cursor-pointer flex items-center justify-center w-full">
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Voltar para Login
+                    </button>
                 </div>
             </div>
 
@@ -313,7 +324,6 @@
                     Entendido
                 </button>
             </div>
-
         </div>
     </div>
 
@@ -383,7 +393,7 @@
 
     <script>
         // ==========================================
-        // 1. INICIALIZAÇÃO DO FIREBASE (Suas chaves)
+        // 1. INICIALIZAÇÃO DO FIREBASE
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0",
@@ -393,14 +403,12 @@
             messagingSenderId: "1008986456536",
             appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad"
         };
-
-        // Ligar os motores do Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
 
         // ==========================================
-        // 2. DADOS E RENDERIZAÇÃO DO PÓDIO
+        // 2. RENDERIZAÇÃO DO PÓDIO
         // ==========================================
         const dadosRanking = [
             { posicao: 1, nick: "G4VET4", pontos: 185 }, { posicao: 2, nick: "benjlfbaby", pontos: 150 }, { posicao: 3, nick: "BeGomes94.", pontos: 130 },
@@ -414,7 +422,6 @@
 
         const podiumContainer = document.getElementById('podium-container');
         const ordemPodio = [dadosRanking[1], dadosRanking[0], dadosRanking[2]]; 
-
         ordemPodio.forEach(membro => {
             if(!membro) return;
             let orderClass = membro.posicao === 1 ? "order-2" : membro.posicao === 2 ? "order-1" : "order-3";
@@ -508,25 +515,91 @@
             }, 200);
         }
 
-        // Lógica Falsa de Cadastro (Substituiremos pelo Firebase Auth depois)
+        // ==========================================
+        // 4. FIREBASE: CADASTRO E LOGIN (O COFRE)
+        // ==========================================
+
         function enviarCadastro(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-cadastro');
+            const feedback = document.getElementById('reg-feedback');
+            
+            const nick = document.getElementById('reg-nick').value.trim();
+            const senha = document.getElementById('reg-senha').value;
+            
+            // Truque de Engenharia: Converte Nick em Email para o Firebase
+            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
+
+            btn.disabled = true;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
-            setTimeout(() => {
-                btn.innerHTML = 'Enviar Solicitação';
-                switchView('feedback');
-                document.getElementById('form-cadastro').reset();
-            }, 1000);
+            feedback.classList.add('hidden');
+
+            auth.createUserWithEmailAndPassword(emailFake, senha)
+                .then((userCredential) => {
+                    // Cadastrou com sucesso. Agora salva o pedido no banco de dados.
+                    return db.collection("solicitacoes_acesso").doc(userCredential.user.uid).set({
+                        nick: nick,
+                        status: "Pendente",
+                        dataSolicitacao: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    // Desloga imediatamente para ele não entrar no painel antes da aprovação
+                    auth.signOut();
+                    
+                    // Mostra tela de sucesso
+                    btn.innerHTML = 'Enviar Solicitação';
+                    btn.disabled = false;
+                    document.getElementById('form-cadastro').reset();
+                    switchView('feedback'); 
+                })
+                .catch((error) => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Enviar Solicitação';
+                    
+                    // Tratamento de erros comuns
+                    if(error.code === 'auth/email-already-in-use') {
+                        feedback.innerText = "Este Nick já solicitou cadastro!";
+                    } else if(error.code === 'auth/weak-password') {
+                        feedback.innerText = "A senha deve ter pelo menos 6 caracteres.";
+                    } else {
+                        feedback.innerText = "Erro ao solicitar: " + error.message;
+                    }
+                    feedback.classList.remove('hidden');
+                    feedback.classList.add('block');
+                });
         }
 
-        // Lógica Falsa de Login (Substituiremos pelo Firebase Auth depois)
         function realizarLogin(e) {
             e.preventDefault();
-            window.location.href = 'admin.html';
+            const btn = document.getElementById('btn-login-submit');
+            const feedback = document.getElementById('login-feedback');
+            
+            const nick = document.getElementById('login-nick').value.trim();
+            const senha = document.getElementById('login-senha').value;
+            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
+            feedback.classList.add('hidden');
+
+            auth.signInWithEmailAndPassword(emailFake, senha)
+                .then((userCredential) => {
+                    // Entrou com sucesso. Redireciona para o Painel Admin.
+                    window.location.href = 'admin.html';
+                })
+                .catch((error) => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Entrar no Painel';
+                    feedback.innerText = "Nick ou senha incorretos!";
+                    feedback.classList.remove('hidden');
+                    feedback.classList.add('block');
+                });
         }
 
-        // Grade de Atividades
+        // ==========================================
+        // 5. ENVIO DE POSTAGEM DE ATIVIDADE
+        // ==========================================
         const activityCards = document.querySelectorAll('.js-activity-card');
         const hiddenInput = document.getElementById('form-categoria-hidden');
         activityCards.forEach(card => {
@@ -537,20 +610,6 @@
             });
         });
 
-        function toggleDropdown() {
-            const m = document.getElementById('menu-meses');
-            const s = document.getElementById('icone-seta');
-            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2');
-            s.classList.toggle('rotate-180');
-        }
-        function selecionarMes(el) {
-            document.getElementById('texto-mes').innerText = el.innerText;
-            toggleDropdown();
-        }
-
-        // ==========================================
-        // 4. ENVIO PARA O FIREBASE
-        // ==========================================
         const form = document.getElementById('form-atividade');
         const btnEnviar = document.getElementById('btn-enviar-form');
         const feedback = document.getElementById('feedback-form');
@@ -563,36 +622,53 @@
             const nickValue = document.getElementById('form-nick').value;
             const provaValue = document.getElementById('form-prova').value;
             const categoriaValue = hiddenInput.value;
+            const scriptURL = 'SEU_LINK_DO_APPS_SCRIPT_AQUI'; 
 
-            // Salvando no Banco de Dados (Firestore)
-            db.collection("postagens").add({
+            const promessaFirebase = db.collection("postagens").add({
                 nick: nickValue,
                 categoria: categoriaValue,
                 prova: provaValue,
                 status: "Pendente",
                 dataEnvio: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                feedback.innerText = "Sucesso! Postagem enviada para análise.";
-                feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
-                form.reset();
-                activityCards.forEach(c => c.classList.remove('active'));
-                hiddenInput.value = "";
-            })
-            .catch(error => {
-                console.error("Erro ao enviar:", error);
-                feedback.innerText = "Erro ao enviar. Tente novamente.";
-                feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
-            })
-            .finally(() => {
-                btnEnviar.disabled = false;
-                btnEnviar.innerHTML = 'Enviar Postagem para Análise';
             });
+
+            let promessaPlanilha = Promise.resolve(); 
+            if (scriptURL && scriptURL !== 'SEU_LINK_DO_APPS_SCRIPT_AQUI') {
+                promessaPlanilha = fetch(scriptURL, { method: 'POST', body: new FormData(form)});
+            }
+
+            Promise.all([promessaFirebase, promessaPlanilha])
+                .then(() => {
+                    feedback.innerText = "Sucesso! Postagem enviada para análise.";
+                    feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
+                    form.reset();
+                    activityCards.forEach(c => c.classList.remove('active'));
+                    hiddenInput.value = "";
+                })
+                .catch(error => {
+                    feedback.innerText = "Erro ao enviar. Tente novamente.";
+                    feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+                })
+                .finally(() => {
+                    btnEnviar.disabled = false;
+                    btnEnviar.innerHTML = 'Enviar Postagem para Análise';
+                });
         });
 
         // ==========================================
-        // 5. ANIMAÇÕES GSAP
+        // 6. UTILIDADES E ANIMAÇÕES
         // ==========================================
+        function toggleDropdown() {
+            const m = document.getElementById('menu-meses');
+            const s = document.getElementById('icone-seta');
+            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2');
+            s.classList.toggle('rotate-180');
+        }
+        function selecionarMes(el) {
+            document.getElementById('texto-mes').innerText = el.innerText;
+            toggleDropdown();
+        }
+
         window.addEventListener('load', () => {
             const tl = gsap.timeline();
             tl.to("#anim-header", { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" })
@@ -603,4 +679,5 @@
 
         VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 6, speed: 1200, glare: true, "max-glare": 0.1 });
     </script>
+</body>
 </html>
