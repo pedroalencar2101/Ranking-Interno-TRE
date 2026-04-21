@@ -204,22 +204,39 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // ==========================================
+       // ==========================================
         // 2. GUARDA DE AUTENTICAÇÃO (O Leão de Chácara)
         // ==========================================
         auth.onAuthStateChanged((user) => {
             const loader = document.getElementById('auth-loader');
+            
             if (user) {
-                // Usuário logado: Mostra o email/nick na sidebar e inicia o sistema
-                document.getElementById('admin-user-email').innerText = user.email.split('@')[0].toUpperCase();
-                
-                // Fade out no loader
-                gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
-                
-                // Puxar os dados ao vivo
-                iniciarEscutas();
+                // O usuário tem a senha certa, mas ele foi aprovado? Vamos olhar no banco!
+                db.collection("solicitacoes_acesso").doc(user.uid).get()
+                .then((doc) => {
+                    if (doc.exists && doc.data().status === "Aprovado") {
+                        // APROVADO! Deixa entrar e puxa o Nick dele.
+                        document.getElementById('admin-user-email').innerText = doc.data().nick.toUpperCase();
+                        
+                        // Esconde a tela de carregamento de segurança
+                        gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
+                        
+                        // Puxa os dados ao vivo do painel
+                        iniciarEscutas();
+                    } else {
+                        // PENDENTE OU REJEITADO! Chuta ele pra fora.
+                        auth.signOut().then(() => {
+                            alert("Acesso Negado: Sua conta ainda não foi aprovada pelo Ministério.");
+                            window.location.href = 'index.html';
+                        });
+                    }
+                }).catch((error) => {
+                    console.error("Erro ao verificar permissão:", error);
+                    auth.signOut().then(() => { window.location.href = 'index.html'; });
+                });
+
             } else {
-                // Não logado: Chuta de volta pro index
+                // Não está logado, chuta pro início.
                 window.location.href = 'index.html';
             }
         });
