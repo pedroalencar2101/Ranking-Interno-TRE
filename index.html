@@ -21,10 +21,14 @@
                         tre: {
                             brand: '#D31522',
                             brandHover: '#FA1C2A',
-                            bgPanel: 'rgba(20, 4, 5, 0.4)',
+                            bgPanel: 'rgba(20, 4, 5, 0.45)',
                             glassNav: 'rgba(30, 5, 6, 0.85)',
                         }
                     },
+                    boxShadow: {
+                        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.6)',
+                        'nav': '0 10px 40px -10px rgba(0, 0, 0, 0.8)',
+                    }
                 }
             }
         }
@@ -32,9 +36,8 @@
 
     <style>
         body {
-            /* Fundo preto puro (OLED) com spotlight centralizado no topo */
-            background: #000000;
-            background-image: radial-gradient(circle at top center, #2B0508 0%, #000000 70%);
+            background: #050101;
+            background-image: radial-gradient(circle at top center, #3A070B 0%, #050101 80%);
             color: #FFFFFF;
             min-height: 100vh;
             background-attachment: fixed;
@@ -42,151 +45,84 @@
             overflow-x: hidden;
         }
         
-        /* Navbar com efeito Apple Glass */
         .glass-navbar {
             background: theme('colors.tre.glassNav');
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Painéis simples de vidro para seletor e tabela */
         .glass-panel-simple {
-            background: rgba(30, 5, 6, 0.6);
+            background: theme('colors.tre.bgPanel');
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s ease;
         }
 
         /* ========================================================
-           MOTOR GEOMÉTRICO 3D PURO (SEM BIBLIOTECAS)
+           MOTOR 3D VANILLA TILT & GLASSMORPHISM
            ======================================================== */
         
-        /* Contêiner de Perspectiva Global */
-        #podium-container {
-            perspective: 2500px; /* Profundidade de câmera para visualização dos cubos */
+        /* Contêiner que permite a profundidade 3D */
+        .tilt-card {
             transform-style: preserve-3d;
-        }
-
-        /* O Cubo/Pedestal - Estrutura Mestre */
-        .cube-wrapper {
+            background: linear-gradient(135deg, rgba(40, 7, 10, 0.7) 0%, rgba(15, 2, 3, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
             position: relative;
-            transform-style: preserve-3d; /* Essencial para os filhos herdarem 3D */
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); /* Animação suave */
-            will-change: transform;
         }
 
-        /* Faces Geométricas do Cubo */
-        .cube-face {
+        /* Efeito de luz neon por trás dos pódios */
+        .neon-glow {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden; /* Otimiza performance */
-            -webkit-backface-visibility: hidden;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.4;
+            transition: opacity 0.5s ease;
+        }
+        .tilt-card:hover .neon-glow { opacity: 0.7; }
+
+        /* Elementos que saltam do vidro (Eixo Z) */
+        .z-avatar {
+            transform: translateZ(90px); /* O avatar salta 90px pra fora da tela */
+            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.8));
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .tilt-card:hover .z-avatar {
+            transform: translateZ(120px) scale(1.05) translateY(-10px);
         }
 
-        /* Definição de Espessura ( translateZ ) */
-        :root { --cube-depth: 120px; } /* Ajuste a espessura total do pedestal aqui */
-
-        /* 1. Face Frontal (Recebe o Glassmorphism e os Dados) */
-        .face-front {
-            transform: rotateY(0deg) translateZ(calc(var(--cube-depth) / 2));
-            background: linear-gradient(145deg, rgba(30, 6, 8, 0.9) 0%, rgba(15, 2, 3, 0.95) 100%);
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
-            z-index: 2;
-        }
-
-        /* 2. Face Traseira (Normalmente oculta) */
-        .face-back {
-            transform: rotateY(180deg) translateZ(calc(var(--cube-depth) / 2));
-            background: #120203;
-        }
-
-        /* 3. Faces Laterais (Esquerda e Direita - Recebem Sombras de Profundidade) */
-        .face-left {
-            transform: rotateY(-90deg) translateZ(calc(var(--cube-depth) / 2));
-            background: linear-gradient(to right, #120203, #1A0406); /* Sombra no encontro */
-        }
-        .face-right {
-            transform: rotateY(90deg) translateZ(calc(var(--cube-depth) / 2));
-            background: linear-gradient(to left, #120203, #1A0406); /* Sombra no encontro */
-        }
-
-        /* 4. Faces Horizontais (Cima e Baixo) */
-        
-        /* Face Superior: Onde o Habbo fica "em pé". Recebe luz total e a cor da medalha */
-        .face-top {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: var(--cube-depth);
-            transform: rotateX(90deg) translateZ(calc(var(--cube-depth) / 2));
-            border-radius: 20px 20px 0 0;
-            /* Gradiente simulando metal/vidro polido recebendo luz do spotlight */
-            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(20,4,5,0.5) 100%);
-            box-shadow: 0 0 40px -10px currentColor; /* Glow da cor da medalha */
-        }
-
-        /* Face Inferior: Sombra de contato com o chão */
-        .face-bottom {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: var(--cube-depth);
-            transform: rotateX(-90deg) translateZ(calc(var(--cube-depth) / 2));
-            background: #000000;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-        }
-
-        /* Posicionamento do Habbo sobre o Cubo */
-        .habbo-positioner {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%) translateZ(calc((var(--cube-depth) / 2) + 10px)); /* Levemente pra frente pra não flutuar */
-            /* Ancorado na base do pedestal pra ficar "em pé" na face superior */
-            bottom: calc(100% - 30px); /* Ajuste fino baseado na perspectiva de cima */
-            z-index: 10;
-            pointer-events: none;
-            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.7));
-            transition: all 0.5s ease;
+        .z-content {
+            transform: translateZ(40px); /* Textos flutuam 40px */
         }
         
-        /* Interação de Hover Dinâmica (Física 3D) */
-        .cube-wrapper:hover .habbo-positioner {
-            transform: translateX(-50%) translateZ(calc((var(--cube-depth) / 2) + 40px)) translateY(-15px); /* Salta e flutua */
-            filter: drop-shadow(0 30px 25px rgba(0,0,0,0.8));
-        }
-        
-        /* Glow da face superior baseado na medalha */
-        .glow-gold { color: #FFD700; }
-        .glow-silver { color: #E3E4E5; }
-        .glow-bronze { color: #CD7F32; }
-
-        /* Estilo Mobile (Estático 3D) */
-        @media (max-width: 768px) {
-            /* Garante inclinação volumétrica fixa no celular */
-            .cube-wrapper {
-                transform: rotateX(10deg) rotateY(-10deg);
-                box-shadow: -15px 25px 50px rgba(0,0,0,0.7);
-            }
+        .z-badge {
+            transform: translateZ(60px);
         }
 
-        /* Tipografia Premium */
-        .text-3d-title { text-shadow: 0 10px 15px rgba(0,0,0,0.8); }
+        /* Cores Temáticas */
+        .glow-gold { background: #FFD700; }
+        .glow-silver { background: #E3E4E5; }
+        .glow-bronze { background: #CD7F32; }
+
+        .border-gold { border-top: 2px solid rgba(255, 215, 0, 0.8); }
+        .border-silver { border-top: 2px solid rgba(227, 228, 229, 0.8); }
+        .border-bronze { border-top: 2px solid rgba(205, 127, 50, 0.8); }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #120203; }
+        ::-webkit-scrollbar-track { background: #050101; }
         ::-webkit-scrollbar-thumb { background: #D31522; rounded: 3px; }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand selection:text-white flex flex-col">
 
-    <header class="sticky top-0 z-50 w-full glass-navbar shadow-nav">
+    <header class="sticky top-0 z-50 w-full glass-navbar shadow-nav opacity-0" id="anim-header">
         <div class="container mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
             <div class="flex items-center gap-6 md:gap-10">
                 <a href="#" class="flex items-center hover:opacity-80 transition-opacity">
@@ -209,8 +145,8 @@
     </header>
 
     <main class="flex-grow container mx-auto px-4 md:px-6">
-        <section class="pt-12 md:pt-16 pb-6 text-center relative z-40">
-            <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight mb-3 uppercase drop-shadow-lg text-3d-title">Ranking <span class="text-transparent bg-clip-text bg-gradient-to-r from-tre-brand to-[#FF4B55]">dos Treinadores</span></h1>
+        <section class="pt-12 md:pt-16 pb-6 text-center relative z-40 opacity-0" id="anim-title">
+            <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight mb-3 uppercase drop-shadow-2xl">Ranking <span class="text-transparent bg-clip-text bg-gradient-to-r from-tre-brand to-[#FF4B55]">dos Treinadores</span></h1>
             <p class="text-white/50 text-[10px] sm:text-xs md:text-sm font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase">Ranking Interno dos Melhores Treinadores do Mês</p>
             
             <div class="flex flex-wrap items-center justify-center gap-3 mt-8 relative z-50">
@@ -219,7 +155,7 @@
                         <i class="fa-solid fa-calendar-check text-tre-brand"></i> Abril 2026 
                         <i class="fa-solid fa-chevron-down text-[10px] ml-1 text-white/40 group-hover:text-white/80 transition-colors"></i>
                     </button>
-                    <div class="absolute left-0 top-full mt-2 w-full glass-panel-simple !bg-[#0D0102]/95 rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden flex flex-col text-sm shadow-2xl z-50">
+                    <div class="absolute left-0 top-full mt-2 w-full glass-panel-simple !bg-[#050101]/95 rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden flex flex-col text-sm shadow-2xl z-50">
                         <a href="#" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5">Março 2026</a>
                         <a href="#" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5">Fevereiro 2026</a>
                         <a href="#" class="px-4 py-2.5 text-center hover:bg-white/10 transition-colors text-white/50 hover:text-white text-[11px] italic">Ver todos</a>
@@ -233,10 +169,10 @@
         </section>
 
         <section class="py-10 md:py-20 relative z-10 overflow-visible">
-            <div class="flex flex-col md:flex-row items-center md:items-end justify-center gap-[10rem] md:gap-16 max-w-6xl mx-auto mt-36 md:mt-48" id="podium-container"></div>
+            <div class="flex flex-col md:flex-row items-center md:items-end justify-center gap-[6.5rem] md:gap-12 max-w-6xl mx-auto mt-28 md:mt-32" id="podium-container"></div>
         </section>
 
-        <section class="py-12 md:py-16">
+        <section class="py-12 md:py-16 opacity-0" id="anim-list">
             <div class="max-w-4xl mx-auto">
                 <h2 class="text-[11px] md:text-sm font-black tracking-widest uppercase text-white/30 mb-5 md:mb-6 pl-3 md:pl-4 border-l-2 border-tre-brand">Demais Classificados</h2>
                 <div class="glass-panel-simple rounded-2xl md:rounded-3xl overflow-hidden p-1 shadow-3xl">
@@ -250,7 +186,7 @@
         </section>
     </main>
 
-    <footer class="w-full border-t border-white/5 bg-[#010101] mt-16 pb-10">
+    <footer class="w-full border-t border-white/5 bg-[#030000] mt-16 pb-10">
         <div class="container mx-auto px-6 pt-10 text-center text-white/30 grayscale hover:grayscale-0 transition-all duration-700 hover:text-white/60">
             <img src="trelogo.png" alt="Logo TRE" class="h-10 mx-auto object-contain mb-4 opacity-50" onerror="this.style.display='none'">
             <p class="text-xl md:text-2xl font-black tracking-tighter uppercase mb-1">Companhia dos Treinadores</p>
@@ -262,6 +198,9 @@
             </div>
         </div>
     </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
         const dadosRanking = [
@@ -280,40 +219,43 @@
         }
 
         const podiumContainer = document.getElementById('podium-container');
-        const ordemPodio = [dadosRanking[1], dadosRanking[0], dadosRanking[2]]; // 2º Esquerda, 1º Centro, 3º Direita
+        const ordemPodio = [dadosRanking[1], dadosRanking[0], dadosRanking[2]]; // 2º, 1º, 3º
 
         ordemPodio.forEach(membro => {
             if(!membro) return;
 
             let orderClass = membro.posicao === 1 ? "order-1 md:order-2" : membro.posicao === 2 ? "order-2 md:order-1" : "order-3 md:order-3";
-            let alturaPedestal = membro.posicao === 1 ? "h-72 md:h-96" : membro.posicao === 2 ? "h-60 md:h-80" : "h-56 md:h-72";
-            let widthClass = membro.posicao === 1 ? "w-[17rem] md:w-[26rem]" : "w-[16rem] md:w-[22rem]";
+            let alturaCard = membro.posicao === 1 ? "h-64 md:h-80" : membro.posicao === 2 ? "h-52 md:h-64" : "h-48 md:h-60";
+            let widthClass = membro.posicao === 1 ? "w-[16rem] md:w-[22rem]" : "w-[15rem] md:w-[19rem]";
+            
             let corMedalha = membro.posicao === 1 ? "text-[#FFD700]" : membro.posicao === 2 ? "text-[#E3E4E5]" : "text-[#CD7F32]";
             let glowMedal = membro.posicao === 1 ? "glow-gold" : membro.posicao === 2 ? "glow-silver" : "glow-bronze";
+            let borderMedal = membro.posicao === 1 ? "border-gold" : membro.posicao === 2 ? "border-silver" : "border-bronze";
             let nickSize = membro.posicao === 1 ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl";
 
-            // Inserção da geometria pura no DOM
+            // Inserção da estrutura otimizada para o VanillaTilt
             podiumContainer.innerHTML += `
-                <div class="cube-wrapper flex flex-col items-center ${widthClass} ${alturaPedestal} ${orderClass} ${glowMedal} group perspective-1500" data-js-tilt>
-                    
-                    <div class="habbo-positioner">
-                        <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="max-h-[140%] object-contain scale-110 md:scale-125">
-                    </div>
-
-                    <div class="cube-face face-back"></div>
-                    <div class="cube-face face-left"></div>
-                    <div class="cube-face face-right"></div>
-                    <div class="cube-face face-bottom"></div>
-                    <div class="cube-face face-top"></div>
-                    
-                    <div class="cube-face face-front flex flex-col items-center justify-end p-6 md:p-8 rounded-[20px] overflow-hidden">
+                <div class="anim-podium opacity-0 ${widthClass} ${orderClass} mt-16 md:mt-0">
+                    <div class="tilt-card ${alturaCard} ${borderMedal} w-full flex flex-col items-center justify-end p-6 md:p-8" 
+                         data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-scale="1.05" data-tilt-perspective="1000">
                         
-                        <div class="text-center w-full mt-auto flex flex-col items-center gap-5 md:gap-6 transform-style-preserve3d">
-                            <h3 class="${nickSize} font-black tracking-tighter text-white whitespace-nowrap group-hover:text-tre-brand transition-colors text-3d-title drop-shadow-lg" style="transform: translateZ(30px);">${membro.nick}</h3>
+                        <div class="neon-glow ${glowMedal}"></div>
+                        
+                        <div class="absolute bottom-[calc(100%-2.5rem)] md:bottom-[calc(100%-3rem)] left-1/2 -translate-x-1/2 pointer-events-none z-avatar w-full flex justify-center">
+                            <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="object-contain scale-110 md:scale-125">
+                        </div>
+
+                        <div class="z-content text-center w-full mt-auto flex flex-col items-center gap-5 md:gap-6">
                             
-                            <div class="inline-flex items-center justify-center bg-black/60 border border-white/10 rounded-2xl px-6 md:px-8 py-2 md:py-3 shadow-inner shadow-black/50" style="transform: translateZ(40px);">
+                            <div class="z-badge">
+                                <span class="font-black text-lg md:text-xl tracking-[0.2em] whitespace-nowrap ${corMedalha} drop-shadow-md">${membro.posicao}º LUGAR</span>
+                            </div>
+                            
+                            <h3 class="${nickSize} font-black tracking-tighter text-white whitespace-nowrap group-hover:text-tre-brand transition-colors drop-shadow-lg">${membro.nick}</h3>
+                            
+                            <div class="inline-flex items-center justify-center bg-black/60 border border-white/10 rounded-2xl px-6 md:px-8 py-2 md:py-3 shadow-inner">
                                 <span class="text-2xl md:text-3xl font-black text-white">${membro.pontos}</span> 
-                                <span class="text-xs md:text-sm font-bold text-tre-brand ml-2 uppercase tracking-widest">Pts</span>
+                                <span class="text-xs md:text-sm font-bold text-white/50 ml-2 uppercase tracking-widest">Pts</span>
                             </div>
                         </div>
                     </div>
@@ -321,46 +263,11 @@
             `;
         });
 
-        // ========================================================
-        // MOTOR DE ROTACÃO MAGNÉTICA (3D TILT GEOMÉTRICO)
-        // ========================================================
-        
-        // Só ativa o efeito 3D interativo se for Desktop
-        if (window.matchMedia("(min-width: 768px)").matches) {
-            const cubes = document.querySelectorAll('[data-js-tilt]');
-            
-            cubes.forEach(cube => {
-                cube.addEventListener('mousemove', (e) => {
-                    const rect = cube.getBoundingClientRect();
-                    
-                    // Cálculo do centro do objeto
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-                    
-                    // Distância do mouse para o centro (-0.5 a 0.5)
-                    const mouseX = e.clientX - centerX;
-                    const mouseY = e.clientY - centerY;
-                    
-                    // Conversão para ângulos (Máximo de 15 graus)
-                    const rotateX = (-mouseY / (rect.height / 2)) * 15; 
-                    const rotateY = (mouseX / (rect.width / 2)) * 15;
-                    
-                    // Aplicação da matriz de transformação no Cubo
-                    cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                });
-
-                // Reset suave ao sair do mouse
-                cube.addEventListener('mouseleave', () => {
-                    cube.style.transform = `rotateX(0deg) rotateY(0deg)`;
-                });
-            });
-        }
-
-        // Renderização da tabela permanece inalterada
+        // Tabela Geral
         const listContainer = document.getElementById('list-container');
         dadosRanking.slice(3).forEach(membro => {
             listContainer.innerHTML += `
-                <tr class="group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default">
+                <tr class="anim-row group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default">
                     <td class="p-4 md:p-5 md:px-8 text-center font-black text-lg md:text-xl text-white/20 group-hover:text-tre-brand transition-colors w-16 md:w-24">
                         ${membro.posicao}º
                     </td>
@@ -377,6 +284,42 @@
                 </tr>
             `;
         });
+
+        // ========================================================
+        // INICIALIZAÇÃO E ANIMAÇÕES (GSAP + TILT)
+        // ========================================================
+        
+        // Inicia o Vanilla Tilt em todos os cards que possuem 'data-tilt'
+        VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+            max: 15,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.3,
+        });
+
+        // Animação de Entrada Premium usando GSAP
+        // Atraso curto para garantir que o DOM renderizou
+        setTimeout(() => {
+            const tl = gsap.timeline();
+            
+            // 1. Desce a Navbar
+            tl.to("#anim-header", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" })
+            
+            // 2. Revela o Título
+            .to("#anim-title", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.5")
+            
+            // 3. Os Pódios sobem um por vez
+            .fromTo(".anim-podium", 
+                { y: 50, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "back.out(1.5)" }, 
+                "-=0.4"
+            )
+            
+            // 4. A Lista aparece
+            .to("#anim-list", { opacity: 1, duration: 0.5, ease: "power2.out" }, "-=0.2");
+            
+        }, 100);
+
     </script>
 </body>
 </html>
