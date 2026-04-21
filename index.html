@@ -678,6 +678,79 @@
         });
 
         VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 6, speed: 1200, glare: true, "max-glare": 0.1 });
+
+        // ==========================================
+        // CARREGAMENTO DINÂMICO DO QUADRO DE PONTOS
+        // (Isso faz o site principal escutar o admin)
+        // ==========================================
+        db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
+            if (doc.exists && doc.data().atividades) {
+                renderizarModaisDinamicos(doc.data().atividades);
+            }
+        });
+
+        function renderizarModaisDinamicos(atividades) {
+            // 1. Atualiza o Formulário de Postagem (Cards de Seleção)
+            const gridPostagem = document.querySelector('#form-atividade .grid.gap-3');
+            if(gridPostagem) {
+                gridPostagem.innerHTML = '';
+                atividades.forEach(ativ => {
+                    let badgeClass = ativ.pontos > 0 ? 'plus' : 'minus';
+                    let ptSinal = ativ.pontos > 0 ? `+${ativ.pontos}` : ativ.pontos;
+                    gridPostagem.innerHTML += `
+                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="${ativ.nome}">
+                            <div class="space-y-1">
+                                <span class="text-[11px] text-white/70 block">[${ativ.grupo}]</span>
+                                <span class="text-[11px] font-bold text-white block truncate max-w-[150px]">${ativ.nome}</span>
+                                <span class="text-[9px] text-white/30 tracking-widest uppercase">${ativ.responsavel}</span>
+                            </div>
+                            <span class="point-badge point-${badgeClass}">${ptSinal}</span>
+                        </div>
+                    `;
+                });
+
+                // Readiciona o evento de clique aos novos cards renderizados
+                document.querySelectorAll('.js-activity-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        document.querySelectorAll('.js-activity-card').forEach(c => c.classList.remove('active'));
+                        this.classList.add('active');
+                        document.getElementById('form-categoria-hidden').value = this.getAttribute('data-activity');
+                    });
+                });
+            }
+
+            // 2. Atualiza o Modal Oficial do Quadro de Pontos
+            const quadroModal = document.querySelector('#modal-pontos .custom-scrollbar');
+            if(quadroModal) {
+                quadroModal.innerHTML = '';
+                
+                // Agrupa atividades por categoria
+                const categoriasAgrupadas = atividades.reduce((acc, ativ) => {
+                    if (!acc[ativ.grupo]) acc[ativ.grupo] = [];
+                    acc[ativ.grupo].push(ativ);
+                    return acc;
+                }, {});
+
+                // Renderiza cada grupo
+                Object.keys(categoriasAgrupadas).sort().forEach(nomeGrupo => {
+                    let htmlGrupo = `<div class="bg-white/5 p-3 rounded-lg border border-white/5">
+                        <h4 class="text-[10px] text-white uppercase font-bold tracking-wider">${nomeGrupo}</h4>
+                        <div class="space-y-1.5 mt-2">`;
+                    
+                    categoriasAgrupadas[nomeGrupo].forEach(ativ => {
+                        let badgeClass = ativ.pontos > 0 ? 'plus' : 'minus';
+                        let ptSinal = ativ.pontos > 0 ? `+${ativ.pontos}` : ativ.pontos;
+                        htmlGrupo += `<div class="flex justify-between items-center">
+                            <span class="text-white/70 text-xs">${ativ.nome} <span class="text-[9px] text-white/30 ml-1">(${ativ.responsavel})</span></span> 
+                            <span class="point-badge point-${badgeClass}">${ptSinal}</span>
+                        </div>`;
+                    });
+
+                    htmlGrupo += `</div></div>`;
+                    quadroModal.innerHTML += htmlGrupo;
+                });
+            }
+        }
     </script>
 </body>
 </html>
