@@ -92,6 +92,9 @@
             filter: drop-shadow(0 25px 25px rgba(0,0,0,0.8));
         }
 
+        .z-content { transform: translateZ(20px); }
+        .z-badge { transform: translateZ(30px); }
+
         .border-gold { border-top: 1px solid rgba(255, 215, 0, 0.5); }
         .border-silver { border-top: 1px solid rgba(227, 228, 229, 0.5); }
         .border-bronze { border-top: 1px solid rgba(205, 127, 50, 0.5); }
@@ -239,9 +242,9 @@
     <div id="modal-login" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-login')"></div>
         
-        <div class="relative w-full max-w-md bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-all duration-300 overflow-hidden" id="login-container">
+        <div class="relative w-full max-w-md bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-all duration-300">
             
-            <button onclick="toggleModal('modal-login')" class="absolute top-4 right-4 text-white/40 hover:text-tre-brand transition-colors z-10">
+            <button onclick="toggleModal('modal-login')" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-tre-brand transition-colors z-10">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
 
@@ -251,7 +254,7 @@
                 </h2>
                 
                 <div class="bg-tre-brand/10 border border-tre-brand/20 text-tre-brand text-[9px] md:text-[10px] font-bold uppercase tracking-widest p-3 rounded-lg text-center mb-6">
-                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Área exclusiva do Ministério da Companhia dos Treinadores
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Área exclusiva do Ministério
                 </div>
 
                 <form id="form-login" class="space-y-4" onsubmit="realizarLogin(event)">
@@ -274,11 +277,7 @@
                 </div>
             </div>
 
-            <div id="view-register" class="hidden opacity-0 translate-x-10 transition-all duration-300 absolute inset-0 p-6 md:p-8 bg-gradient-to-b from-[#1A0305] to-[#0A0102]">
-                <button onclick="toggleModal('modal-login')" class="absolute top-4 right-4 text-white/40 hover:text-tre-brand transition-colors z-10">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-                
+            <div id="view-register" class="hidden opacity-0 translate-x-4 transition-all duration-300">
                 <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4">
                     <i class="fa-solid fa-user-plus text-tre-brand"></i> Solicitar Acesso
                 </h2>
@@ -313,17 +312,13 @@
                 </div>
             </div>
 
-            <div id="view-feedback" class="hidden opacity-0 translate-y-10 transition-all duration-300 absolute inset-0 p-6 md:p-8 bg-gradient-to-b from-[#1A0305] to-[#0A0102] flex-col items-center justify-center text-center">
-                <button onclick="toggleModal('modal-login')" class="absolute top-4 right-4 text-white/40 hover:text-tre-brand transition-colors z-10">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-                
+            <div id="view-feedback" class="hidden opacity-0 translate-y-4 transition-all duration-300 flex-col items-center justify-center text-center pt-4">
                 <div class="w-20 h-20 bg-amber-500/10 border-2 border-amber-500/30 rounded-full flex items-center justify-center mb-6 mx-auto">
                     <i class="fa-solid fa-clock-rotate-left text-3xl text-amber-500"></i>
                 </div>
                 <h2 class="text-xl font-black text-white uppercase mb-3">Solicitação Recebida</h2>
                 <p class="text-white/60 text-sm leading-relaxed mb-8">
-                    Aguarde enquanto o Ministério analisa sua solicitação de cadastro. Você será informado via jogo ou Discord quando seu acesso for liberado.
+                    Aguarde enquanto o Ministério analisa sua solicitação de cadastro.
                 </p>
                 <button onclick="toggleModal('modal-login')" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3 rounded-xl transition-all cursor-pointer text-sm">
                     Entendido
@@ -394,7 +389,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
-        // Renderização Dinâmica Mantida Intocável
+        // Renderização Dinâmica 
         const dadosRanking = [
             { posicao: 1, nick: "G4VET4", pontos: 185 }, { posicao: 2, nick: "benjlfbaby", pontos: 150 }, { posicao: 3, nick: "BeGomes94.", pontos: 130 },
             { posicao: 4, nick: "Granno", pontos: 110 }, { posicao: 5, nick: "@Allyzon", pontos: 95 }, { posicao: 6, nick: "andrej0128s", pontos: 80 },
@@ -461,12 +456,15 @@
         // ==========================================
         function toggleModal(id) {
             const modal = document.getElementById(id);
-            // Verifica se o modal é de login para resetar a view
+            
+            // Lógica para resetar a view do modal de login
             if(id === 'modal-login' && modal.classList.contains('opacity-0')){
-                switchView('login'); // Sempre abre no login por padrão
+                switchView('login'); 
             }
 
+            // Seleciona a caixa interna responsável pela animação de Scale
             const content = modal.querySelector('div.relative.transform');
+            
             if (modal.classList.contains('opacity-0')) {
                 modal.classList.remove('opacity-0', 'invisible');
                 setTimeout(() => content.classList.replace('scale-95', 'scale-100'), 10);
@@ -476,51 +474,63 @@
             }
         }
 
-        // Lógica de Troca entre Login e Cadastro
+        // NOVO MOTOR DE TROCA DE TELAS (BLINDADO CONTRA COLAPSO DE CONTAINER)
         function switchView(view) {
             const viewLogin = document.getElementById('view-login');
             const viewRegister = document.getElementById('view-register');
             const viewFeedback = document.getElementById('view-feedback');
 
-            // Reseta tudo
-            viewLogin.classList.add('hidden', 'opacity-0');
-            viewRegister.classList.add('hidden', 'opacity-0', 'translate-x-10');
-            viewFeedback.classList.add('hidden', 'opacity-0', 'translate-y-10');
+            // Primeiro: Fade Out na view atual
+            viewLogin.classList.add('opacity-0');
+            viewRegister.classList.add('opacity-0');
+            viewFeedback.classList.add('opacity-0');
             
             setTimeout(() => {
+                // Esconde as telas e as remove do fluxo (para o container adaptar o tamanho a nova tela)
+                viewLogin.classList.add('hidden');
+                viewLogin.classList.remove('block');
+                
+                viewRegister.classList.add('hidden');
+                viewRegister.classList.remove('block');
+                viewRegister.classList.add('translate-x-4');
+                
+                viewFeedback.classList.add('hidden');
+                viewFeedback.classList.remove('flex');
+                viewFeedback.classList.add('translate-y-4');
+                
+                // Mostra a tela selecionada e aplica o fadeIn
                 if(view === 'login') {
                     viewLogin.classList.remove('hidden');
+                    viewLogin.classList.add('block');
                     setTimeout(() => viewLogin.classList.remove('opacity-0'), 50);
                 } else if(view === 'register') {
                     viewRegister.classList.remove('hidden');
-                    setTimeout(() => viewRegister.classList.remove('opacity-0', 'translate-x-10'), 50);
+                    viewRegister.classList.add('block');
+                    setTimeout(() => viewRegister.classList.remove('opacity-0', 'translate-x-4'), 50);
                 } else if(view === 'feedback') {
                     viewFeedback.classList.remove('hidden');
-                    setTimeout(() => viewFeedback.classList.remove('opacity-0', 'translate-y-10'), 50);
+                    viewFeedback.classList.add('flex');
+                    setTimeout(() => viewFeedback.classList.remove('opacity-0', 'translate-y-4'), 50);
                 }
-            }, 300);
+            }, 200);
         }
 
-        // Lógica Falsa de Cadastro (Simulando envio para Liderança)
         function enviarCadastro(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-cadastro');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
-            
             setTimeout(() => {
                 btn.innerHTML = 'Enviar Solicitação';
-                switchView('feedback'); // Mostra a tela de pendência
+                switchView('feedback');
                 document.getElementById('form-cadastro').reset();
             }, 1000);
         }
 
-        // Lógica Falsa de Login (Redirecionando direto para painel adm)
         function realizarLogin(e) {
             e.preventDefault();
             window.location.href = 'admin.html';
         }
 
-        // Grade de Atividades
         const activityCards = document.querySelectorAll('.js-activity-card');
         const hiddenInput = document.getElementById('form-categoria-hidden');
         activityCards.forEach(card => {
@@ -531,7 +541,6 @@
             });
         });
 
-        // Dropdown Meses
         function toggleDropdown() {
             const m = document.getElementById('menu-meses');
             const s = document.getElementById('icone-seta');
