@@ -37,7 +37,7 @@
     <style>
         body {
             background: #050101;
-            background-image: radial-gradient(circle at top center, #3A070B 0%, #050101 80%);
+            background-image: radial-gradient(circle at top center, #2A0508 0%, #050101 80%);
             color: #FFFFFF;
             min-height: 100vh;
             background-attachment: fixed;
@@ -60,60 +60,66 @@
         }
 
         /* ========================================================
-           MOTOR 3D VANILLA TILT & GLASSMORPHISM
+           MOTOR 3D RECALCULADO (FÍSICA SUAVE E ALINHAMENTO FIXO)
            ======================================================== */
         
-        /* Contêiner que permite a profundidade 3D */
+        .perspective-container {
+            perspective: 1200px; /* Profundidade global */
+        }
+
         .tilt-card {
             transform-style: preserve-3d;
-            background: linear-gradient(135deg, rgba(40, 7, 10, 0.7) 0%, rgba(15, 2, 3, 0.9) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
+            background: linear-gradient(135deg, rgba(30, 5, 6, 0.8) 0%, rgba(15, 2, 3, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
             border-radius: 2rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
             position: relative;
         }
 
-        /* Efeito de luz neon por trás dos pódios */
+        /* Suavização Refinada da Luz Neon Traseira */
         .neon-glow {
             position: absolute;
             width: 80%;
             height: 80%;
             top: 10%;
             left: 10%;
-            filter: blur(60px);
+            filter: blur(50px);
             z-index: -1;
-            opacity: 0.4;
+            opacity: 0.15; /* Intensidade base reduzida */
             transition: opacity 0.5s ease;
         }
-        .tilt-card:hover .neon-glow { opacity: 0.7; }
+        .tilt-card:hover .neon-glow { opacity: 0.3; } /* Brilho de hover controlado */
 
-        /* Elementos que saltam do vidro (Eixo Z) */
+        /* Avatar com Eixo Z Reduzido para Manter Alinhamento */
         .z-avatar {
-            transform: translateZ(90px); /* O avatar salta 90px pra fora da tela */
-            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.8));
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            /* Posição absoluta refinada para sentar na borda visual */
+            absolute bottom-[calc(100%-1.8rem)] md:bottom-[calc(100%-2rem)]; 
+            transform: translateZ(30px); /* Z-depth muito menor para estabilidade */
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.8));
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .tilt-card:hover .z-avatar {
-            transform: translateZ(120px) scale(1.05) translateY(-10px);
+            /* No hover, mantemos o alinhamento X (nenhum drift), apenas scale e Z sutil */
+            transform: translateZ(50px) scale(1.05);
         }
 
         .z-content {
-            transform: translateZ(40px); /* Textos flutuam 40px */
+            transform: translateZ(30px); /* Textos flutuam 30px */
         }
         
         .z-badge {
-            transform: translateZ(60px);
+            transform: translateZ(40px);
         }
 
-        /* Cores Temáticas */
-        .glow-gold { background: #FFD700; }
-        .glow-silver { background: #E3E4E5; }
-        .glow-bronze { background: #CD7F32; }
+        /* Cores Temáticas Suavizadas */
+        .glow-gold { background: rgba(255, 215, 0, 0.8); }
+        .glow-silver { background: rgba(227, 228, 229, 0.8); }
+        .glow-bronze { background: rgba(205, 127, 50, 0.8); }
 
-        .border-gold { border-top: 2px solid rgba(255, 215, 0, 0.8); }
-        .border-silver { border-top: 2px solid rgba(227, 228, 229, 0.8); }
-        .border-bronze { border-top: 2px solid rgba(205, 127, 50, 0.8); }
+        .border-gold { border-top: 1px solid rgba(255, 215, 0, 0.4); }
+        .border-silver { border-top: 1px solid rgba(227, 228, 229, 0.4); }
+        .border-bronze { border-top: 1px solid rgba(205, 127, 50, 0.4); }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #050101; }
@@ -144,7 +150,7 @@
         </div>
     </header>
 
-    <main class="flex-grow container mx-auto px-4 md:px-6">
+    <main class="flex-grow container mx-auto px-4 md:px-6 perspective-container">
         <section class="pt-12 md:pt-16 pb-6 text-center relative z-40 opacity-0" id="anim-title">
             <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight mb-3 uppercase drop-shadow-2xl">Ranking <span class="text-transparent bg-clip-text bg-gradient-to-r from-tre-brand to-[#FF4B55]">dos Treinadores</span></h1>
             <p class="text-white/50 text-[10px] sm:text-xs md:text-sm font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase">Ranking Interno dos Melhores Treinadores do Mês</p>
@@ -162,7 +168,7 @@
                     </div>
                 </div>
 
-                <a href="#" target="_blank" class="glass-panel-simple px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10 hover:border-emerald-500/50 transition-all shadow-lg">
+                <a href="#" target="_blank" class="glass-panel-simple px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/10 hover:border-emerald-500/50 transition-all shadow-lg">
                     <i class="fa-solid fa-file-excel"></i> Transparência
                 </a>
             </div>
@@ -233,15 +239,15 @@
             let borderMedal = membro.posicao === 1 ? "border-gold" : membro.posicao === 2 ? "border-silver" : "border-bronze";
             let nickSize = membro.posicao === 1 ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl";
 
-            // Inserção da estrutura otimizada para o VanillaTilt
+            // Inserção da estrutura otimizada e polida
             podiumContainer.innerHTML += `
                 <div class="anim-podium opacity-0 ${widthClass} ${orderClass} mt-16 md:mt-0">
                     <div class="tilt-card ${alturaCard} ${borderMedal} w-full flex flex-col items-center justify-end p-6 md:p-8" 
-                         data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-scale="1.05" data-tilt-perspective="1000">
+                         data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-tilt-scale="1.05" data-tilt-perspective="1000">
                         
                         <div class="neon-glow ${glowMedal}"></div>
                         
-                        <div class="absolute bottom-[calc(100%-2.5rem)] md:bottom-[calc(100%-3rem)] left-1/2 -translate-x-1/2 pointer-events-none z-avatar w-full flex justify-center">
+                        <div class="z-avatar left-1/2 -translate-x-1/2 pointer-events-none w-full flex justify-center">
                             <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="object-contain scale-110 md:scale-125">
                         </div>
 
@@ -253,9 +259,9 @@
                             
                             <h3 class="${nickSize} font-black tracking-tighter text-white whitespace-nowrap group-hover:text-tre-brand transition-colors drop-shadow-lg">${membro.nick}</h3>
                             
-                            <div class="inline-flex items-center justify-center bg-black/60 border border-white/10 rounded-2xl px-6 md:px-8 py-2 md:py-3 shadow-inner">
+                            <div class="inline-flex items-center justify-center bg-black/60 border border-white/10 rounded-2xl px-6 md:px-8 py-2 md:py-3 shadow-inner shadow-black/50">
                                 <span class="text-2xl md:text-3xl font-black text-white">${membro.pontos}</span> 
-                                <span class="text-xs md:text-sm font-bold text-white/50 ml-2 uppercase tracking-widest">Pts</span>
+                                <span class="text-[11px] md:text-sm font-semibold text-white/60 ml-2 uppercase tracking-widest">Pts</span>
                             </div>
                         </div>
                     </div>
@@ -263,7 +269,7 @@
             `;
         });
 
-        // Tabela Geral
+        // Tabela Geral Refinada
         const listContainer = document.getElementById('list-container');
         dadosRanking.slice(3).forEach(membro => {
             listContainer.innerHTML += `
@@ -279,7 +285,7 @@
                     </td>
                     <td class="p-4 md:p-5 md:px-8 text-right w-32 md:w-40">
                         <span class="font-black text-xl md:text-2xl text-white transition-colors group-hover:text-tre-brand">${membro.pontos}</span> 
-                        <span class="text-[11px] md:text-xs font-bold text-white/40 uppercase ml-1">Pts</span>
+                        <span class="text-[11px] md:text-sm font-semibold text-white/60 ml-1 uppercase tracking-widest">Pts</span>
                     </td>
                 </tr>
             `;
@@ -289,36 +295,27 @@
         // INICIALIZAÇÃO E ANIMAÇÕES (GSAP + TILT)
         // ========================================================
         
-        // Inicia o Vanilla Tilt em todos os cards que possuem 'data-tilt'
+        // Inicia o Vanilla Tilt com configurações refinadas
         VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
-            max: 15,
-            speed: 400,
+            max: 12, /* Rotação máxima reduzida para estabilidade */
+            speed: 500,
             glare: true,
-            "max-glare": 0.3,
+            "max-glare": 0.2, /* Brilho de vidro muito mais sutil */
         });
 
         // Animação de Entrada Premium usando GSAP
-        // Atraso curto para garantir que o DOM renderizou
-        setTimeout(() => {
+        window.addEventListener('load', () => {
             const tl = gsap.timeline();
             
-            // 1. Desce a Navbar
             tl.to("#anim-header", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" })
-            
-            // 2. Revela o Título
             .to("#anim-title", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.5")
-            
-            // 3. Os Pódios sobem um por vez
             .fromTo(".anim-podium", 
-                { y: 50, opacity: 0 }, 
-                { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "back.out(1.5)" }, 
+                { y: 60, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: "elastic.out(1, 0.75)" }, 
                 "-=0.4"
             )
-            
-            // 4. A Lista aparece
-            .to("#anim-list", { opacity: 1, duration: 0.5, ease: "power2.out" }, "-=0.2");
-            
-        }, 100);
+            .to("#anim-list", { opacity: 1, duration: 0.5, ease: "power2.out" }, "-=0.6");
+        });
 
     </script>
 </body>
