@@ -58,7 +58,6 @@
         .vivid-perfil { transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); transform-origin: center; }
         .vivid-perfil:hover { background: rgba(211, 21, 34, 0.15); border-color: rgba(211, 21, 34, 0.3); box-shadow: theme('boxShadow.vivid'); transform: scale(1.02); }
         
-        /* CORREÇÃO DA ANIMAÇÃO DO AVATAR: Travando o Eixo X */
         .vivid-perfil img { transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
         .vivid-perfil:hover img { transform: translateX(-50%) scale(1.15) !important; }
 
@@ -212,7 +211,6 @@
                 </div>
 
                 <div class="glass-panel-simple p-5 flex flex-wrap items-center justify-between gap-4 mb-8 rounded-xl border border-white/5 relative z-20">
-                    
                     <div class="relative">
                         <button id="btn-filter-mes" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-4 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white cursor-pointer focus:outline-none hover:text-white transition-colors">
                             <i class="fa-solid fa-calendar-alt text-amber-500"></i> 
@@ -227,7 +225,7 @@
 
                     <div class="relative w-full md:w-72">
                         <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
-                        <input type="text" id="search-historico" onkeyup="filtrarHistoricoBusca()" placeholder="Buscar por Nick do Policial..." class="w-full glass-input rounded-lg pl-11 pr-4 py-2.5 text-sm font-medium">
+                        <input type="text" id="search-historico" onkeyup="filtrarHistoricoBusca()" placeholder="Buscar por Nick..." class="w-full glass-input rounded-lg pl-11 pr-4 py-2.5 text-sm font-medium">
                     </div>
                 </div>
 
@@ -274,15 +272,14 @@
                         <table class="w-full text-left border-collapse min-w-full text-sm">
                             <thead class="bg-white/5 text-[10px] uppercase font-black tracking-widest text-white/40 border-b border-white/5">
                                 <tr>
-                                    <th class="p-4 px-6">Categoria / Grupo</th>
+                                    <th class="p-4 px-6">Categoria</th>
                                     <th class="p-4">Atividade</th>
                                     <th class="p-4 text-center">Pontos</th>
                                     <th class="p-4">Responsável</th>
                                     <th class="p-4 text-right">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-config-list">
-                                </tbody>
+                            <tbody id="table-config-list"></tbody>
                         </table>
                     </div>
                 </div>
@@ -302,8 +299,8 @@
                 <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4 w-full">Detalhes Liderança</h2>
             </div>
 
-            <div class="vivid-perfil-circle w-32 h-32 md:w-40 md:h-40 bg-[#0A0102] rounded-full overflow-hidden border-4 border-tre-brand relative mb-6 shadow-vivid">
-                <img id="modal-avatar" src="https://via.placeholder.com/200x200/0A0102/FFFFFF?text=???" class="absolute -top-3 left-1/2 -translate-x-1/2 scale-110">
+            <div class="w-32 h-32 md:w-40 md:h-40 bg-[#0A0102] rounded-full overflow-hidden border-4 border-tre-brand relative mb-6 shadow-vivid flex-shrink-0">
+                <img id="modal-avatar" src="https://via.placeholder.com/200x200/0A0102/FFFFFF?text=???" class="absolute -top-1 left-1/2 -translate-x-1/2 scale-110">
             </div>
             <h3 class="text-2xl font-black text-white group-hover:text-tre-brand mb-1" id="modal-perfil-nick">Nickname</h3>
             <p class="text-[10px] text-white/40 uppercase tracking-widest mb-6">Usuário Liderança Ministério TRE</p>
@@ -353,23 +350,29 @@
                 </div>
                 
                 <div class="space-y-1.5">
-                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Grupo / Categoria</label>
-                    <select id="config-grupo" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
-                        <option value="[A] Ouvidoria / Grupo Int.">[A] Ouvidoria / Grupo Int.</option>
-                        <option value="[B] Destaques Semanais">[B] Destaques Semanais</option>
-                        <option value="[C] Hierarquia / Metas">[C] Hierarquia / Metas</option>
-                        <option value="[D] Diversos">[D] Diversos</option>
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Categoria</label>
+                    <select id="config-grupo" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium appearance-none">
+                        <option value="Ouvidoria">Ouvidoria</option>
+                        <option value="Destaques">Destaques</option>
+                        <option value="Hierarquia e Metas">Hierarquia e Metas</option>
+                        <option value="Diversos">Diversos</option>
                     </select>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-1.5">
-                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Pontos (Ex: 5 ou -2)</label>
-                        <input type="number" id="config-pontos" required placeholder="Ex: 5" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium text-center">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Pontos (+ ou -)</label>
+                        <input type="number" id="config-pontos" required placeholder="Ex: 5 ou -2" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium text-center">
                     </div>
                     <div class="space-y-1.5">
                         <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Setor Responsável</label>
-                        <input type="text" id="config-responsavel" required placeholder="Ex: CDC" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium text-center">
+                        <select id="config-responsavel" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium appearance-none text-center">
+                            <option value="GRUPO INTERNO">GRUPO INTERNO</option>
+                            <option value="CDI">CDI</option>
+                            <option value="CPT">CPT</option>
+                            <option value="MINISTÉRIO">MINISTÉRIO</option>
+                            <option value="LIDERANÇA">LIDERANÇA</option>
+                        </select>
                     </div>
                 </div>
 
@@ -403,7 +406,7 @@
         const auth = firebase.auth();
 
         let currentUserNick = "LIDERANÇA"; 
-        let quadroPontosGlobal = []; // Array global para mapear pontos no histórico e renderizar CRUD
+        let quadroPontosGlobal = []; // Array do Quadro de Pontos vivo
 
         // ==========================================
         // 2. GUARDA DE AUTENTICAÇÃO DUPLA
@@ -421,7 +424,6 @@
                         
                         gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
                         
-                        // Carrega as configurações (Quadro de Pontos) antes de carregar o restante
                         carregarConfiguracoesSistema(() => {
                             iniciarEscutas();
                         });
@@ -499,24 +501,16 @@
             carregarHistoricoTabela(el.innerText);
         }
 
-        // NOVO: Filtro Dinâmico de Busca no Histórico
         function filtrarHistoricoBusca() {
             const termo = document.getElementById('search-historico').value.toLowerCase();
             const linhas = document.querySelectorAll('#table-historico-list tr');
             let mostrouAlgum = false;
 
             linhas.forEach(linha => {
-                // A primeira coluna (td) contém o Nick
                 const nick = linha.querySelector('td:first-child').innerText.toLowerCase();
-                if (nick.includes(termo)) {
-                    linha.style.display = '';
-                    mostrouAlgum = true;
-                } else {
-                    linha.style.display = 'none';
-                }
+                if (nick.includes(termo)) { linha.style.display = ''; mostrouAlgum = true; } else { linha.style.display = 'none'; }
             });
 
-            // Se filtrou tudo e não achou nada, pode mostrar o empty state (opcional)
             const emptyHistorico = document.getElementById('empty-historico');
             if(!mostrouAlgum && linhas.length > 0 && termo !== "") {
                 emptyHistorico.classList.remove('hidden'); emptyHistorico.classList.add('flex');
@@ -596,15 +590,14 @@
                 if (doc.exists && doc.data().atividades) {
                     quadroPontosGlobal = doc.data().atividades;
                 } else {
-                    // Seed inicial (Se o banco estiver vazio, cria o padrão)
                     quadroPontosGlobal = [
-                        { id: "cfg_1", nome: "Destaque Semanal Executivo", grupo: "[B] Destaques Semanais", pontos: 4, responsavel: "TREINADOR/SUP" },
-                        { id: "cfg_2", nome: "Ministração Aula Geral", grupo: "[D] Diversos", pontos: 6, responsavel: "Ministrador" }
+                        { id: "cfg_1", nome: "Destaque Semanal", grupo: "Destaques", pontos: 4, responsavel: "LIDERANÇA" },
+                        { id: "cfg_2", nome: "Ministração Aula Geral", grupo: "Diversos", pontos: 6, responsavel: "MINISTÉRIO" }
                     ];
                     db.collection("configuracoes").doc("quadro_pontos").set({ atividades: quadroPontosGlobal });
                 }
                 renderizarTabelaConfig();
-                if(callback) callback(); // Libera o carregamento das outras abas
+                if(callback) callback(); 
             });
         }
 
@@ -612,7 +605,6 @@
             const list = document.getElementById('table-config-list');
             list.innerHTML = '';
             
-            // Ordenar por Grupo
             const ativs = [...quadroPontosGlobal].sort((a, b) => a.grupo.localeCompare(b.grupo));
 
             ativs.forEach(ativ => {
@@ -660,14 +652,14 @@
                 nome: document.getElementById('config-nome').value.trim(),
                 grupo: document.getElementById('config-grupo').value,
                 pontos: parseInt(document.getElementById('config-pontos').value),
-                responsavel: document.getElementById('config-responsavel').value.trim().toUpperCase()
+                responsavel: document.getElementById('config-responsavel').value
             };
 
             let novaLista = [...quadroPontosGlobal];
-            if(idInput) { // Atualizando
+            if(idInput) { 
                 const index = novaLista.findIndex(q => q.id === idInput);
                 if(index > -1) novaLista[index] = novaAtiv;
-            } else { // Inserindo nova
+            } else { 
                 novaLista.push(novaAtiv);
             }
 
@@ -792,7 +784,7 @@
         }
 
         // ==========================================
-        // 8. HISTÓRICO MENSAL DETALHADO (Com Tabela de Pontos)
+        // 8. HISTÓRICO MENSAL DETALHADO 
         // ==========================================
         function carregarHistoricoTabela(mesFilter) {
             const list = document.getElementById('table-historico-list');
@@ -808,24 +800,16 @@
                   let postsMostrados = 0;
                   querySnapshot.forEach((doc) => {
                       const data = doc.data();
-                      
-                      // Processamento da Data
                       let dataJulgStr = "N/A";
                       if(data.dataJulgamento) {
                           const d = data.dataJulgamento.toDate();
                           dataJulgStr = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} às ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
                       }
 
-                      // NOVO: Cálculo Dinâmico de Pontos
                       let pontosCalculados = "-";
                       if (data.status === "Aprovado") {
-                          // Busca na configuração global para descobrir quanto vale
                           const ativConfig = quadroPontosGlobal.find(q => q.nome === data.categoria);
-                          if(ativConfig) {
-                              pontosCalculados = ativConfig.pontos > 0 ? `+${ativConfig.pontos}` : ativConfig.pontos;
-                          } else {
-                              pontosCalculados = "??"; // Se a atividade foi deletada do quadro
-                          }
+                          if(ativConfig) { pontosCalculados = ativConfig.pontos > 0 ? `+${ativConfig.pontos}` : ativConfig.pontos; } else { pontosCalculados = "??"; }
                       } else if (data.status === "Rejeitado") {
                           pontosCalculados = "0";
                       }
@@ -853,8 +837,7 @@
 
                   if(postsMostrados === 0) { emptyHistorico.classList.remove('hidden'); emptyHistorico.classList.add('flex'); }
                   
-                  // Reaplica o filtro de busca caso o usuário mude de mês com algo digitado
-                  filtrarHistoricoBusca();
+                  filtrarHistoricoBusca(); // Mantém o filtro de texto
               }).catch(err => { console.error("Erro histórico:", err); list.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-red-400">Erro comunicação servidor.</td></tr>'; });
         }
     </script>
