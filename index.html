@@ -6,25 +6,19 @@
     <title>Ranking Interno | Treinadores</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         tre: {
-                            // Vermelho escuro e rico para o fundo
-                            bgDark: '#2D0A0C',
-                            bgDarker: '#170304',
-                            // Vermelho vibrante para destaques
-                            brand: '#E6192B',
+                            bgDark: '#1A0506', // Fundo ainda mais profundo para dar contraste ao vidro
+                            brand: '#D31522', // Vermelho forte e vivo
+                            brandHover: '#FA1C2A',
                         },
                         medal: {
                             gold: '#FFD700',
@@ -38,200 +32,190 @@
     </script>
 
     <style>
-        /* Base do site com gradiente premium vermelho escuro */
         body {
-            background: linear-gradient(135deg, #2D0A0C 0%, #170304 100%);
+            background: radial-gradient(circle at top center, #3A0A0E 0%, #1A0506 100%);
             color: #FFFFFF;
             min-height: 100vh;
             background-attachment: fixed;
         }
 
-        /* Efeito Glassmorphism (Padrão Apple) */
+        /* Vidro mais limpo e polido */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            background: rgba(20, 5, 6, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .glass-panel:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(40, 10, 12, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transform: translateY(-4px);
         }
 
-        /* Animações suaves */
-        .interactive {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Efeitos de reatividade da interface */
+        .btn-reactive {
+            transition: all 0.3s ease;
+        }
+        .btn-reactive:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 20px -10px rgba(211, 21, 34, 0.5);
         }
 
-        /* Brilhos específicos das medalhas para os cards do pódio */
-        .glow-gold { box-shadow: 0 0 25px rgba(255, 215, 0, 0.15); border-color: rgba(255, 215, 0, 0.4); }
-        .glow-silver { box-shadow: 0 0 25px rgba(227, 228, 229, 0.15); border-color: rgba(227, 228, 229, 0.3); }
-        .glow-bronze { box-shadow: 0 0 25px rgba(205, 127, 50, 0.15); border-color: rgba(205, 127, 50, 0.3); }
+        /* Brilhos dos pedestais */
+        .pedestal-gold { border-top: 2px solid #FFD700; box-shadow: 0 -10px 30px -10px rgba(255, 215, 0, 0.3); }
+        .pedestal-silver { border-top: 2px solid #E3E4E5; box-shadow: 0 -10px 30px -10px rgba(227, 228, 229, 0.2); }
+        .pedestal-bronze { border-top: 2px solid #CD7F32; box-shadow: 0 -10px 30px -10px rgba(205, 127, 50, 0.2); }
         
-        .glow-gold:hover { box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); transform: translateY(-5px); }
-        .glow-silver:hover { box-shadow: 0 0 40px rgba(227, 228, 229, 0.3); transform: translateY(-5px); }
-        .glow-bronze:hover { box-shadow: 0 0 40px rgba(205, 127, 50, 0.3); transform: translateY(-5px); }
+        /* Animação do Avatar (O site vivo) */
+        .avatar-hover {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+        }
+        .group:hover .avatar-hover {
+            transform: translateY(-15px) scale(1.15);
+            filter: drop-shadow(0 20px 25px rgba(0,0,0,0.7)) brightness(1.1);
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand selection:text-white pb-20">
 
-    <header class="sticky top-0 z-50 w-full glass-panel border-x-0 border-t-0 rounded-none">
-        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-tre-brand text-xl"></i>
-                <span class="font-bold tracking-wider">TREINADORES</span>
-            </div>
+    <header class="sticky top-0 z-50 w-full glass-panel !rounded-none !transform-none !border-x-0 !border-t-0">
+        <div class="container mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center btn-reactive">
+                <img src="trelogo.png" alt="Logo Treinadores" class="h-12 object-contain" onerror="this.src='https://via.placeholder.com/150x50/1A0506/FFFFFF?text=LOGO+TRE'">
+            </a>
             
-            <nav class="hidden md:flex gap-6 text-sm font-medium text-white/70">
-                <a href="#" class="hover:text-white transition-colors">Início</a>
-                <a href="#" class="hover:text-white transition-colors">Diário Oficial</a>
-                <a href="#" class="hover:text-white transition-colors">Weekly</a>
+            <nav class="hidden lg:flex gap-8 text-sm font-medium text-white/80 items-center">
+                <a href="#" class="hover:text-white hover:text-tre-brand transition-colors">Início</a>
+                <a href="#" class="hover:text-white transition-colors">Sobre (Regras)</a>
             </nav>
 
-            <div>
-                <a href="admin.html" class="glass-panel interactive px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:text-tre-brand">
-                    <i class="fa-solid fa-lock text-xs"></i> Acesso Restrito
+            <div class="flex items-center gap-4">
+                <a href="#" class="btn-reactive bg-tre-brand text-white px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide shadow-lg border border-red-500/50 hover:bg-tre-brandHover flex items-center gap-2">
+                    <i class="fa-solid fa-bolt"></i> Postagem de Atividade
+                </a>
+                <a href="admin.html" class="hidden sm:flex glass-panel !transform-none px-4 py-2.5 rounded-xl text-sm font-semibold items-center gap-2 hover:bg-white/10 hover:text-tre-brand">
+                    <i class="fa-solid fa-lock text-xs"></i> Restrito
                 </a>
             </div>
         </div>
     </header>
 
-    <section class="container mx-auto px-6 pt-16 pb-12 text-center flex flex-col items-center">
-        <i class="fa-solid fa-trophy text-5xl text-medal-gold mb-4 drop-shadow-[0_0_15px_rgba(255,215,0,0.5)]"></i>
-        <h1 class="text-4xl md:text-5xl font-black tracking-tight mb-2">RANKING INTERNO</h1>
-        <p class="text-white/60 text-sm tracking-widest uppercase mb-8">Companhia de Treinadores • RCC</p>
-
-        <div class="flex flex-wrap justify-center gap-4">
-            <button class="glass-panel interactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:bg-white/10 hover:border-tre-brand/50">
-                <i class="fa-solid fa-medal"></i> Pódio Geral
-            </button>
-            <button class="glass-panel interactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:bg-white/10 hover:border-tre-brand/50">
-                <i class="fa-solid fa-list-ol"></i> Classificação Completa
-            </button>
-            <button class="glass-panel interactive px-6 py-3 rounded-xl font-semibold flex items-center gap-2 border-tre-brand/30 text-tre-brand bg-tre-brand/10 hover:bg-tre-brand/20">
-                <i class="fa-solid fa-file-shield"></i> Transparência
-            </button>
-        </div>
-    </section>
-
-    <section class="container mx-auto px-6 py-8">
-        <div class="flex items-center gap-4 mb-10">
-            <h2 class="text-2xl font-bold tracking-tight">RANKING – ABRIL 2026</h2>
-            <div class="h-[2px] flex-1 bg-gradient-to-r from-tre-brand/50 to-transparent"></div>
-        </div>
-
-        <div class="flex flex-col md:flex-row items-end justify-center gap-6 max-w-4xl mx-auto" id="podium-container">
-            </div>
+    <section class="container mx-auto px-6 pt-16 pb-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-black tracking-tight mb-3">RANKING <span class="text-transparent bg-clip-text bg-gradient-to-r from-tre-brand to-red-400">OFICIAL</span></h1>
+        <p class="text-white/60 text-sm tracking-widest uppercase mb-4">Corpo de Treinadores • Acompanhamento Mensal</p>
     </section>
 
     <section class="container mx-auto px-6 py-12">
-        <div class="flex items-center gap-4 mb-8">
-            <h2 class="text-2xl font-bold tracking-tight">CLASSIFICAÇÃO GERAL</h2>
-            <div class="h-[2px] flex-1 bg-gradient-to-r from-tre-brand/50 to-transparent"></div>
-        </div>
+        <div class="flex flex-col md:flex-row items-end justify-center gap-8 md:gap-4 max-w-5xl mx-auto mt-20" id="podium-container">
+            </div>
+    </section>
 
-        <div class="max-w-4xl mx-auto glass-panel rounded-2xl overflow-hidden">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="border-b border-white/10 text-xs uppercase tracking-wider text-white/50 bg-black/20">
-                        <th class="p-4 font-semibold text-center w-24">Posição</th>
-                        <th class="p-4 font-semibold">Membro</th>
-                        <th class="p-4 font-semibold text-right">Pontuação</th>
-                    </tr>
-                </thead>
-                <tbody id="list-container">
-                    </tbody>
-            </table>
+    <section class="container mx-auto px-6 py-16">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-xl font-bold tracking-widest uppercase text-white/40 mb-6 pl-2">Demais Classificados</h2>
+            
+            <div class="glass-panel rounded-3xl overflow-hidden p-2">
+                <table class="w-full text-left border-collapse">
+                    <tbody id="list-container">
+                        </tbody>
+                </table>
+            </div>
         </div>
     </section>
 
     <script>
-        // 1. DADOS SIMULADOS (No futuro, o Google Sheets vai enviar um array exatamente igual a este)
+        // Dados Estruturais (G4VET4 no topo do corpo executivo/militar)
         const dadosRanking = [
-            { posicao: 1, nick: "G4VET4", pontos: 120 },
-            { posicao: 2, nick: "-newdiegoma33", pontos: 95 },
-            { posicao: 3, nick: "Haqz", pontos: 88 },
-            { posicao: 4, nick: "TASIO_Nara", pontos: 75 },
-            { posicao: 5, nick: "-Matematico", pontos: 60 },
-            { posicao: 6, nick: "dlzn.", pontos: 55 }
+            { posicao: 1, nick: "G4VET4", pontos: 120, cargo: "Supervisor" },
+            { posicao: 2, nick: "-newdiegoma33", pontos: 95, cargo: "Treinador" },
+            { posicao: 3, nick: "Haqz", pontos: 88, cargo: "Treinador" },
+            { posicao: 4, nick: "TASIO_Nara", pontos: 75, cargo: "Treinador" },
+            { posicao: 5, nick: "-Matematico", pontos: 60, cargo: "Treinador" },
+            { posicao: 6, nick: "dlzn.", pontos: 55, cargo: "Treinador" }
         ];
 
-        // 2. FUNÇÃO DA API DO HABBO
         function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
             return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
         }
 
-        // 3. RENDERIZAR O PÓDIO
+        // RENDERIZAR O PÓDIO (SEM OVERFLOW-HIDDEN, AVATAR LIVRE)
         const podiumContainer = document.getElementById('podium-container');
-        
-        // Separamos o Top 3
         const top3 = dadosRanking.slice(0, 3);
-        
-        // Reordenamos para exibir na tela na ordem visual correta: 2º Esquerda, 1º Centro, 3º Direita
-        const ordemPodio = [top3[1], top3[0], top3[2]];
+        const ordemPodio = [top3[1], top3[0], top3[2]]; // 2º, 1º, 3º
 
         ordemPodio.forEach(membro => {
             if(!membro) return;
 
-            let estilos, altura, glowClass, corTexto;
+            let alturaPedestal, corMedalha, classePedestal;
             
-            // Configurações visuais específicas para cada posição
             if (membro.posicao === 1) {
-                altura = "h-80 md:h-[22rem] w-full md:w-72 z-10 md:-mt-8"; // Maior destaque
-                glowClass = "glow-gold bg-gradient-to-b from-white/10 to-transparent";
-                corTexto = "text-medal-gold";
+                alturaPedestal = "h-56 md:h-64 z-20";
+                corMedalha = "text-medal-gold";
+                classePedestal = "pedestal-gold bg-gradient-to-b from-yellow-900/20 to-transparent";
             } else if (membro.posicao === 2) {
-                altura = "h-72 w-full md:w-64";
-                glowClass = "glow-silver";
-                corTexto = "text-medal-silver";
+                alturaPedestal = "h-48 md:h-52 z-10";
+                corMedalha = "text-medal-silver";
+                classePedestal = "pedestal-silver bg-gradient-to-b from-gray-700/20 to-transparent";
             } else {
-                altura = "h-64 w-full md:w-64";
-                glowClass = "glow-bronze";
-                corTexto = "text-medal-bronze";
+                alturaPedestal = "h-44 md:h-48 z-10";
+                corMedalha = "text-medal-bronze";
+                classePedestal = "pedestal-bronze bg-gradient-to-b from-orange-900/20 to-transparent";
             }
 
+            // Repare na classe 'group' no container pai, e a ausência do 'overflow-hidden'
             const cardHtml = `
-                <div class="glass-panel interactive rounded-3xl ${altura} ${glowClass} flex flex-col items-center justify-between p-6 relative overflow-hidden group">
+                <div class="relative w-full md:w-72 flex flex-col items-center group mt-20 md:mt-0">
                     
-                    <div class="text-center z-10">
-                        <span class="font-black text-xl ${corTexto}">${membro.posicao}º LUGAR</span>
+                    <div class="absolute bottom-[calc(100%-3rem)] z-30 pointer-events-none w-full flex justify-center">
+                        <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="avatar-hover">
                     </div>
 
-                    <div class="relative w-full flex-1 flex justify-center items-end pb-2">
-                        <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" 
-                             class="absolute bottom-0 interactive group-hover:scale-110 drop-shadow-2xl">
-                    </div>
+                    <div class="glass-panel w-full rounded-3xl ${alturaPedestal} ${classePedestal} flex flex-col items-center justify-end p-6 relative">
+                        
+                        <div class="absolute -top-4 bg-tre-bgDark border border-white/10 px-4 py-1 rounded-full shadow-lg">
+                            <span class="font-black text-sm ${corMedalha}">${membro.posicao}º LUGAR</span>
+                        </div>
 
-                    <div class="text-center z-10 w-full pt-4 border-t border-white/10 mt-auto">
-                        <h3 class="text-xl font-bold tracking-tight">${membro.nick}</h3>
-                        <p class="text-white/60 font-medium">${membro.pontos} Pts</p>
+                        <div class="text-center w-full mt-auto">
+                            <h3 class="text-2xl font-bold tracking-tight text-white group-hover:text-tre-brand transition-colors">${membro.nick}</h3>
+                            <p class="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">${membro.cargo}</p>
+                            <div class="inline-block bg-white/5 border border-white/10 rounded-lg px-4 py-1.5 mt-2">
+                                <span class="text-lg font-black">${membro.pontos}</span> <span class="text-xs text-white/50">Pts</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
             podiumContainer.innerHTML += cardHtml;
         });
 
-        // 4. RENDERIZAR A LISTA GERAL (Posição 4 em diante)
+        // RENDERIZAR A LISTA GERAL (Com efeitos Hover)
         const listContainer = document.getElementById('list-container');
         const restoLista = dadosRanking.slice(3);
 
         restoLista.forEach(membro => {
             const rowHtml = `
-                <tr class="border-b border-white/5 interactive hover:bg-white/5 group">
-                    <td class="p-4 text-center font-bold text-white/50 group-hover:text-white transition-colors">
+                <tr class="group border-b border-white/5 hover:bg-white/5 transition-all duration-300 cursor-default">
+                    <td class="p-4 md:px-8 text-center font-black text-xl text-white/30 group-hover:text-tre-brand transition-colors w-16 md:w-24">
                         ${membro.posicao}º
                     </td>
-                    <td class="p-4 flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-white/10 border border-white/20 overflow-hidden relative flex-shrink-0">
+                    <td class="p-4 flex items-center gap-4 md:gap-6">
+                        <div class="w-12 h-12 rounded-full bg-tre-bgDark border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand/50 transition-colors">
                             <img src="${getAvatarUrl(membro.nick, 'm', 'wlk', 'std')}" alt="${membro.nick}" 
-                                 class="absolute -top-3 left-1/2 -translate-x-1/2">
+                                 class="absolute -top-2 left-1/2 -translate-x-1/2 group-hover:scale-110 transition-transform duration-300">
                         </div>
-                        <span class="font-semibold tracking-wide">${membro.nick}</span>
+                        <div class="flex flex-col">
+                            <span class="font-bold text-lg tracking-wide group-hover:translate-x-2 transition-transform duration-300">${membro.nick}</span>
+                            <span class="text-xs text-white/40 font-medium">${membro.cargo}</span>
+                        </div>
                     </td>
-                    <td class="p-4 text-right font-bold text-tre-brand">
-                        ${membro.pontos} <span class="text-xs text-white/50 font-normal">Pts</span>
+                    <td class="p-4 md:px-8 text-right w-32">
+                        <span class="font-bold text-xl text-white group-hover:text-tre-brand transition-colors">${membro.pontos}</span> 
+                        <span class="text-sm text-white/40">Pts</span>
                     </td>
                 </tr>
             `;
