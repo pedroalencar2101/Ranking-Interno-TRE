@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Comando Central (PCC) | Ministério RCC</title>
+    <title>Painel de Comando | Ministério RCC</title>
     
     <link rel="icon" type="image/png" href="logotre.png?v=2">
     <link rel="apple-touch-icon" href="logotre.png?v=2">
@@ -37,15 +37,11 @@
             min-height: 100vh;
             background-attachment: fixed;
             font-size: 15px;
-            overflow: hidden;
+            overflow: hidden; 
         }
         
-        .glass-panel {
-            background: rgba(20, 4, 5, 0.6);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        .glass-panel { background: rgba(20, 4, 5, 0.6); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-panel-simple { background: rgba(20, 4, 5, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
 
         .glass-card {
             background: linear-gradient(145deg, rgba(35, 6, 8, 0.4) 0%, rgba(10, 1, 2, 0.6) 100%);
@@ -59,30 +55,19 @@
         .nav-item.active { background: rgba(211, 21, 34, 0.1); border-left: 3px solid #D31522; color: white; }
         .nav-item:hover:not(.active) { background: rgba(255, 255, 255, 0.05); }
 
-        .vivid-perfil {
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            transform-origin: center;
-        }
-        .vivid-perfil:hover {
-            background: rgba(211, 21, 34, 0.15);
-            border-color: rgba(211, 21, 34, 0.3);
-            box-shadow: theme('boxShadow.vivid');
-            transform: scale(1.02);
-        }
-        .vivid-perfil img { transition: transform 0.5s ease; }
-        .vivid-perfil:hover img { transform: rotate(15deg) scale(1.1); }
+        .vivid-perfil { transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); transform-origin: center; }
+        .vivid-perfil:hover { background: rgba(211, 21, 34, 0.15); border-color: rgba(211, 21, 34, 0.3); box-shadow: theme('boxShadow.vivid'); transform: scale(1.02); }
+        
+        /* CORREÇÃO DA ANIMAÇÃO DO AVATAR: Travando o Eixo X */
+        .vivid-perfil img { transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
+        .vivid-perfil:hover img { transform: translateX(-50%) scale(1.15) !important; }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #D31522; }
 
-        .glass-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.3s ease;
-        }
+        .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
         .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: theme('colors.tre.brand'); outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
 
         #auth-loader { z-index: 9999; }
@@ -94,15 +79,15 @@
         <img src="trelogo.png" alt="Logo TRE" class="h-16 mb-6 animate-pulse" onerror="this.src='https://via.placeholder.com/80x80/D31522/FFFFFF?text=TRE'">
         <i class="fa-solid fa-user-shield text-4xl text-tre-brand mb-4"></i>
         <h2 class="text-white font-black tracking-widest uppercase text-sm">Validando Acesso Ministerial</h2>
-        <p class="text-white/40 text-xs mt-2">Área Central de Comando | PCC</p>
+        <p class="text-white/40 text-xs mt-2">Área Restrita do Ministério</p>
     </div>
 
     <aside id="sidebar" class="glass-panel w-72 h-full flex flex-col fixed md:relative z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 border-r border-white/5">
         <div class="p-6 border-b border-white/5 flex items-center gap-4">
             <img src="trelogo.png" alt="TRE" class="h-10 object-contain" onerror="this.src='https://via.placeholder.com/50x50/D31522/FFFFFF?text=TRE'">
             <div>
-                <h1 class="text-xl font-black text-white tracking-tighter leading-none">PAINEL COMANDO</h1>
-                <p class="text-[9px] text-tre-brand font-bold uppercase tracking-widest mt-1">Ministério RCC | PCC</p>
+                <h1 class="text-xl font-black text-white tracking-tighter leading-none">PAINEL</h1>
+                <p class="text-[9px] text-tre-brand font-bold uppercase tracking-widest mt-1">Ministério RCC</p>
             </div>
             <button onclick="toggleSidebar()" class="md:hidden text-white/50 hover:text-white ml-auto"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
@@ -128,7 +113,7 @@
         <div class="p-6 border-t border-white/5">
             <button onclick="toggleModal('modal-perfil')" class="w-full glass-card vivid-perfil p-4 flex items-center gap-3.5 mb-4 border border-white/10 hover:border-tre-brand/30 transition-all cursor-pointer">
                 <div class="w-12 h-12 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
-                    <img id="sidebar-avatar" src="https://via.placeholder.com/80x80/0A0102/FFFFFF?text=???" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-700">
+                    <img id="sidebar-avatar" src="https://via.placeholder.com/80x80/0A0102/FFFFFF?text=???" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500">
                 </div>
                 <div class="text-left">
                     <p class="text-sm font-black text-white group-hover:text-tre-brand" id="admin-user-nick">Carregando...</p>
@@ -149,7 +134,7 @@
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebar()" class="text-white/70 hover:text-white"><i class="fa-solid fa-bars text-lg"></i></button>
                 <img src="trelogo.png" alt="TRE" class="h-6" onerror="this.src='https://via.placeholder.com/30x30/D31522/FFFFFF?text=TRE'">
-                <span class="font-black text-sm tracking-widest uppercase">Comando</span>
+                <span class="font-black text-sm tracking-widest uppercase">Painel</span>
             </div>
             <a href="index.html" class="text-xs font-bold text-white/50 hover:text-tre-brand transition-colors"><i class="fa-solid fa-house"></i> Site</a>
         </header>
@@ -163,7 +148,7 @@
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4 pb-6 border-b border-white/5">
                     <div>
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
-                            <i class="fa-solid fa-clipboard-check text-tre-brand"></i> Auditoria de Atividades
+                            <i class="fa-solid fa-clipboard-check text-tre-brand"></i> Auditoria
                         </h2>
                         <p class="text-white/40 text-xs md:text-sm">Postagens de atividades aguardando validação para o ranking.</p>
                     </div>
@@ -176,7 +161,7 @@
                 <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
                 
                 <div id="empty-atividades" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
-                    <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
+                    <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
                     <h3 class="text-xl font-black uppercase text-white tracking-widest">Tudo Limpo!</h3>
                     <p class="text-sm text-white/40 mt-1 max-w-sm">Nenhuma atividade pendente de análise.</p>
                 </div>
@@ -217,16 +202,19 @@
             </div>
 
             <div id="tab-historico" class="tab-content hidden opacity-0">
-                <div class="mb-10 pb-6 border-b border-white/5">
-                    <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
-                        <i class="fa-solid fa-box-archive text-tre-brand"></i> Histórico Mensal
-                    </h2>
-                    <p class="text-white/40 text-xs md:text-sm">Arquivo completo de todas as postagens julgadas pela Liderança.</p>
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4 pb-6 border-b border-white/5">
+                    <div>
+                        <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
+                            <i class="fa-solid fa-box-archive text-tre-brand"></i> Histórico Mensal
+                        </h2>
+                        <p class="text-white/40 text-xs md:text-sm">Arquivo completo de todas as postagens julgadas pela Liderança.</p>
+                    </div>
                 </div>
 
-                <div class="glass-panel-simple p-5 flex flex-wrap gap-3 mb-8 rounded-xl border border-white/5 relative z-20">
+                <div class="glass-panel-simple p-5 flex flex-wrap items-center justify-between gap-4 mb-8 rounded-xl border border-white/5 relative z-20">
+                    
                     <div class="relative">
-                        <button id="btn-filter-mes" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 text-white cursor-pointer focus:outline-none hover:text-white transition-colors">
+                        <button id="btn-filter-mes" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-4 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white cursor-pointer focus:outline-none hover:text-white transition-colors">
                             <i class="fa-solid fa-calendar-alt text-amber-500"></i> 
                             <span id="texto-filter-mes">Abril 2026</span> 
                             <i id="icone-filter-seta" class="fa-solid fa-chevron-down text-xs ml-1 text-white/40 transition-transform duration-300"></i>
@@ -235,6 +223,11 @@
                             <button onclick="selecionarFilterMes(this)" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Abril 2026</button>
                             <button onclick="selecionarFilterMes(this)" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Maio 2026</button>
                         </div>
+                    </div>
+
+                    <div class="relative w-full md:w-72">
+                        <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
+                        <input type="text" id="search-historico" onkeyup="filtrarHistoricoBusca()" placeholder="Buscar por Nick do Policial..." class="w-full glass-input rounded-lg pl-11 pr-4 py-2.5 text-sm font-medium">
                     </div>
                 </div>
 
@@ -245,7 +238,7 @@
                                 <tr>
                                     <th class="p-4 px-6">Nick</th>
                                     <th class="p-4">Atividade Cadastrada</th>
-                                    <th class="p-4">Data Postagem</th>
+                                    <th class="p-4 text-center">Pontos</th>
                                     <th class="p-4 text-center">Status</th>
                                     <th class="p-4">Admin Responsável</th>
                                     <th class="p-4">Data Julgamento</th>
@@ -259,23 +252,38 @@
                 <div id="empty-historico" class="hidden flex-col items-center justify-center py-20 text-center glass-card p-10 border-dashed border-2 border-white/5">
                     <i class="fa-solid fa-folder-open text-4xl text-white/20 mb-4"></i>
                     <h3 class="text-lg font-bold text-white/50">Sem histórico</h3>
-                    <p class="text-sm text-white/30 mt-1">Nenhuma postagem arquivada para este mês.</p>
+                    <p class="text-sm text-white/30 mt-1">Nenhuma postagem arquivada correspondente.</p>
                 </div>
             </div>
 
             <div id="tab-config" class="tab-content hidden opacity-0 relative">
-                <div class="mb-10 pb-6 border-b border-white/5">
-                    <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
-                        <i class="fa-solid fa-sliders text-tre-brand"></i> Configurações
-                    </h2>
-                    <p class="text-white/40 text-xs md:text-sm">Módulo de controle central para editar o Quadro de Pontos e categorias da Companhia.</p>
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4 pb-6 border-b border-white/5">
+                    <div>
+                        <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
+                            <i class="fa-solid fa-sliders text-tre-brand"></i> Configurações
+                        </h2>
+                        <p class="text-white/40 text-xs md:text-sm">Gestão central do Quadro de Pontos e Categorias.</p>
+                    </div>
+                    <button onclick="abrirModalConfigAtividade()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition-all text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Nova Atividade
+                    </button>
                 </div>
 
-                <div class="glass-card p-6 md:p-8 space-y-10 relative z-10">
-                    <div class="text-center">
-                        <i class="fa-solid fa-person-digging text-4xl text-amber-500 mb-4"></i>
-                        <h3 class="text-lg font-bold text-white">Quadro de Pontos Central (CRUD Firestore)</h3>
-                        <p class="text-sm text-white/50 mt-2 max-w-lg mx-auto">Em breve você poderá mudar o valor da pontuação, adicionar atividades, retirá-las e alterar categorias e setores responsáveis direto por aqui. *Módulo em implementação.*</p>
+                <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl">
+                    <div class="overflow-x-auto pb-2">
+                        <table class="w-full text-left border-collapse min-w-full text-sm">
+                            <thead class="bg-white/5 text-[10px] uppercase font-black tracking-widest text-white/40 border-b border-white/5">
+                                <tr>
+                                    <th class="p-4 px-6">Categoria / Grupo</th>
+                                    <th class="p-4">Atividade</th>
+                                    <th class="p-4 text-center">Pontos</th>
+                                    <th class="p-4">Responsável</th>
+                                    <th class="p-4 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-config-list">
+                                </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -330,6 +338,48 @@
         </div>
     </div>
 
+    <div id="modal-config-atividade" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-config-atividade')"></div>
+        <div class="relative w-full max-w-md bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-all duration-300">
+            <button onclick="toggleModal('modal-config-atividade')" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-tre-brand transition-colors z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl font-black text-white uppercase mb-6 flex items-center gap-2 border-b border-white/10 pb-4"><i class="fa-solid fa-pen-to-square text-tre-brand"></i> Gerenciar Atividade</h2>
+            
+            <form id="form-config-atividade" onsubmit="salvarConfigAtividade(event)" class="space-y-4">
+                <input type="hidden" id="config-id">
+                
+                <div class="space-y-1.5">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nome da Atividade</label>
+                    <input type="text" id="config-nome" required placeholder="Ex: Ministração de Aula Geral" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
+                </div>
+                
+                <div class="space-y-1.5">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Grupo / Categoria</label>
+                    <select id="config-grupo" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
+                        <option value="[A] Ouvidoria / Grupo Int.">[A] Ouvidoria / Grupo Int.</option>
+                        <option value="[B] Destaques Semanais">[B] Destaques Semanais</option>
+                        <option value="[C] Hierarquia / Metas">[C] Hierarquia / Metas</option>
+                        <option value="[D] Diversos">[D] Diversos</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Pontos (Ex: 5 ou -2)</label>
+                        <input type="number" id="config-pontos" required placeholder="Ex: 5" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium text-center">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Setor Responsável</label>
+                        <input type="text" id="config-responsavel" required placeholder="Ex: CDC" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium text-center">
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-save-config" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-4 text-sm flex items-center justify-center gap-2">
+                    Salvar Atividade
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -338,7 +388,7 @@
 
     <script>
         // ==========================================
-        // 1. INICIALIZAÇÃO FIREBASE 
+        // 1. INICIALIZAÇÃO E VARIAVEIS GLOBAIS
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0",
@@ -353,6 +403,7 @@
         const auth = firebase.auth();
 
         let currentUserNick = "LIDERANÇA"; 
+        let quadroPontosGlobal = []; // Array global para mapear pontos no histórico e renderizar CRUD
 
         // ==========================================
         // 2. GUARDA DE AUTENTICAÇÃO DUPLA
@@ -365,15 +416,18 @@
                 .then((doc) => {
                     if (doc.exists && doc.data().status === "Aprovado") {
                         currentUserNick = doc.data().nick || "Admin";
-                        
                         document.getElementById('admin-user-nick').innerText = currentUserNick.toUpperCase();
                         prepararModalPerfilMeu(doc.data());
                         
                         gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
-                        iniciarEscutas();
+                        
+                        // Carrega as configurações (Quadro de Pontos) antes de carregar o restante
+                        carregarConfiguracoesSistema(() => {
+                            iniciarEscutas();
+                        });
                     } else {
                         auth.signOut().then(() => {
-                            alert("Acesso Negado: Sua conta ainda não foi aprovada pelo Ministério.");
+                            alert("Acesso Negado: Sua conta não foi aprovada pelo Ministério.");
                             window.location.href = 'index.html';
                         });
                     }
@@ -386,9 +440,7 @@
             }
         });
 
-        function logout() {
-            auth.signOut().then(() => { window.location.href = 'index.html'; });
-        }
+        function logout() { auth.signOut().then(() => { window.location.href = 'index.html'; }); }
 
         function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
             return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
@@ -401,11 +453,9 @@
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
+                sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden');
             } else {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
+                sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden');
             }
         }
 
@@ -449,13 +499,38 @@
             carregarHistoricoTabela(el.innerText);
         }
 
+        // NOVO: Filtro Dinâmico de Busca no Histórico
+        function filtrarHistoricoBusca() {
+            const termo = document.getElementById('search-historico').value.toLowerCase();
+            const linhas = document.querySelectorAll('#table-historico-list tr');
+            let mostrouAlgum = false;
+
+            linhas.forEach(linha => {
+                // A primeira coluna (td) contém o Nick
+                const nick = linha.querySelector('td:first-child').innerText.toLowerCase();
+                if (nick.includes(termo)) {
+                    linha.style.display = '';
+                    mostrouAlgum = true;
+                } else {
+                    linha.style.display = 'none';
+                }
+            });
+
+            // Se filtrou tudo e não achou nada, pode mostrar o empty state (opcional)
+            const emptyHistorico = document.getElementById('empty-historico');
+            if(!mostrouAlgum && linhas.length > 0 && termo !== "") {
+                emptyHistorico.classList.remove('hidden'); emptyHistorico.classList.add('flex');
+            } else if (mostrouAlgum) {
+                emptyHistorico.classList.add('hidden'); emptyHistorico.classList.remove('flex');
+            }
+        }
+
         // ==========================================
-        // 4. PERFIL VIVO (Modo Meu Perfil vs Modo Terceiro)
+        // 4. PERFIL VIVO E MODAL
         // ==========================================
         function prepararModalPerfilMeu(data) {
             document.getElementById('modal-perfil-nick').innerText = data.nick;
-            const avatarUrl = getAvatarUrl(data.nick, 'm', 'std', 'std');
-            document.getElementById('sidebar-avatar').src = avatarUrl;
+            document.getElementById('sidebar-avatar').src = getAvatarUrl(data.nick, 'm', 'std', 'std');
             document.getElementById('modal-avatar').src = getAvatarUrl(data.nick, 'l', 'std', 'std');
             
             const txtDesc = document.getElementById('perfil-descricao');
@@ -514,7 +589,103 @@
         }
 
         // ==========================================
-        // 5. ESCUTAS EM TEMPO REAL (AUDITORIA, ACESSO, ADMINS)
+        // 5. MÓDULO DE CONFIGURAÇÕES (CRUD FIREBASE)
+        // ==========================================
+        function carregarConfiguracoesSistema(callback) {
+            db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
+                if (doc.exists && doc.data().atividades) {
+                    quadroPontosGlobal = doc.data().atividades;
+                } else {
+                    // Seed inicial (Se o banco estiver vazio, cria o padrão)
+                    quadroPontosGlobal = [
+                        { id: "cfg_1", nome: "Destaque Semanal Executivo", grupo: "[B] Destaques Semanais", pontos: 4, responsavel: "TREINADOR/SUP" },
+                        { id: "cfg_2", nome: "Ministração Aula Geral", grupo: "[D] Diversos", pontos: 6, responsavel: "Ministrador" }
+                    ];
+                    db.collection("configuracoes").doc("quadro_pontos").set({ atividades: quadroPontosGlobal });
+                }
+                renderizarTabelaConfig();
+                if(callback) callback(); // Libera o carregamento das outras abas
+            });
+        }
+
+        function renderizarTabelaConfig() {
+            const list = document.getElementById('table-config-list');
+            list.innerHTML = '';
+            
+            // Ordenar por Grupo
+            const ativs = [...quadroPontosGlobal].sort((a, b) => a.grupo.localeCompare(b.grupo));
+
+            ativs.forEach(ativ => {
+                let badgeClass = ativ.pontos > 0 ? 'emerald' : 'red';
+                let ptSinal = ativ.pontos > 0 ? `+${ativ.pontos}` : ativ.pontos;
+
+                list.innerHTML += `
+                    <tr class="group border-b border-white/5 hover:bg-white/5 transition-colors text-white/80">
+                        <td class="p-4 px-6 font-bold text-[11px] uppercase tracking-wider text-white/50 group-hover:text-white">${ativ.grupo}</td>
+                        <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${ativ.nome}</td>
+                        <td class="p-4 text-center"><span class="inline-flex items-center point-badge point-${badgeClass}">${ptSinal}</span></td>
+                        <td class="p-4 text-xs font-semibold whitespace-nowrap uppercase">${ativ.responsavel}</td>
+                        <td class="p-4 text-right whitespace-nowrap">
+                            <button onclick="editarAtividadeConfig('${ativ.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="excluirAtividadeConfig('${ativ.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function abrirModalConfigAtividade() {
+            document.getElementById('form-config-atividade').reset();
+            document.getElementById('config-id').value = "";
+            toggleModal('modal-config-atividade');
+        }
+
+        function editarAtividadeConfig(id) {
+            const ativ = quadroPontosGlobal.find(q => q.id === id);
+            if(ativ) {
+                document.getElementById('config-id').value = ativ.id;
+                document.getElementById('config-nome').value = ativ.nome;
+                document.getElementById('config-grupo').value = ativ.grupo;
+                document.getElementById('config-pontos').value = ativ.pontos;
+                document.getElementById('config-responsavel').value = ativ.responsavel;
+                toggleModal('modal-config-atividade');
+            }
+        }
+
+        function salvarConfigAtividade(e) {
+            e.preventDefault();
+            const idInput = document.getElementById('config-id').value;
+            const novaAtiv = {
+                id: idInput ? idInput : "cfg_" + Date.now(),
+                nome: document.getElementById('config-nome').value.trim(),
+                grupo: document.getElementById('config-grupo').value,
+                pontos: parseInt(document.getElementById('config-pontos').value),
+                responsavel: document.getElementById('config-responsavel').value.trim().toUpperCase()
+            };
+
+            let novaLista = [...quadroPontosGlobal];
+            if(idInput) { // Atualizando
+                const index = novaLista.findIndex(q => q.id === idInput);
+                if(index > -1) novaLista[index] = novaAtiv;
+            } else { // Inserindo nova
+                novaLista.push(novaAtiv);
+            }
+
+            db.collection("configuracoes").doc("quadro_pontos").update({ atividades: novaLista })
+                .then(() => { toggleModal('modal-config-atividade'); })
+                .catch(err => { console.error("Erro config:", err); alert("Erro ao salvar."); });
+        }
+
+        function excluirAtividadeConfig(id) {
+            if(confirm("Tem certeza que deseja excluir esta atividade permanentemente do sistema?")) {
+                const novaLista = quadroPontosGlobal.filter(q => q.id !== id);
+                db.collection("configuracoes").doc("quadro_pontos").update({ atividades: novaLista })
+                    .catch(err => { console.error("Erro excluir config:", err); alert("Erro ao excluir."); });
+            }
+        }
+
+        // ==========================================
+        // 6. ESCUTAS EM TEMPO REAL (AUDITORIA E ADMINS)
         // ==========================================
         function iniciarEscutas() {
             // Auditoria
@@ -544,7 +715,7 @@
                   }
               });
 
-            // Acessos
+            // Acessos Pendentes
             db.collection("solicitacoes_acesso").where("status", "==", "Pendente").onSnapshot((querySnapshot) => {
                   const grid = document.getElementById('grid-acessos');
                   const emptyState = document.getElementById('empty-acessos');
@@ -577,7 +748,7 @@
                       grid.innerHTML += `
                           <button onclick="abrirDetalhesAdminDoc('${doc.id}')" class="vivid-perfil h-24 glass-card p-3 flex flex-col items-center justify-center text-center gap-2 border border-white/5 cursor-pointer group">
                               <div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
-                                  <img src="${getAvatarUrl(data.nick, 'm', 'std', 'std')}" class="absolute -top-1 left-1/2 -translate-x-1/2">
+                                  <img src="${getAvatarUrl(data.nick, 'm', 'std', 'std')}" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500">
                               </div>
                               <p class="text-[11px] font-black text-white group-hover:text-tre-brand truncate w-full">${data.nick}</p>
                           </button>`;
@@ -588,7 +759,7 @@
         }
 
         // ==========================================
-        // 6. MOTOR DE JULGAMENTO & REJEIÇÃO
+        // 7. MOTOR DE JULGAMENTO & REJEIÇÃO
         // ==========================================
         function julgarDoc(colecao, docId, novoStatus) {
             const card = document.getElementById(`card-${docId}`);
@@ -621,7 +792,7 @@
         }
 
         // ==========================================
-        // 7. HISTÓRICO MENSAL DETALHADO
+        // 8. HISTÓRICO MENSAL DETALHADO (Com Tabela de Pontos)
         // ==========================================
         function carregarHistoricoTabela(mesFilter) {
             const list = document.getElementById('table-historico-list');
@@ -637,10 +808,26 @@
                   let postsMostrados = 0;
                   querySnapshot.forEach((doc) => {
                       const data = doc.data();
+                      
+                      // Processamento da Data
                       let dataJulgStr = "N/A";
                       if(data.dataJulgamento) {
                           const d = data.dataJulgamento.toDate();
                           dataJulgStr = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} às ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+                      }
+
+                      // NOVO: Cálculo Dinâmico de Pontos
+                      let pontosCalculados = "-";
+                      if (data.status === "Aprovado") {
+                          // Busca na configuração global para descobrir quanto vale
+                          const ativConfig = quadroPontosGlobal.find(q => q.nome === data.categoria);
+                          if(ativConfig) {
+                              pontosCalculados = ativConfig.pontos > 0 ? `+${ativConfig.pontos}` : ativConfig.pontos;
+                          } else {
+                              pontosCalculados = "??"; // Se a atividade foi deletada do quadro
+                          }
+                      } else if (data.status === "Rejeitado") {
+                          pontosCalculados = "0";
                       }
 
                       postsMostrados++;
@@ -651,11 +838,11 @@
                       list.innerHTML += `
                           <tr class="group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default text-white/80">
                               <td class="p-4 px-6 flex items-center gap-3 font-bold group-hover:text-white truncate">
-                                  <div class="w-8 h-8 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors"><img src="${getAvatarUrl(data.nick, 'm', 'std', 'sml')}" class="absolute -top-1 left-1/2 -translate-x-1/2"></div>
+                                  <div class="w-8 h-8 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors"><img src="${getAvatarUrl(data.nick, 'm', 'std', 'sml')}" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500 group-hover:scale-110"></div>
                                   ${data.nick}
                               </td>
                               <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${data.categoria}</td>
-                              <td class="p-4 text-white/50 text-[11px] font-mono whitespace-nowrap">${data.dataEnvio ? data.dataEnvio.toDate().toLocaleString() : 'N/A'}</td>
+                              <td class="p-4 text-center font-black text-lg text-${statusClass}-500">${pontosCalculados}</td>
                               <td class="p-4 text-center">
                                   <span class="inline-flex items-center gap-1.5 point-badge point-${statusClass} text-${statusClass}-400"><i class="fa-solid fa-${statusIcon}"></i> ${data.status}</span>
                               </td>
@@ -665,6 +852,9 @@
                   });
 
                   if(postsMostrados === 0) { emptyHistorico.classList.remove('hidden'); emptyHistorico.classList.add('flex'); }
+                  
+                  // Reaplica o filtro de busca caso o usuário mude de mês com algo digitado
+                  filtrarHistoricoBusca();
               }).catch(err => { console.error("Erro histórico:", err); list.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-red-400">Erro comunicação servidor.</td></tr>'; });
         }
     </script>
