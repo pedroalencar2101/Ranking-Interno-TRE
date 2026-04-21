@@ -24,7 +24,7 @@
                     },
                     boxShadow: {
                         '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.6)',
-                        'nav': '0 10px 40px -10px rgba(0, 0, 0, 0.8)', // Sombra profissional para navbar
+                        'nav': '0 10px 40px -10px rgba(0, 0, 0, 0.8)',
                     }
                 }
             }
@@ -37,7 +37,7 @@
             color: #FFFFFF;
             min-height: 100vh;
             background-attachment: fixed;
-            font-size: 15px; /* Tamanho base harmonizado */
+            font-size: 15px;
         }
         .glass-panel {
             background: theme('colors.tre.bgPanel');
@@ -55,13 +55,11 @@
             background: theme('colors.tre.glassNav');
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            /* Sem borda fina vermelha. Utilizando sombra shadow-nav */
         }
         .pedestal-gold { border-top: 2px solid #FFD700; box-shadow: 0 -15px 40px -15px rgba(255, 215, 0, 0.25); }
         .pedestal-silver { border-top: 2px solid #E3E4E5; box-shadow: 0 -15px 40px -15px rgba(227, 228, 229, 0.15); }
         .pedestal-bronze { border-top: 2px solid #CD7F32; box-shadow: 0 -15px 40px -15px rgba(205, 127, 50, 0.15); }
         
-        /* Ajuste de scrollbar para mobile */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #120203; }
         ::-webkit-scrollbar-thumb { background: #D31522; rounded: 3px; }
@@ -71,18 +69,21 @@
 
     <header class="sticky top-0 z-50 w-full glass-navbar shadow-nav">
         <div class="container mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-            <a href="#" class="flex items-center hover:opacity-80 transition-opacity">
-                <img src="trelogo.png" alt="Logo" class="h-10 md:h-12 object-contain" onerror="this.src='https://via.placeholder.com/150x50/D31522/FFFFFF?text=LOGO'">
-            </a>
             
-            <nav class="hidden md:flex gap-8 text-sm font-semibold text-white/80 items-center">
-                <a href="#" class="hover:text-tre-brand transition-colors">Início</a>
-                <a href="#" class="hover:text-white transition-colors">Sobre (Regras)</a>
-            </nav>
+            <div class="flex items-center gap-6 md:gap-10">
+                <a href="#" class="flex items-center hover:opacity-80 transition-opacity">
+                    <img src="trelogo.png" alt="Logo" class="h-10 md:h-12 object-contain" onerror="this.src='https://via.placeholder.com/150x50/D31522/FFFFFF?text=LOGO'">
+                </a>
+                
+                <nav class="hidden md:flex gap-6 text-[13px] font-bold uppercase tracking-wider text-white/70 items-center">
+                    <a href="#" class="hover:text-tre-brand transition-colors">Início</a>
+                    <a href="#" class="hover:text-tre-brand transition-colors">Regras</a>
+                </nav>
+            </div>
 
             <div class="flex items-center gap-2 md:gap-4">
-                <a href="#" class="bg-tre-brand text-white px-3 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl text-[11px] md:text-sm font-bold shadow-xl border border-red-500/50 hover:bg-tre-brandHover transition-all hover:-translate-y-0.5 flex items-center gap-1.5 md:gap-2">
-                    <i class="fa-solid fa-bolt"></i> <span class="hidden xs:inline">Postar</span> Atividade
+                <a href="#" class="bg-tre-brand text-white px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl text-[11px] md:text-sm font-bold shadow-xl border border-red-500/50 hover:bg-tre-brandHover transition-all hover:-translate-y-0.5 flex items-center gap-1.5 md:gap-2">
+                    <i class="fa-solid fa-bolt"></i> Atividade
                 </a>
                 <a href="admin.html" class="flex bg-black/40 border border-white/10 px-3 md:px-4 py-2 md:py-2.5 rounded-lg md:rounded-xl text-[11px] md:text-sm font-semibold hover:bg-white/10 hover:text-tre-brand transition-all hover:-translate-y-0.5 items-center gap-1.5 md:gap-2">
                     <i class="fa-solid fa-lock text-xs"></i> Restrito
@@ -105,7 +106,8 @@
             <div class="max-w-4xl mx-auto">
                 <h2 class="text-[11px] md:text-sm font-black tracking-widest uppercase text-white/30 mb-5 md:mb-6 pl-3 md:pl-4 border-l-2 border-tre-brand">Alto Escalão e Demais Membros</h2>
                 <div class="glass-panel rounded-2xl md:rounded-3xl overflow-hidden p-1 shadow-3xl">
-                    <div class="overflow-x-auto"> <table class="w-full text-left border-collapse min-w-[500px]">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[500px]">
                             <tbody id="list-container"></tbody>
                         </table>
                     </div>
@@ -115,10 +117,16 @@
     </main>
 
     <footer class="w-full border-t border-white/5 bg-black/40 mt-16 pb-10">
-        <div class="container mx-auto px-6 pt-12 text-center text-white/30 grayscale hover:grayscale-0 transition-all duration-700 hover:text-white/60">
+        <div class="container mx-auto px-6 pt-10 text-center text-white/30 grayscale hover:grayscale-0 transition-all duration-700 hover:text-white/60">
             <img src="trelogo.png" alt="Logo TRE" class="h-10 mx-auto object-contain mb-4 opacity-50" onerror="this.style.display='none'">
             <p class="text-xl md:text-2xl font-black tracking-tighter uppercase mb-1">Companhia dos Treinadores</p>
             <p class="text-[10px] md:text-xs font-medium uppercase tracking-[0.3em]">RCC • Todos os direitos reservados</p>
+            
+            <div class="mt-6 pt-5 border-t border-white/5 inline-block">
+                <p class="text-[11px] md:text-xs font-semibold tracking-widest text-white/40">
+                    <span class="font-mono text-tre-brand font-bold text-sm">&lt;/&gt;</span> por <span class="text-white/80">G4VET4</span> &bull; &copy; 2026 Companhia dos Treinadores
+                </p>
+            </div>
         </div>
     </footer>
 
@@ -139,10 +147,6 @@
         }
 
         const podiumContainer = document.getElementById('podium-container');
-        // Ordem visual responsiva: 1º no topo (mobile), ou 2º, 1º, 3º (desktop)
-        // O CSS flex-col (mobile) vs flex-row (desktop) cuida disso se invertermos a ordem no JS para mobile,
-        // mas é melhor manter a lógica e usar 'order' do Tailwind. 
-        // Vamos manter a ordem de desktop e forçar a ordem 1, 2, 3 no mobile usando classes 'order'.
         const ordemPodio = [dadosRanking[1], dadosRanking[0], dadosRanking[2]];
 
         ordemPodio.forEach(membro => {
