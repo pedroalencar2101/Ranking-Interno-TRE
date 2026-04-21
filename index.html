@@ -103,14 +103,14 @@
 
     <script>
         const dadosRanking = [
-            { posicao: 1, nick: "G4VET4", pontos: 185, cargo: "Treinador / Supervisor" },
-            { posicao: 2, nick: "benjlfbaby", pontos: 150, cargo: "Líder" },
-            { posicao: 3, nick: "BeGomes94.", pontos: 130, cargo: "Vice-Líder" },
-            { posicao: 4, nick: "Granno", pontos: 110, cargo: "Consultor" },
-            { posicao: 5, nick: "@Allyzon", pontos: 95, cargo: "Consultor" },
-            { posicao: 6, nick: "andrej0128s", pontos: 80, cargo: "Ministro" },
-            { posicao: 7, nick: "Evange", pontos: 75, cargo: "Ministro" },
-            { posicao: 8, nick: "AGUA.1598", pontos: 60, cargo: "Ministro" }
+            { posicao: 1, nick: "G4VET4", pontos: 185 },
+            { posicao: 2, nick: "benjlfbaby", pontos: 150 },
+            { posicao: 3, nick: "BeGomes94.", pontos: 130 },
+            { posicao: 4, nick: "Granno", pontos: 110 },
+            { posicao: 5, nick: "@Allyzon", pontos: 95 },
+            { posicao: 6, nick: "andrej0128s", pontos: 80 },
+            { posicao: 7, nick: "Evange", pontos: 75 },
+            { posicao: 8, nick: "AGUA.1598", pontos: 60 }
         ];
 
         function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
@@ -137,8 +137,7 @@
                             <span class="font-black text-xl tracking-[0.2em] whitespace-nowrap ${corMedalha} drop-shadow-md">${membro.posicao}º LUGAR</span>
                         </div>
                         <div class="text-center w-full mt-auto">
-                            <h3 class="text-2xl md:text-3xl font-black tracking-tight text-white whitespace-nowrap group-hover:text-tre-brand transition-colors">${membro.nick}</h3>
-                            <p class="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1 mb-4 whitespace-nowrap">${membro.cargo}</p>
+                            <h3 class="text-2xl md:text-3xl font-black tracking-tight text-white whitespace-nowrap group-hover:text-tre-brand transition-colors mb-5">${membro.nick}</h3>
                             <div class="inline-flex items-center justify-center bg-black/40 border border-white/5 rounded-2xl px-6 py-2 shadow-inner">
                                 <span class="text-2xl font-black">${membro.pontos}</span> <span class="text-sm font-semibold text-white/40 ml-1.5 uppercase">Pts</span>
                             </div>
@@ -160,10 +159,7 @@
                         <div class="w-14 h-14 rounded-full bg-black/40 border-2 border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors shadow-lg">
                             <img src="${getAvatarUrl(membro.nick, 'm', 'wlk', 'std')}" alt="${membro.nick}" class="absolute -top-3 left-1/2 -translate-x-1/2 transition-transform duration-500 group-hover:scale-110">
                         </div>
-                        <div class="flex flex-col">
-                            <span class="font-bold text-lg tracking-wide transition-transform duration-300 group-hover:translate-x-2">${membro.nick}</span>
-                            <span class="text-xs text-tre-brand font-bold uppercase tracking-widest">${membro.cargo}</span>
-                        </div>
+                        <span class="font-bold text-lg tracking-wide transition-transform duration-300 group-hover:translate-x-2">${membro.nick}</span>
                     </td>
                     <td class="p-5 md:px-8 text-right w-32 md:w-40">
                         <span class="font-black text-2xl text-white transition-colors group-hover:text-tre-brand">${membro.pontos}</span> 
