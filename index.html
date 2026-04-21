@@ -87,17 +87,18 @@
         .tilt-card:hover .neon-glow { opacity: 0.25; }
 
         /* ========================================================
-           CORREÇÃO DO AVATAR: ANCORAGEM MAGNÉTICA DOS PÉS
+           CORREÇÃO DEFINITIVA DO AVATAR (Fixando o Eixo X)
            ======================================================== */
         .z-avatar {
-            transform-origin: bottom center; /* O SEGREDO: Fixa os pés do avatar na borda do card */
-            transform: translateZ(2px); /* Eixo Z minúsculo para anular a distorção de paralaxe na rotação */
+            transform-origin: bottom center; 
+            /* O SEGREDO: O translateX(-50%) fica rigidamente escrito aqui para não ser apagado no Hover */
+            transform: translateX(-50%) translateZ(2px); 
             filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
             transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease;
         }
         .tilt-card:hover .z-avatar {
-            /* Removemos o translateY e mantemos o Z baixo. O Scale faz o corpo crescer para cima sem descolar o pé */
-            transform: translateZ(8px) scale(1.04);
+            /* Mantemos o eixo X cravado no -50% enquanto crescemos o avatar */
+            transform: translateX(-50%) translateZ(8px) scale(1.04);
             filter: drop-shadow(0 25px 25px rgba(0,0,0,0.8));
         }
 
@@ -240,7 +241,7 @@
                         
                         <div class="neon-glow ${glowMedal}"></div>
                         
-                        <div class="absolute bottom-[calc(100%-2.5rem)] md:bottom-[calc(100%-3rem)] left-1/2 -translate-x-1/2 pointer-events-none z-avatar w-full flex justify-center items-end">
+                        <div class="absolute bottom-[calc(100%-2.5rem)] md:bottom-[calc(100%-3rem)] left-1/2 pointer-events-none z-avatar w-full flex justify-center items-end">
                             <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="object-contain scale-110 md:scale-125 origin-bottom">
                         </div>
 
