@@ -25,10 +25,6 @@
                             glassNav: 'rgba(30, 5, 6, 0.85)',
                         }
                     },
-                    boxShadow: {
-                        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.6)',
-                        'nav': '0 10px 40px -10px rgba(0, 0, 0, 0.8)',
-                    }
                 }
             }
         }
@@ -36,7 +32,9 @@
 
     <style>
         body {
-            background: radial-gradient(circle at top center, #2B0508 0%, #0D0102 100%);
+            /* Fundo preto puro (OLED) com spotlight centralizado no topo */
+            background: #000000;
+            background-image: radial-gradient(circle at top center, #2B0508 0%, #000000 70%);
             color: #FFFFFF;
             min-height: 100vh;
             background-attachment: fixed;
@@ -44,12 +42,16 @@
             overflow-x: hidden;
         }
         
-        /* Navbar e Painéis Base */
+        /* Navbar com efeito Apple Glass */
         .glass-navbar {
             background: theme('colors.tre.glassNav');
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8);
         }
+
+        /* Painéis simples de vidro para seletor e tabela */
         .glass-panel-simple {
             background: rgba(30, 5, 6, 0.6);
             backdrop-filter: blur(20px);
@@ -57,69 +59,125 @@
             transition: all 0.3s ease;
         }
 
-        /* =========================================
-           MOTOR 3D DE ALTA PERFORMANCE
-           ========================================= */
-        .perspective-container {
-            perspective: 1200px; /* Profundidade da câmera 3D */
-            transform-style: preserve-3d;
-        }
+        /* ========================================================
+           MOTOR GEOMÉTRICO 3D PURO (SEM BIBLIOTECAS)
+           ======================================================== */
         
-        /* O Bloco Volumétrico */
-        .card-3d-wrapper {
+        /* Contêiner de Perspectiva Global */
+        #podium-container {
+            perspective: 2500px; /* Profundidade de câmera para visualização dos cubos */
             transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
-            will-change: transform;
-            /* Bordas e fundo do "vidro grosso" */
-            background: linear-gradient(145deg, rgba(35, 6, 8, 0.8) 0%, rgba(15, 2, 3, 0.9) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.1);
         }
 
-        /* Efeito de Espessura (Extrusão) no Mobile (Static 3D) */
+        /* O Cubo/Pedestal - Estrutura Mestre */
+        .cube-wrapper {
+            position: relative;
+            transform-style: preserve-3d; /* Essencial para os filhos herdarem 3D */
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); /* Animação suave */
+            will-change: transform;
+        }
+
+        /* Faces Geométricas do Cubo */
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Otimiza performance */
+            -webkit-backface-visibility: hidden;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* Definição de Espessura ( translateZ ) */
+        :root { --cube-depth: 120px; } /* Ajuste a espessura total do pedestal aqui */
+
+        /* 1. Face Frontal (Recebe o Glassmorphism e os Dados) */
+        .face-front {
+            transform: rotateY(0deg) translateZ(calc(var(--cube-depth) / 2));
+            background: linear-gradient(145deg, rgba(30, 6, 8, 0.9) 0%, rgba(15, 2, 3, 0.95) 100%);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+            z-index: 2;
+        }
+
+        /* 2. Face Traseira (Normalmente oculta) */
+        .face-back {
+            transform: rotateY(180deg) translateZ(calc(var(--cube-depth) / 2));
+            background: #120203;
+        }
+
+        /* 3. Faces Laterais (Esquerda e Direita - Recebem Sombras de Profundidade) */
+        .face-left {
+            transform: rotateY(-90deg) translateZ(calc(var(--cube-depth) / 2));
+            background: linear-gradient(to right, #120203, #1A0406); /* Sombra no encontro */
+        }
+        .face-right {
+            transform: rotateY(90deg) translateZ(calc(var(--cube-depth) / 2));
+            background: linear-gradient(to left, #120203, #1A0406); /* Sombra no encontro */
+        }
+
+        /* 4. Faces Horizontais (Cima e Baixo) */
+        
+        /* Face Superior: Onde o Habbo fica "em pé". Recebe luz total e a cor da medalha */
+        .face-top {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: var(--cube-depth);
+            transform: rotateX(90deg) translateZ(calc(var(--cube-depth) / 2));
+            border-radius: 20px 20px 0 0;
+            /* Gradiente simulando metal/vidro polido recebendo luz do spotlight */
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(20,4,5,0.5) 100%);
+            box-shadow: 0 0 40px -10px currentColor; /* Glow da cor da medalha */
+        }
+
+        /* Face Inferior: Sombra de contato com o chão */
+        .face-bottom {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: var(--cube-depth);
+            transform: rotateX(-90deg) translateZ(calc(var(--cube-depth) / 2));
+            background: #000000;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+
+        /* Posicionamento do Habbo sobre o Cubo */
+        .habbo-positioner {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateZ(calc((var(--cube-depth) / 2) + 10px)); /* Levemente pra frente pra não flutuar */
+            /* Ancorado na base do pedestal pra ficar "em pé" na face superior */
+            bottom: calc(100% - 30px); /* Ajuste fino baseado na perspectiva de cima */
+            z-index: 10;
+            pointer-events: none;
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.7));
+            transition: all 0.5s ease;
+        }
+        
+        /* Interação de Hover Dinâmica (Física 3D) */
+        .cube-wrapper:hover .habbo-positioner {
+            transform: translateX(-50%) translateZ(calc((var(--cube-depth) / 2) + 40px)) translateY(-15px); /* Salta e flutua */
+            filter: drop-shadow(0 30px 25px rgba(0,0,0,0.8));
+        }
+        
+        /* Glow da face superior baseado na medalha */
+        .glow-gold { color: #FFD700; }
+        .glow-silver { color: #E3E4E5; }
+        .glow-bronze { color: #CD7F32; }
+
+        /* Estilo Mobile (Estático 3D) */
         @media (max-width: 768px) {
-            .card-3d-wrapper {
-                transform: rotateX(15deg) rotateY(0deg) translateZ(0);
-                box-shadow: 0 30px 40px -10px rgba(0,0,0,0.8), 0 5px 0px rgba(211, 21, 34, 0.2);
+            /* Garante inclinação volumétrica fixa no celular */
+            .cube-wrapper {
+                transform: rotateX(10deg) rotateY(-10deg);
+                box-shadow: -15px 25px 50px rgba(0,0,0,0.7);
             }
         }
 
-        /* Reflexo de Luz dinâmico sobre o vidro */
-        .glare {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.15) 0%, transparent 60%);
-            pointer-events: none;
-            border-radius: inherit;
-            transform: translateZ(1px); /* Fica logo acima do fundo */
-            transition: opacity 0.4s;
-            opacity: 0.5;
-        }
-
-        /* Elevação dos Elementos no Eixo Z */
-        .layer-avatar {
-            transform: translateZ(80px) translateY(-10px); /* Pula muito para fora da tela */
-            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.7));
-            transition: transform 0.4s ease-out;
-        }
-        .card-3d-wrapper:hover .layer-avatar {
-            transform: translateZ(110px) translateY(-25px) scale(1.1);
-            filter: drop-shadow(0 30px 30px rgba(0,0,0,0.9));
-        }
-
-        .layer-title {
-            transform: translateZ(40px); /* Flutua um pouco */
-            text-shadow: 0 10px 15px rgba(0,0,0,0.8);
-        }
-        
-        .layer-score {
-            transform: translateZ(50px);
-        }
-
-        /* Cores Volumétricas Específicas */
-        .volumetric-gold { border-top: 2px solid #FFD700; box-shadow: 0 30px 60px -15px rgba(255, 215, 0, 0.25), inset 0 20px 50px -20px rgba(255, 215, 0, 0.1); }
-        .volumetric-silver { border-top: 2px solid #E3E4E5; box-shadow: 0 30px 60px -15px rgba(227, 228, 229, 0.15), inset 0 20px 50px -20px rgba(227, 228, 229, 0.05); }
-        .volumetric-bronze { border-top: 2px solid #CD7F32; box-shadow: 0 30px 60px -15px rgba(205, 127, 50, 0.15), inset 0 20px 50px -20px rgba(205, 127, 50, 0.05); }
+        /* Tipografia Premium */
+        .text-3d-title { text-shadow: 0 10px 15px rgba(0,0,0,0.8); }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #120203; }
@@ -152,7 +210,7 @@
 
     <main class="flex-grow container mx-auto px-4 md:px-6">
         <section class="pt-12 md:pt-16 pb-6 text-center relative z-40">
-            <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight mb-3 uppercase drop-shadow-lg">Ranking <span class="text-transparent bg-clip-text bg-gradient-to-r from-tre-brand to-[#FF4B55]">dos Treinadores</span></h1>
+            <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight mb-3 uppercase drop-shadow-lg text-3d-title">Ranking <span class="text-transparent bg-clip-text bg-gradient-to-r from-tre-brand to-[#FF4B55]">dos Treinadores</span></h1>
             <p class="text-white/50 text-[10px] sm:text-xs md:text-sm font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase">Ranking Interno dos Melhores Treinadores do Mês</p>
             
             <div class="flex flex-wrap items-center justify-center gap-3 mt-8 relative z-50">
@@ -174,8 +232,8 @@
             </div>
         </section>
 
-        <section class="py-10 md:py-16 relative z-10">
-            <div class="perspective-container flex flex-col md:flex-row items-center md:items-end justify-center gap-[6.5rem] md:gap-12 max-w-6xl mx-auto mt-28 md:mt-36" id="podium-container"></div>
+        <section class="py-10 md:py-20 relative z-10 overflow-visible">
+            <div class="flex flex-col md:flex-row items-center md:items-end justify-center gap-[10rem] md:gap-16 max-w-6xl mx-auto mt-36 md:mt-48" id="podium-container"></div>
         </section>
 
         <section class="py-12 md:py-16">
@@ -192,7 +250,7 @@
         </section>
     </main>
 
-    <footer class="w-full border-t border-white/5 bg-[#0A0101] mt-16 pb-10">
+    <footer class="w-full border-t border-white/5 bg-[#010101] mt-16 pb-10">
         <div class="container mx-auto px-6 pt-10 text-center text-white/30 grayscale hover:grayscale-0 transition-all duration-700 hover:text-white/60">
             <img src="trelogo.png" alt="Logo TRE" class="h-10 mx-auto object-contain mb-4 opacity-50" onerror="this.style.display='none'">
             <p class="text-xl md:text-2xl font-black tracking-tighter uppercase mb-1">Companhia dos Treinadores</p>
@@ -222,37 +280,38 @@
         }
 
         const podiumContainer = document.getElementById('podium-container');
-        const ordemPodio = [dadosRanking[1], dadosRanking[0], dadosRanking[2]];
+        const ordemPodio = [dadosRanking[1], dadosRanking[0], dadosRanking[2]]; // 2º Esquerda, 1º Centro, 3º Direita
 
         ordemPodio.forEach(membro => {
             if(!membro) return;
 
             let orderClass = membro.posicao === 1 ? "order-1 md:order-2" : membro.posicao === 2 ? "order-2 md:order-1" : "order-3 md:order-3";
-            let alturaPedestal = membro.posicao === 1 ? "h-64 md:h-80 z-20" : membro.posicao === 2 ? "h-52 md:h-64 z-10" : "h-48 md:h-[15rem] z-10";
-            let widthClass = membro.posicao === 1 ? "w-[16rem] md:w-[24rem]" : "w-[15rem] md:w-[20rem]";
+            let alturaPedestal = membro.posicao === 1 ? "h-72 md:h-96" : membro.posicao === 2 ? "h-60 md:h-80" : "h-56 md:h-72";
+            let widthClass = membro.posicao === 1 ? "w-[17rem] md:w-[26rem]" : "w-[16rem] md:w-[22rem]";
             let corMedalha = membro.posicao === 1 ? "text-[#FFD700]" : membro.posicao === 2 ? "text-[#E3E4E5]" : "text-[#CD7F32]";
-            let colorBlock = membro.posicao === 1 ? "volumetric-gold" : membro.posicao === 2 ? "volumetric-silver" : "volumetric-bronze";
+            let glowMedal = membro.posicao === 1 ? "glow-gold" : membro.posicao === 2 ? "glow-silver" : "glow-bronze";
             let nickSize = membro.posicao === 1 ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl";
 
-            // A estrutura agora engloba as camadas 3D (layer-avatar, layer-title, etc)
+            // Inserção da geometria pura no DOM
             podiumContainer.innerHTML += `
-                <div class="relative ${widthClass} flex flex-col items-center ${orderClass} js-tilt-card group perspective-1000">
+                <div class="cube-wrapper flex flex-col items-center ${widthClass} ${alturaPedestal} ${orderClass} ${glowMedal} group perspective-1500" data-js-tilt>
                     
-                    <div class="absolute bottom-[calc(100%-3.5rem)] md:bottom-[calc(100%-4rem)] left-1/2 -translate-x-1/2 z-30 pointer-events-none layer-avatar w-full h-full flex justify-center items-end">
-                        <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="max-h-[140%] object-contain">
+                    <div class="habbo-positioner">
+                        <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="max-h-[140%] object-contain scale-110 md:scale-125">
                     </div>
 
-                    <div class="card-3d-wrapper w-full rounded-[2rem] md:rounded-[2.5rem] ${alturaPedestal} ${colorBlock} flex flex-col items-center p-6 md:p-8 relative">
-                        <div class="glare"></div>
+                    <div class="cube-face face-back"></div>
+                    <div class="cube-face face-left"></div>
+                    <div class="cube-face face-right"></div>
+                    <div class="cube-face face-bottom"></div>
+                    <div class="cube-face face-top"></div>
+                    
+                    <div class="cube-face face-front flex flex-col items-center justify-end p-6 md:p-8 rounded-[20px] overflow-hidden">
                         
-                        <div class="mt-8 mb-auto text-center w-full layer-title">
-                            <span class="font-black text-lg md:text-2xl tracking-[0.2em] whitespace-nowrap ${corMedalha}">${membro.posicao}º LUGAR</span>
-                        </div>
-                        
-                        <div class="text-center w-full mt-auto flex flex-col items-center gap-5 md:gap-6 layer-score">
-                            <h3 class="${nickSize} font-black tracking-tighter text-white whitespace-nowrap group-hover:text-tre-brand transition-colors drop-shadow-md">${membro.nick}</h3>
+                        <div class="text-center w-full mt-auto flex flex-col items-center gap-5 md:gap-6 transform-style-preserve3d">
+                            <h3 class="${nickSize} font-black tracking-tighter text-white whitespace-nowrap group-hover:text-tre-brand transition-colors text-3d-title drop-shadow-lg" style="transform: translateZ(30px);">${membro.nick}</h3>
                             
-                            <div class="inline-flex items-center justify-center bg-black/60 border border-white/10 rounded-2xl px-6 md:px-8 py-2 md:py-3 shadow-inner">
+                            <div class="inline-flex items-center justify-center bg-black/60 border border-white/10 rounded-2xl px-6 md:px-8 py-2 md:py-3 shadow-inner shadow-black/50" style="transform: translateZ(40px);">
                                 <span class="text-2xl md:text-3xl font-black text-white">${membro.pontos}</span> 
                                 <span class="text-xs md:text-sm font-bold text-tre-brand ml-2 uppercase tracking-widest">Pts</span>
                             </div>
@@ -262,47 +321,43 @@
             `;
         });
 
-        // =========================================
-        // SCRIPT DE RASTREIO MAGNÉTICO (3D TILT)
-        // =========================================
-        const cards = document.querySelectorAll('.js-tilt-card');
+        // ========================================================
+        // MOTOR DE ROTACÃO MAGNÉTICA (3D TILT GEOMÉTRICO)
+        // ========================================================
         
-        cards.forEach(card => {
-            const wrapper = card.querySelector('.card-3d-wrapper');
-            const glare = card.querySelector('.glare');
+        // Só ativa o efeito 3D interativo se for Desktop
+        if (window.matchMedia("(min-width: 768px)").matches) {
+            const cubes = document.querySelectorAll('[data-js-tilt]');
             
-            // Só executa o efeito 3D em telas maiores (evita bugar o touch do celular)
-            if (window.matchMedia("(min-width: 768px)").matches) {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left; // x position within the element
-                    const y = e.clientY - rect.top;  // y position within the element
+            cubes.forEach(cube => {
+                cube.addEventListener('mousemove', (e) => {
+                    const rect = cube.getBoundingClientRect();
                     
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
+                    // Cálculo do centro do objeto
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
                     
-                    // Cálculo do ângulo (Max 15 graus de inclinação)
-                    const rotateX = ((y - centerY) / centerY) * -15; 
-                    const rotateY = ((x - centerX) / centerX) * 15;
+                    // Distância do mouse para o centro (-0.5 a 0.5)
+                    const mouseX = e.clientX - centerX;
+                    const mouseY = e.clientY - centerY;
                     
-                    // Cálculo do brilho dinâmico (Glare)
-                    const glareX = (x / rect.width) * 100;
-                    const glareY = (y / rect.height) * 100;
-
-                    wrapper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                    glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.2) 0%, transparent 60%)`;
+                    // Conversão para ângulos (Máximo de 15 graus)
+                    const rotateX = (-mouseY / (rect.height / 2)) * 15; 
+                    const rotateY = (mouseX / (rect.width / 2)) * 15;
+                    
+                    // Aplicação da matriz de transformação no Cubo
+                    cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 });
 
-                card.addEventListener('mouseleave', () => {
-                    // Retorna à posição original de forma suave
-                    wrapper.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-                    glare.style.background = `radial-gradient(circle at 50% 0%, rgba(255,255,255,0.15) 0%, transparent 60%)`;
+                // Reset suave ao sair do mouse
+                cube.addEventListener('mouseleave', () => {
+                    cube.style.transform = `rotateX(0deg) rotateY(0deg)`;
                 });
-            }
-        });
+            });
+        }
 
+        // Renderização da tabela permanece inalterada
         const listContainer = document.getElementById('list-container');
-        
         dadosRanking.slice(3).forEach(membro => {
             listContainer.innerHTML += `
                 <tr class="group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default">
