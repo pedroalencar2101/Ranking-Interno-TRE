@@ -49,7 +49,7 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: #D31522; }
         #auth-loader { z-index: 9999; }
         
-        /* Ocultar elementos para Convidados */
+        /* Ocultar elementos restritos se o body tiver a classe de convidado */
         body.role-convidado .only-admin { display: none !important; }
     </style>
 </head>
@@ -245,7 +245,7 @@
                 <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-widest mb-5 flex items-center gap-3 border-t border-white/5 pt-10">
                     <i class="fa-solid fa-user text-white/50"></i> Convidados (Leitura)
                 </h3>
-                <div id="grid-admin-list-convidados" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                <div id="grid-admin-list-convidados" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10"></div>
             </div>
 
             <div id="tab-config" class="tab-content hidden opacity-0 relative z-10">
@@ -438,8 +438,8 @@
 
         function getAvatarUrl(nick, size = 'l') { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=${size}`; }
 
-     // ==========================================
-        // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA
+        // ==========================================
+        // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA (BUG RESOLVIDO)
         // ==========================================
         auth.onAuthStateChanged((user) => {
             const loader = document.getElementById('auth-loader');
@@ -448,19 +448,16 @@
                     if (doc.exists && doc.data().status === "Aprovado") {
                         currentUserNick = doc.data().nick || "Admin";
                         
-                        // CORREÇÃO DO BUG DE REBAIXAMENTO:
                         let rawRole = doc.data().role;
+                        
                         if (rawRole === "SuperAdmin") {
-                            currentUserRole = "Admin"; // Migra o antigo SuperAdmin para Admin
+                            currentUserRole = "Admin";
+                            db.collection("solicitacoes_acesso").doc(user.uid).update({ role: "Admin" });
                         } else if (!rawRole) {
-                            currentUserRole = "Convidado"; // Se for conta nova sem cargo, vira Convidado
+                            currentUserRole = "Convidado";
+                            db.collection("solicitacoes_acesso").doc(user.uid).update({ role: "Convidado" });
                         } else {
-                            currentUserRole = rawRole; // Se já for Admin ou Convidado, RESPEITA e mantém!
-                        }
-
-                        // Salva no banco apenas se precisou migrar algo
-                        if(rawRole !== currentUserRole) {
-                            db.collection("solicitacoes_acesso").doc(user.uid).update({ role: currentUserRole });
+                            currentUserRole = rawRole; 
                         }
 
                         document.getElementById('admin-user-nick').innerText = currentUserNick.toUpperCase();
@@ -474,11 +471,19 @@
                     } else {
                         auth.signOut().then(() => { alert("Acesso Negado ou Revogado."); window.location.href = 'index.html'; });
                     }
-                }).catch((error) => { auth.signOut().then(() => window.location.href = 'index.html'; });
+                }).catch((error) => { auth.signOut().then(() => window.location.href = 'index.html'); });
             } else {
                 window.location.href = 'index.html';
             }
         });
+
+        function logout() { auth.signOut().then(() => { window.location.href = 'index.html'; }); }
+
+        function aplicarPermissoesUI() {
+            if(currentUserRole === "Admin") document.body.classList.remove('role-convidado');
+            else document.body.classList.add('role-convidado');
+        }
+        function isAdmin() { return currentUserRole === "Admin"; }
 
         // ==========================================
         // 3. UI E NAVEGAÇÃO
@@ -528,15 +533,19 @@
         function carregarConfiguracoesSistema(callback) {
             db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
                 if (doc.exists && doc.data().atividades) { quadroPontosGlobal = doc.data().atividades; } 
+                else { quadroPontosGlobal = [{ id: "cfg_1", nome: "Destaque Semanal", grupo: "Destaques", pontos: 4, responsavel: "LIDERANÇA" }]; db.collection("configuracoes").doc("quadro_pontos").set({ atividades: quadroPontosGlobal }); }
+                
                 renderizarTabelaConfig(); atualizarDropdownsDeAtividade();
                 if(callback) callback(); 
             });
         }
+
         function atualizarDropdownsDeAtividade() {
             let html = '<option value="">Selecione uma atividade...</option>';
             [...quadroPontosGlobal].sort((a,b) => a.nome.localeCompare(b.nome)).forEach(a => html += `<option value="${a.nome}" class="text-black">${a.nome} (${a.pontos > 0 ? '+'+a.pontos : a.pontos})</option>`);
             document.getElementById('man-categoria').innerHTML = html; document.getElementById('edith-categoria').innerHTML = html;
         }
+
         function renderizarTabelaConfig() {
             const list = document.getElementById('table-config-list'); list.innerHTML = '';
             [...quadroPontosGlobal].sort((a, b) => a.grupo.localeCompare(b.grupo)).forEach(a => {
@@ -546,10 +555,13 @@
                     <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${a.nome}</td>
                     <td class="p-4 text-center"><span class="inline-flex items-center point-badge point-${cor}">${p}</span></td>
                     <td class="p-4 text-xs font-semibold uppercase">${a.responsavel}</td>
-                    <td class="p-4 text-right whitespace-nowrap"><button onclick="editarAtividadeConfig('${a.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button><button onclick="excluirAtividadeConfig('${a.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>`;
+                    <td class="p-4 text-right whitespace-nowrap">
+                        <button onclick="editarAtividadeConfig('${a.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="excluirAtividadeConfig('${a.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+                    </td></tr>`;
             });
         }
+
         function abrirModalConfigAtividade() { document.getElementById('form-config-atividade').reset(); document.getElementById('config-id').value = ""; toggleModal('modal-config-atividade'); }
         function editarAtividadeConfig(id) { const a = quadroPontosGlobal.find(q => q.id === id); if(a) { document.getElementById('config-id').value = a.id; document.getElementById('config-nome').value = a.nome; document.getElementById('config-grupo').value = a.grupo; document.getElementById('config-pontos').value = a.pontos; document.getElementById('config-responsavel').value = a.responsavel; toggleModal('modal-config-atividade'); } }
         function salvarConfigAtividade(e) {
@@ -569,7 +581,7 @@
                 const grid = document.getElementById('grid-atividades'); const empty = document.getElementById('empty-atividades');
                 document.getElementById('count-atividades').innerText = `${snap.size} Pendentes`; grid.innerHTML = ''; 
                 if (snap.empty) { empty.classList.replace('hidden', 'flex'); } else { empty.classList.replace('flex', 'hidden');
-                    snap.forEach((doc) => { const d = doc.data();
+                    snap.forEach((doc) => { const d = doc.data(); 
                         grid.innerHTML += `<div class="glass-card p-5 flex flex-col h-full" id="card-${doc.id}">
                             <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5"><div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0"><img src="${getAvatarUrl(d.nick,'m')}" class="absolute -top-2 left-1/2 -translate-x-1/2"></div><div><h4 class="font-bold text-white tracking-wide">${d.nick}</h4><p class="text-[10px] text-white/40 uppercase tracking-widest"><i class="fa-regular fa-clock"></i> ${formatarDataHora(d.dataEnvio)}</p></div></div>
                             <div class="flex-grow mb-5"><span class="inline-block bg-white/5 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white/40 uppercase mb-2">Categoria</span><p class="text-sm font-semibold text-tre-brand leading-tight">${d.categoria}</p></div>
@@ -612,7 +624,7 @@
                 });
             });
 
-            // Lista Liderança (Admins e Convidados)
+            // Lista Liderança (Admins e Convidados com visual gigante)
             db.collection("solicitacoes_acesso").where("status", "==", "Aprovado").onSnapshot((snap) => {
                 const gridAdmins = document.getElementById('grid-admin-list-admins'); gridAdmins.innerHTML = '';
                 const gridConvidados = document.getElementById('grid-admin-list-convidados'); gridConvidados.innerHTML = '';
@@ -650,7 +662,7 @@
         function iniciarRejeicao(id) { document.getElementById('form-reject-docId').value = id; document.getElementById('reject-motivo').value = ''; toggleModal('modal-reject-atividades'); }
         function confirmarRejeicaoPostagem(e) {
             e.preventDefault(); const id = document.getElementById('form-reject-docId').value; const m = document.getElementById('reject-motivo').value.trim();
-            if(!m) { alert("Motivo obrigatório."); return; } toggleModal('modal-reject-atividades');
+            if(!m) { alert("Motivo é obrigatório."); return; } toggleModal('modal-reject-atividades');
             db.collection("postagens").doc(id).update({ status: "Rejeitado", motivoRejeicao: m, dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(), julgadoPor: currentUserNick });
         }
 
@@ -663,8 +675,7 @@
             db.collection("postagens").add(docData).then(()=> { toggleModal('modal-admin-post'); alert("Lançamento efetuado!"); });
         }
 
-        // Edição de Histórico (Carimbo de Edição Adicionado)
-        function apagarHistorico(id) { if(confirm("ALERTA: Essa postagem sumirá do ranking. Confirmar exclusão?")) db.collection("postagens").doc(id).delete(); }
+        function apagarHistorico(id) { if(confirm("ALERTA: Essa postagem sumirá do ranking. Confirmar exclusão permanente?")) db.collection("postagens").doc(id).delete(); }
         function iniciarEdicaoHistorico(id) {
             db.collection("postagens").doc(id).get().then(doc => {
                 const d = doc.data(); document.getElementById('edith-id').value = id; document.getElementById('edith-nick').value = d.nick; document.getElementById('edith-categoria').value = d.categoria; document.getElementById('edith-status').value = d.status; document.getElementById('edith-pontos').value = d.pontosOverride || ""; toggleModal('modal-edit-historico');
@@ -678,10 +689,10 @@
         }
 
         // ==========================================
-        // 8. RENDERIZAÇÃO DO HISTÓRICO GERAL 
+        // 8. RENDERIZAÇÃO DO HISTÓRICO GERAL (Com Carimbos)
         // ==========================================
         function carregarTabelaHistorico() {
-            const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando Banco de Dados...</td></tr>';
+            const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...</td></tr>';
             db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado", "Pendente"]).onSnapshot((snap) => {
                 let filtrados = []; snap.forEach(doc => { const d = doc.data(); d.id = doc.id; if(d.dataEnvio || d.dataJulgamento) { let t = d.dataJulgamento || d.dataEnvio; d.mesAnoStr = `${mesesNomes[t.toDate().getMonth()]} ${t.toDate().getFullYear()}`; filtrados.push(d); } });
                 filtrados = filtrados.filter(p => p.mesAnoStr === mesAtualStr).sort((a, b) => (b.dataJulgamento||b.dataEnvio).toDate() - (a.dataJulgamento||a.dataEnvio).toDate());
@@ -698,7 +709,6 @@
                     } else if (d.status === "Rejeitado") pts = "0";
                     let stCl = d.status === "Aprovado" ? "emerald" : d.status === "Rejeitado" ? "red" : "amber"; let ic = d.status === "Aprovado" ? "check" : d.status === "Rejeitado" ? "xmark" : "clock";
                     
-                    // Coluna Detalhes do Processo (Carimbos de Auditoria)
                     let detalhesProcesso = `<div class="space-y-1.5 min-w-[220px]">
                         <p class="text-white/70"><i class="fa-solid fa-paper-plane text-white/20 w-4"></i> Enviado: <span class="font-mono text-[10px] text-white/50 ml-1">${envStr}</span></p>
                         ${d.status !== 'Pendente' ? `<p class="text-white/70"><i class="fa-solid fa-gavel text-amber-500/50 w-4"></i> Análise: <span class="font-bold text-white">${d.julgadoPor || 'Sistema'}</span> <span class="font-mono text-[10px] text-white/50 ml-1">(${julgStr})</span></p>` : ''}
