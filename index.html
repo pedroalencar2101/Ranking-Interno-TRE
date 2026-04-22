@@ -236,7 +236,37 @@
 
         let quadroPontosGlobal = [];
         let postagensGlobal = [];
-        let mesAtualStr = "Abril 2026"; // Filtro de Mês Padrão
+        // ==========================================
+        // GERADOR AUTOMÁTICO DE MESES
+        // ==========================================
+        const mesesNomes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        const dataAtualGlobal = new Date();
+        let mesAtualStr = `${mesesNomes[dataAtualGlobal.getMonth()]} ${dataAtualGlobal.getFullYear()}`;
+
+        function inicializarDropdownMeses() {
+            // Tenta achar o botão de texto (depende de qual arquivo estamos)
+            const textoMesBtn = document.getElementById('texto-mes') || document.getElementById('texto-filter-mes');
+            const menuMeses = document.getElementById('menu-meses') || document.getElementById('menu-filter-meses');
+            
+            if(textoMesBtn && menuMeses) {
+                textoMesBtn.innerText = mesAtualStr;
+                menuMeses.innerHTML = '';
+                
+                // Gera automaticamente o mês atual e os 5 meses anteriores
+                for(let i = 0; i < 6; i++) {
+                    let d = new Date(dataAtualGlobal.getFullYear(), dataAtualGlobal.getMonth() - i, 1);
+                    let nomeMes = `${mesesNomes[d.getMonth()]} ${d.getFullYear()}`;
+                    
+                    // A função onclick varia um pouco dependendo se é o index (selecionarMes) ou admin/transparencia (selecionarFilterMes)
+                    let funcaoClick = document.getElementById('texto-filter-mes') ? 'selecionarFilterMes(this)' : 'selecionarMes(this)';
+                    
+                    menuMeses.innerHTML += `<button onclick="${funcaoClick}" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">${nomeMes}</button>`;
+                }
+            }
+        }
+        
+        // Roda a função assim que o site carrega
+        window.addEventListener('DOMContentLoaded', inicializarDropdownMeses);
 
         function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
             return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
