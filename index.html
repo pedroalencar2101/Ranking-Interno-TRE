@@ -17,257 +17,768 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { tre: { brand: '#D31522', brandHover: '#FA1C2A', bgPanel: 'rgba(20, 4, 5, 0.5)', glassNav: 'rgba(25, 3, 4, 0.85)' } },
-                    boxShadow: { '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.5)', 'nav': '0 10px 40px -10px rgba(0, 0, 0, 0.7)' }
+                    colors: {
+                        tre: {
+                            brand: '#D31522',
+                            brandHover: '#FA1C2A',
+                            bgPanel: 'rgba(20, 4, 5, 0.5)',
+                            glassNav: 'rgba(25, 3, 4, 0.85)',
+                        }
+                    },
+                    boxShadow: {
+                        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.5)',
+                        'nav': '0 10px 40px -10px rgba(0, 0, 0, 0.7)',
+                    }
                 }
             }
         }
     </script>
 
     <style>
-        body { background: #0A0102; background-image: radial-gradient(circle at top center, #35060A 0%, #0A0102 90%); color: #FFFFFF; min-height: 100vh; background-attachment: fixed; font-size: 15px; overflow-x: hidden; scroll-behavior: smooth; }
-        .glass-navbar { background: theme('colors.tre.glassNav'); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
-        .glass-panel-simple { background: theme('colors.tre.bgPanel'); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.4s; }
-        .tilt-card { transform-style: preserve-3d; background: linear-gradient(145deg, rgba(35, 6, 8, 0.7) 0%, rgba(10, 1, 2, 0.85) 100%); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); border-radius: 1.5rem; position: relative; }
-        .neon-glow { position: absolute; width: 70%; height: 70%; top: 15%; left: 15%; filter: blur(60px); z-index: -1; opacity: 0.1; }
-        .z-avatar { transform-origin: bottom center; transform: translateX(-50%) translateZ(2px); filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5)); transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .tilt-card:hover .z-avatar { transform: translateX(-50%) translateZ(8px) scale(1.05); }
-        .border-gold { border-top: 1px solid rgba(255, 215, 0, 0.5); } .border-silver { border-top: 1px solid rgba(227, 228, 229, 0.5); } .border-bronze { border-top: 1px solid rgba(205, 127, 50, 0.5); }
-        .glow-gold { background: #FFD700; } .glow-silver { background: #E3E4E5; } .glow-bronze { background: #CD7F32; }
-        .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: 0.3s; }
-        .glass-input:focus { border-color: #D31522; outline: none; }
-        .activity-grid-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.75rem; transition: 0.3s; cursor: pointer; }
-        .activity-grid-card.active { border-color: #D31522; background: rgba(35, 6, 8, 0.8); }
-        .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 4px; }
-        .point-plus { background: rgba(16, 185, 129, 0.2); color: #34D399; } .point-minus { background: rgba(239, 68, 68, 0.2); color: #F87171; }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: #D31522; border-radius: 3px; }
+        body {
+            background: #0A0102;
+            background-image: radial-gradient(circle at top center, #35060A 0%, #0A0102 90%);
+            color: #FFFFFF;
+            min-height: 100vh;
+            background-attachment: fixed;
+            font-size: 15px;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        .glass-navbar {
+            background: theme('colors.tre.glassNav');
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .glass-panel-simple {
+            background: theme('colors.tre.bgPanel');
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel-simple:hover {
+            background: rgba(35, 6, 8, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Cubos 3D (Z-depth) - VISUAL RESTAURADO */
+        .tilt-card {
+            transform-style: preserve-3d;
+            background: linear-gradient(145deg, rgba(35, 6, 8, 0.7) 0%, rgba(10, 1, 2, 0.85) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border-radius: 1.5rem;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+        @media (min-width: 768px) { .tilt-card { border-radius: 2rem; } }
+
+        .neon-glow {
+            position: absolute; width: 70%; height: 70%; top: 15%; left: 15%; filter: blur(60px); z-index: -1; opacity: 0.1;
+            transition: opacity 0.8s ease;
+        }
+        .tilt-card:hover .neon-glow { opacity: 0.25; }
+
+        .z-avatar {
+            transform-origin: bottom center; 
+            transform: translateX(-50%) translateZ(2px); 
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease;
+        }
+        .tilt-card:hover .z-avatar {
+            transform: translateX(-50%) translateZ(8px) scale(1.04);
+            filter: drop-shadow(0 25px 25px rgba(0,0,0,0.8));
+        }
+
+        .z-content { transform: translateZ(20px); }
+        .z-badge { transform: translateZ(30px); }
+
+        .border-gold { border-top: 1px solid rgba(255, 215, 0, 0.5); }
+        .border-silver { border-top: 1px solid rgba(227, 228, 229, 0.5); }
+        .border-bronze { border-top: 1px solid rgba(205, 127, 50, 0.5); }
+        .glow-gold { background: #FFD700; }
+        .glow-silver { background: #E3E4E5; }
+        .glow-bronze { background: #CD7F32; }
+
+        /* Inputs e Cards Glass */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: theme('colors.tre.brand');
+            outline: none;
+            box-shadow: 0 0 15px rgba(211, 21, 34, 0.2);
+        }
+
+        .activity-grid-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.75rem;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .activity-grid-card:hover {
+            border-color: rgba(211, 21, 34, 0.3);
+            background: rgba(35, 6, 8, 0.5);
+            transform: scale(1.02);
+        }
+        .activity-grid-card.active {
+            border-color: theme('colors.tre.brand');
+            background: rgba(35, 6, 8, 0.8);
+            box-shadow: 0 0 20px rgba(211, 21, 34, 0.3);
+        }
+        .activity-grid-card.active::after {
+            content: ''; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid transparent;
+            background: linear-gradient(to bottom right, rgba(211, 21, 34, 1), rgba(211, 21, 34, 0)) border-box;
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out; mask-composite: exclude; opacity: 0.6;
+        }
+
+        .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 4px; letter-spacing: -0.02em; }
+        .point-plus { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .point-minus { background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0102; }
+        ::-webkit-scrollbar-thumb { background: #D31522; rounded: 3px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
     </style>
 </head>
-<body class="antialiased selection:bg-tre-brand flex flex-col" id="topo">
+<body class="antialiased selection:bg-tre-brand selection:text-white flex flex-col" id="topo">
 
     <header class="sticky top-0 z-50 w-full glass-navbar shadow-nav opacity-0" id="anim-header">
-        <div class="container mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-            <div class="flex items-center gap-4 md:gap-10">
-                <img src="trelogo.png" alt="Logo" class="h-8 md:h-12 object-contain">
-                <nav class="flex gap-4 text-[11px] font-bold uppercase tracking-wider text-white/70">
+        <div class="container mx-auto px-3 sm:px-4 md:px-6 h-14 md:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 sm:gap-6 md:gap-10">
+                <a href="#topo" class="flex items-center hover:opacity-80 transition-opacity">
+                    <img src="trelogo.png" alt="Logo" class="h-6 sm:h-8 md:h-12 object-contain" onerror="this.src='https://via.placeholder.com/150x50/D31522/FFFFFF?text=LOGO'">
+                </a>
+                <nav class="flex gap-3 sm:gap-6 text-[8px] sm:text-[10px] md:text-[13px] font-bold uppercase tracking-wider text-white/70 items-center">
                     <a href="#topo" class="hover:text-white transition-colors">Início</a>
-                    <button onclick="toggleModal('modal-regras')" class="hover:text-white transition-colors uppercase cursor-pointer">Regras</button>
+                    <button onclick="toggleModal('modal-regras')" class="hover:text-white transition-colors cursor-pointer uppercase">Regras</button>
                 </nav>
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="toggleModal('modal-postagem')" class="bg-tre-brand text-white px-4 py-2 md:py-2.5 rounded-xl text-xs font-bold shadow-lg hover:bg-tre-brandHover transition-all flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-bolt"></i> Postar Atividade</button>
-                <button onclick="toggleModal('modal-login')" class="bg-black/40 border border-white/10 px-4 py-2 md:py-2.5 rounded-xl text-xs font-semibold hover:bg-white/10 text-white transition-all flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-lock"></i> Restrito</button>
+            <div class="flex items-center gap-1.5 md:gap-4">
+                <button onclick="toggleModal('modal-postagem')" class="bg-tre-brand text-white px-2 sm:px-4 md:px-5 py-1.5 md:py-2.5 rounded-md md:rounded-xl text-[8px] sm:text-[10px] md:text-sm font-bold shadow-lg border border-red-500/30 hover:bg-tre-brandHover transition-all flex items-center gap-1 md:gap-2 cursor-pointer">
+                    <i class="fa-solid fa-bolt"></i> <span class="hidden sm:inline">Postar </span>Atividade
+                </button>
+                <button onclick="toggleModal('modal-login')" class="flex bg-black/40 border border-white/10 px-2 sm:px-3 md:px-4 py-1.5 md:py-2.5 rounded-md md:rounded-xl text-[8px] sm:text-[10px] md:text-sm font-semibold hover:bg-white/10 hover:text-white transition-all text-white/80 items-center gap-1 md:gap-2 cursor-pointer">
+                    <i class="fa-solid fa-lock text-[8px] md:text-xs"></i> Restrito
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow container mx-auto px-4 md:px-6">
-        <section class="pt-10 md:pt-16 pb-6 text-center relative z-40 opacity-0" id="anim-title">
-            <h1 class="text-4xl md:text-7xl font-black tracking-tight uppercase"><span class="text-white">RANKING DOS</span><br><span class="text-transparent bg-clip-text bg-gradient-to-b from-[#FA1C2A] to-[#800A12]">TREINADORES</span></h1>
-            <p class="text-white/50 text-[10px] md:text-sm font-bold tracking-[0.2em] uppercase mt-3">Ranking Interno dos Melhores Treinadores do Mês</p>
+    <main class="flex-grow container mx-auto px-3 md:px-6">
+        <section class="pt-8 md:pt-16 pb-6 text-center relative z-40 opacity-0" id="anim-title">
+            <h1 class="flex flex-col items-center text-3xl sm:text-5xl md:text-7xl font-black tracking-tight mb-2 md:mb-4 uppercase drop-shadow-2xl">
+                <span class="text-white leading-none">RANKING DOS</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-b from-[#FA1C2A] to-[#800A12] leading-none mt-1 sm:mt-2 drop-shadow-md">TREINADORES</span>
+            </h1>
+            <p class="text-white/50 text-[8px] sm:text-xs md:text-sm font-bold tracking-[0.1em] sm:tracking-[0.2em] md:tracking-[0.3em] uppercase mt-2">Ranking Interno dos Melhores Treinadores do Mês</p>
             
-            <div class="flex flex-wrap items-center justify-center gap-3 mt-8 relative z-50">
-                <div class="relative">
-                    <button id="btn-mes" onclick="toggleMesDropdown()" class="glass-panel-simple px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 text-white cursor-pointer hover:text-white">
-                        <i class="fa-solid fa-calendar-check text-tre-brand"></i> <span id="texto-mes">Carregando...</span> <i id="icone-seta" class="fa-solid fa-chevron-down text-[10px] ml-1 opacity-40 transition-transform"></i>
+            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-10 relative z-50">
+                <div class="relative z-50">
+                    <button id="btn-mes" onclick="toggleMesDropdown()" class="glass-panel-simple px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 text-white/90 cursor-pointer focus:outline-none hover:text-white transition-colors">
+                        <i class="fa-solid fa-calendar-check text-tre-brand"></i> 
+                        <span id="texto-mes">Carregando...</span> 
+                        <i id="icone-seta" class="fa-solid fa-chevron-down text-[8px] sm:text-[10px] ml-1 text-white/40 transition-transform duration-300"></i>
                     </button>
-                    <div id="menu-meses" class="absolute left-0 top-full mt-2 w-full glass-panel-simple !bg-[#0A0102]/95 rounded-xl opacity-0 invisible translate-y-2 transition-all shadow-2xl z-50 overflow-hidden flex flex-col text-sm">
+                    <div id="menu-meses" class="absolute left-0 top-full mt-2 w-full glass-panel-simple !bg-[#0A0102]/95 rounded-lg sm:rounded-xl opacity-0 invisible translate-y-2 transition-all duration-300 overflow-hidden flex flex-col text-[10px] sm:text-sm shadow-2xl z-50">
                         </div>
                 </div>
-                <button onclick="toggleModal('modal-pontos')" class="glass-panel-simple px-5 py-2.5 rounded-xl text-sm font-bold text-yellow-400 border-yellow-500/20 hover:bg-yellow-500/10 transition-all cursor-pointer"><i class="fa-solid fa-star"></i> Quadro de Pontos</button>
-                <a href="transparencia.html" class="glass-panel-simple px-5 py-2.5 rounded-xl text-sm font-bold text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10 transition-all shadow-lg"><i class="fa-solid fa-magnifying-glass-chart"></i> Transparência</a>
+
+                <button onclick="toggleModal('modal-pontos')" class="glass-panel-simple px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 text-yellow-400 border-yellow-500/20 hover:bg-yellow-500/10 transition-all shadow-lg cursor-pointer">
+                    <i class="fa-solid fa-star"></i> Quadro de Pontos
+                </button>
+
+                <a href="transparencia.html" class="glass-panel-simple px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10 transition-all shadow-lg">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i> Transparência
+                </a>
             </div>
         </section>
 
-        <section class="py-10 md:py-20 relative z-10">
-            <div class="flex flex-row items-end justify-center gap-4 sm:gap-12 lg:gap-16 max-w-6xl mx-auto" id="podium-container">
-                <div class="text-white/30 text-sm font-bold mt-10"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Calculando Ranking...</div>
+        <section class="py-8 md:py-20 relative z-10 overflow-visible">
+            <div class="flex flex-row items-end justify-center gap-1.5 sm:gap-6 md:gap-12 lg:gap-16 max-w-6xl mx-auto mt-16 sm:mt-24 md:mt-32" id="podium-container">
+                <div class="w-full text-center text-white/30 text-sm font-bold mt-10"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Calculando Ranking Global...</div>
             </div>
         </section>
 
-        <section class="py-10 opacity-0" id="anim-list">
+        <section class="py-8 md:py-16 opacity-0" id="anim-list">
             <div class="max-w-4xl mx-auto" id="list-wrapper" style="display:none;">
-                <h2 class="text-xs font-black tracking-widest uppercase text-white/30 mb-6 border-l-2 border-tre-brand pl-4">Demais Classificados</h2>
-                <div class="glass-panel-simple rounded-3xl overflow-hidden p-1 shadow-3xl"><table class="w-full text-left border-collapse"><tbody id="list-container"></tbody></table></div>
+                <h2 class="text-[9px] sm:text-[11px] md:text-sm font-black tracking-widest uppercase text-white/30 mb-4 md:mb-6 pl-3 md:pl-4 border-l-2 border-tre-brand">Demais Classificados</h2>
+                <div class="glass-panel-simple rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden p-1 shadow-3xl">
+                    <div class="overflow-x-auto pb-1 sm:pb-2">
+                        <table class="w-full text-left border-collapse min-w-full">
+                            <tbody id="list-container"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div id="empty-ranking" class="hidden flex-col items-center justify-center py-20 text-center"><i class="fa-solid fa-trophy text-4xl text-white/10 mb-4"></i><h3 class="text-lg font-bold text-white/30">Mês sem atividades</h3></div>
+            <div id="empty-ranking" class="hidden flex-col items-center justify-center py-10 text-center">
+                <i class="fa-solid fa-trophy text-4xl text-white/10 mb-4"></i>
+                <h3 class="text-lg font-bold text-white/30">Nenhum ponto registrado</h3>
+                <p class="text-sm text-white/20 mt-1">O ranking deste mês ainda não possui atividades aprovadas.</p>
+            </div>
         </section>
     </main>
 
-    <footer class="w-full border-t border-white/5 bg-[#050101] py-10 text-center opacity-40">
-        <p class="text-xl font-black uppercase tracking-tighter">Companhia dos Treinadores</p>
-        <p class="text-[10px] uppercase tracking-[0.3em] mt-1">RCC • Todos os direitos reservados</p>
+    <footer class="w-full border-t border-white/5 bg-[#050101] mt-10 md:mt-16 pb-8 md:pb-10">
+        <div class="container mx-auto px-6 pt-8 md:pt-10 text-center text-white/30 grayscale hover:grayscale-0 transition-all duration-700 hover:text-white/60">
+            <p class="text-lg sm:text-xl md:text-2xl font-black tracking-tighter uppercase mb-1">Companhia dos Treinadores</p>
+            <p class="text-[8px] sm:text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] sm:tracking-[0.3em]">RCC • Todos os direitos reservados</p>
+            <div class="mt-4 md:mt-6 pt-4 md:pt-5 border-t border-white/5 inline-block">
+                <p class="text-[9px] sm:text-[11px] md:text-xs font-semibold tracking-widest text-white/40">
+                    <span class="font-mono text-tre-brand font-bold text-xs sm:text-sm">&lt;/&gt;</span> por <span class="text-white/80">G4VET4</span> &bull; &copy; 2026 Companhia dos Treinadores
+                </p>
+            </div>
+        </div>
     </footer>
 
     <div id="modal-login" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-login')"></div>
-        <div class="relative w-full max-w-md bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-3xl p-8 transform scale-95 transition-all">
-            <button onclick="toggleModal('modal-login')" class="absolute top-6 right-6 text-white/40 hover:text-tre-brand"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <div id="view-login" class="block">
-                <h2 class="text-2xl font-black text-white uppercase mb-6 pb-4 border-b border-white/10">Acesso Restrito</h2>
+        
+        <div class="relative w-full max-w-md bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-all duration-300">
+            
+            <button onclick="toggleModal('modal-login')" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-tre-brand transition-colors z-10">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div id="view-login" class="block transition-all duration-300">
+                <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4">
+                    <i class="fa-solid fa-lock text-tre-brand"></i> Acesso Restrito
+                </h2>
+                
+                <div class="bg-tre-brand/10 border border-tre-brand/20 text-tre-brand text-[9px] md:text-[10px] font-bold uppercase tracking-widest p-3 rounded-lg text-center mb-6">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Área exclusiva do Ministério
+                </div>
+
+                <div id="login-feedback" class="hidden mb-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30"></div>
+
                 <form id="form-login" class="space-y-4" onsubmit="realizarLogin(event)">
-                    <input type="text" id="login-nick" required placeholder="Nick no Habbo" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
-                    <input type="password" id="login-senha" required placeholder="Senha" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
-                    <button type="submit" id="btn-login-submit" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl transition-all cursor-pointer">Entrar no Painel</button>
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label>
+                        <input type="text" id="login-nick" required placeholder="Seu nick..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Senha de Acesso</label>
+                        <input type="password" id="login-senha" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
+                    </div>
+                    <button type="submit" id="btn-login-submit" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">
+                        Entrar no Painel
+                    </button>
                 </form>
-                <button onclick="switchView('register')" class="w-full text-tre-brand font-bold text-sm mt-6 hover:text-white">Solicitar Cadastro</button>
+
+                <div class="mt-6 text-center border-t border-white/5 pt-4">
+                    <p class="text-xs text-white/50">Ainda não tem acesso?</p>
+                    <button onclick="switchView('register')" class="text-tre-brand font-bold text-sm hover:text-white transition-colors mt-1 cursor-pointer">Solicitar Cadastro</button>
+                </div>
             </div>
-            <div id="view-register" class="hidden opacity-0 translate-x-4">
-                <h2 class="text-2xl font-black text-white uppercase mb-6 pb-4 border-b border-white/10">Solicitar Acesso</h2>
+
+            <div id="view-register" class="hidden opacity-0 translate-x-4 transition-all duration-300">
+                <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4">
+                    <i class="fa-solid fa-user-plus text-tre-brand"></i> Solicitar Acesso
+                </h2>
+                
+                <div id="reg-feedback" class="hidden mb-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30"></div>
+
                 <form id="form-cadastro" class="space-y-4" onsubmit="enviarCadastro(event)">
-                    <input type="text" id="reg-nick" required placeholder="Seu Nick" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm">
-                    <input type="password" id="reg-senha" required placeholder="Crie uma Senha" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm">
-                    <button type="submit" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-all cursor-pointer">Enviar Pedido</button>
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label>
+                        <input type="text" id="reg-nick" required placeholder="Ex: G4VET4" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
+                    </div>
+                    
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Criar Senha</label>
+                        <input type="password" id="reg-senha" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
+                    </div>
+                    
+                    <button type="submit" id="btn-cadastro" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">
+                        Enviar Solicitação
+                    </button>
                 </form>
-                <button onclick="switchView('login')" class="w-full text-white/40 text-xs mt-4">Voltar ao Login</button>
+
+                <div class="mt-4 text-center border-t border-white/5 pt-4">
+                    <button type="button" onclick="switchView('login')" class="text-white/50 text-xs hover:text-white transition-colors cursor-pointer flex items-center justify-center w-full">
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Voltar para Login
+                    </button>
+                </div>
             </div>
-            <div id="view-feedback" class="hidden text-center"><i class="fa-solid fa-clock-rotate-left text-4xl text-amber-500 mb-4"></i><h2 class="text-xl font-black text-white uppercase mb-2">Pedido Enviado</h2><p class="text-white/50 text-sm">Aguarde a aprovação ministerial.</p></div>
+
+            <div id="view-feedback" class="hidden opacity-0 translate-y-4 transition-all duration-300 flex-col items-center justify-center text-center pt-4">
+                <div class="w-20 h-20 bg-amber-500/10 border-2 border-amber-500/30 rounded-full flex items-center justify-center mb-6 mx-auto">
+                    <i class="fa-solid fa-clock-rotate-left text-3xl text-amber-500"></i>
+                </div>
+                <h2 class="text-xl font-black text-white uppercase mb-3">Solicitação Recebida</h2>
+                <p class="text-white/60 text-sm leading-relaxed mb-8">
+                    Aguarde enquanto o Ministério analisa sua solicitação de cadastro.
+                </p>
+                <button onclick="toggleModal('modal-login')" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3 rounded-xl transition-all cursor-pointer text-sm">
+                    Entendido
+                </button>
+            </div>
         </div>
     </div>
 
     <div id="modal-postagem" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-postagem')"></div>
-        <div class="relative w-full max-w-4xl bg-[#0A0102] border border-white/10 rounded-3xl p-8 transform scale-95 transition-all">
-            <h2 class="text-2xl font-black text-white uppercase mb-6 pb-4 border-b border-white/10">Postar Atividade</h2>
-            <form id="form-atividade" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input type="text" id="form-nick" required placeholder="Seu Nick" class="w-full glass-input rounded-xl px-4 py-3">
-                <input type="url" id="form-prova" required placeholder="Link da Prova (Imgur/Discord)" class="w-full glass-input rounded-xl px-4 py-3">
-                <div class="md:col-span-2">
-                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3 block">Atividade Cumprida</label>
-                    <input type="hidden" id="form-categoria-hidden" required>
-                    <div id="grade-dinamica-postagem" class="grid grid-cols-1 md:grid-cols-3 gap-3 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar"></div>
+        <div class="relative w-full max-w-lg lg:max-w-4xl bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-transform duration-300">
+            <button onclick="toggleModal('modal-postagem')" class="absolute top-4 right-4 text-white/40 hover:text-tre-brand transition-colors z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-6 flex items-center gap-3 border-b border-white/10 pb-4"><i class="fa-solid fa-paper-plane text-tre-brand"></i> Postar Atividade</h2>
+            <form id="form-atividade" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                <div class="space-y-1.5 md:col-span-1"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label><input type="text" name="nick" id="form-nick" required placeholder="Ex: G4VET4" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium"></div>
+                <div class="space-y-1.5 md:col-span-1"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Link da Prova (Imgur/Discord)</label><input type="url" name="prova" id="form-prova" required placeholder="https://..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium"></div>
+                <div class="space-y-2 md:col-span-2">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Selecione a Atividade Cumprida</label>
+                    <input type="hidden" name="categoria" id="form-categoria-hidden" required>
+                    <div class="max-h-[35vh] overflow-y-auto pr-2 custom-scrollbar grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="grade-dinamica-postagem">
+                        <p class="text-xs text-white/30 col-span-full text-center py-4"><i class="fa-solid fa-spinner fa-spin"></i> Carregando atividades do Admin...</p>
+                    </div>
                 </div>
-                <button type="submit" id="btn-enviar-form" class="md:col-span-2 bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-4 rounded-xl cursor-pointer">Enviar para Análise</button>
-                <div id="feedback-form" class="md:col-span-2 hidden mt-2 p-3 rounded-xl text-center text-xs font-bold"></div>
+                <div class="md:col-span-2 pt-2">
+                    <button type="submit" id="btn-enviar-form" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer text-sm"><span>Enviar Postagem para Análise</span></button>
+                    <div id="feedback-form" class="hidden mt-4 p-3 rounded-xl text-center text-xs font-bold"></div>
+                </div>
             </form>
+        </div>
+    </div>
+
+    <div id="modal-regras" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-md" onclick="toggleModal('modal-regras')"></div>
+        <div class="relative w-full max-w-2xl bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl p-6 shadow-2xl transform scale-95 transition-all">
+            <h2 class="text-xl font-black text-white uppercase border-b border-white/10 pb-4 mb-4">Regras do Ranking</h2>
+            <div class="custom-scrollbar overflow-y-auto max-h-[50vh] pr-2 text-white/70 text-sm space-y-3">
+                <p>• Pontos válidos apenas para atividades aprovadas pela Liderança.</p>
+                <p>• Prazo de postagem: Domingo até às 23:59h.</p>
+                <p>• Fraudes nas provas resultam em punição e zeramento de pontos.</p>
+            </div>
+            <button onclick="toggleModal('modal-regras')" class="mt-6 w-full bg-white/5 py-2 rounded-lg text-white font-bold border border-white/10 text-xs">Fechar</button>
         </div>
     </div>
 
     <div id="modal-pontos" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-pontos')"></div>
-        <div class="relative w-full max-w-2xl bg-[#0A0102] border border-white/10 rounded-3xl p-8 transform scale-95 transition-all">
+        <div class="relative w-full max-w-2xl bg-[#0A0102] border border-white/10 rounded-2xl p-6 shadow-2xl transform scale-95 transition-all">
             <h2 class="text-xl font-black text-white uppercase border-b border-white/10 pb-4 mb-4">Quadro de Pontos Oficial</h2>
-            <div id="quadro-dinamico-pontos" class="max-h-[60vh] overflow-y-auto text-xs space-y-3 pr-2 custom-scrollbar"></div>
+            <div class="max-h-[60vh] overflow-y-auto text-xs space-y-2.5 pr-2 custom-scrollbar" id="quadro-dinamico-pontos">
+                <p class="text-xs text-white/30 text-center py-4"><i class="fa-solid fa-spinner fa-spin"></i> Carregando Quadro do Admin...</p>
+            </div>
+            <button onclick="toggleModal('modal-pontos')" class="mt-6 w-full bg-white/5 py-2 rounded-lg text-white font-bold border border-white/10 text-xs">Entendido</button>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
 
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0", authDomain: "tre-ranking.firebaseapp.com", projectId: "tre-ranking", storageBucket: "tre-ranking.firebasestorage.app", messagingSenderId: "1008986456536", appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad" };
+        // ==========================================
+        // 1. INICIALIZAÇÃO DO FIREBASE
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0",
+            authDomain: "tre-ranking.firebaseapp.com",
+            projectId: "tre-ranking",
+            storageBucket: "tre-ranking.firebasestorage.app",
+            messagingSenderId: "1008986456536",
+            appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad"
+        };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        let quadroPontosGlobal = []; let postagensGlobal = [];
+        let quadroPontosGlobal = [];
+        let postagensGlobal = [];
+        
+        // ==========================================
+        // 2. GERADOR AUTOMÁTICO DE MESES
+        // ==========================================
         const mesesNomes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-        const dAtu = new Date(); let mesAtualStr = `${mesesNomes[dAtu.getMonth()]} ${dAtu.getFullYear()}`;
+        const dataAtualGlobal = new Date();
+        let mesAtualStr = `${mesesNomes[dataAtualGlobal.getMonth()]} ${dataAtualGlobal.getFullYear()}`;
 
-        function getAvatarUrl(n, s='l') { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${n}&action=std&direction=2&head_direction=2&gesture=sml&size=${s}`; }
-
-        function inicializarDropdown() {
-            const m = document.getElementById('menu-meses'); document.getElementById('texto-mes').innerText = mesAtualStr;
-            m.innerHTML = '';
-            for(let i = 0; i < 6; i++) {
-                let d = new Date(dAtu.getFullYear(), dAtu.getMonth() - i, 1);
-                let n = `${mesesNomes[d.getMonth()]} ${d.getFullYear()}`;
-                m.innerHTML += `<button onclick="selecionarMes(this)" class="px-5 py-3 text-left hover:bg-white/10 text-white/70 w-full cursor-pointer">${n}</button>`;
+        function inicializarDropdownMeses() {
+            const textoMesBtn = document.getElementById('texto-mes');
+            const menuMeses = document.getElementById('menu-meses');
+            
+            if(textoMesBtn && menuMeses) {
+                textoMesBtn.innerText = mesAtualStr;
+                menuMeses.innerHTML = '';
+                
+                for(let i = 0; i < 6; i++) {
+                    let d = new Date(dataAtualGlobal.getFullYear(), dataAtualGlobal.getMonth() - i, 1);
+                    let nomeMes = `${mesesNomes[d.getMonth()]} ${d.getFullYear()}`;
+                    menuMeses.innerHTML += `<button onclick="selecionarMes(this)" class="px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">${nomeMes}</button>`;
+                }
             }
         }
 
-        function selecionarMes(el) { mesAtualStr = el.innerText; document.getElementById('texto-mes').innerText = mesAtualStr; toggleMesDropdown(); renderizarRanking(); }
-        function toggleMesDropdown() { const m = document.getElementById('menu-meses'); const s = document.getElementById('icone-seta'); m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2'); s.classList.toggle('rotate-180'); }
+        // ==========================================
+        // 3. CARREGAMENTO DINÂMICO E RANKING
+        // ==========================================
+        function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
+            return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
+        }
 
+        // Escuta o Quadro de Pontos do Admin
         db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
-            if (doc.exists) { quadroPontosGlobal = doc.data().atividades; renderizarModais(quadroPontosGlobal); carregarRanking(); }
+            if (doc.exists && doc.data().atividades) {
+                quadroPontosGlobal = doc.data().atividades;
+                renderizarModaisDinamicos(quadroPontosGlobal);
+                recalcularRankingGlobal();
+            }
         });
 
-        function carregarRanking() {
-            db.collection("postagens").where("status", "==", "Aprovado").onSnapshot(snap => {
+        function formatarMesAno(data) {
+            return `${mesesNomes[data.getMonth()]} ${data.getFullYear()}`;
+        }
+
+        function recalcularRankingGlobal() {
+            db.collection("postagens").where("status", "==", "Aprovado").onSnapshot(snapshot => {
                 postagensGlobal = [];
-                snap.forEach(doc => {
-                    const d = doc.data(); if(d.dataJulgamento) {
-                        const date = d.dataJulgamento.toDate();
-                        d.mesAnoStr = `${mesesNomes[date.getMonth()]} ${date.getFullYear()}`;
-                        postagensGlobal.push(d);
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if(data.dataJulgamento) {
+                        data.mesAnoStr = formatarMesAno(data.dataJulgamento.toDate());
+                        postagensGlobal.push(data);
                     }
                 });
                 renderizarRanking();
             });
         }
 
+        // A MÁGICA: Recriando o HTML Visual Original, mas com Dados do Banco
         function renderizarRanking() {
-            const pod = document.getElementById('podium-container'); const lst = document.getElementById('list-container');
-            const wrp = document.getElementById('list-wrapper'); const emp = document.getElementById('empty-ranking');
-            let mapa = {};
-            postagensGlobal.filter(p => p.mesAnoStr === mesAtualStr).forEach(p => {
-                const cfg = quadroPontosGlobal.find(q => q.nome === p.categoria);
-                mapa[p.nick] = (mapa[p.nick] || 0) + (cfg ? cfg.pontos : 0);
+            const podiumContainer = document.getElementById('podium-container');
+            const listContainer = document.getElementById('list-container');
+            const listWrapper = document.getElementById('list-wrapper');
+            const emptyRanking = document.getElementById('empty-ranking');
+            
+            // 1. Filtrar pelo mês e Agregar pontos
+            const postsFiltrados = postagensGlobal.filter(p => p.mesAnoStr === mesAtualStr);
+            let mapaPontos = {};
+            postsFiltrados.forEach(post => {
+                const config = quadroPontosGlobal.find(q => q.nome === post.categoria);
+                const pontos = config ? config.pontos : 0;
+                if(!mapaPontos[post.nick]) mapaPontos[post.nick] = 0;
+                mapaPontos[post.nick] += pontos;
             });
-            let rnk = Object.keys(mapa).map(n => ({ nick: n, pontos: mapa[n] })).sort((a,b) => b.pontos - a.pontos);
-            rnk.forEach((it, idx) => it.posicao = idx + 1);
-            pod.innerHTML = ''; lst.innerHTML = '';
-            if (rnk.length === 0) { emp.classList.replace('hidden', 'flex'); wrp.style.display = 'none'; return; }
-            emp.classList.replace('flex', 'hidden'); wrp.style.display = 'block';
-            let top3 = rnk.slice(0,3); let visual = [];
-            if(top3[1]) visual.push(top3[1]); if(top3[0]) visual.push(top3[0]); if(top3[2]) visual.push(top3[2]);
-            visual.forEach(m => {
-                let medal = m.posicao === 1 ? "#FFD700" : m.posicao === 2 ? "#E3E4E5" : "#CD7F32";
-                let h = m.posicao === 1 ? "h-64 sm:h-80" : m.posicao === 2 ? "h-52 sm:h-64" : "h-48 sm:h-60";
-                pod.innerHTML += `<div class="anim-podium opacity-0 ${m.posicao === 1 ? 'order-2' : m.posicao === 2 ? 'order-1' : 'order-3'} w-[30%] sm:w-[20rem]">
-                    <div class="tilt-card ${h} border-t-2 flex flex-col items-center justify-end p-5" style="border-color:${medal}" data-tilt>
-                        <div class="absolute bottom-[calc(100%-1.5rem)] left-1/2 z-avatar w-full flex justify-center"><img src="${getAvatarUrl(m.nick)}" class="scale-110 origin-bottom"></div>
-                        <div class="text-center w-full space-y-2">
-                            <span class="font-black text-[10px] tracking-widest uppercase" style="color:${medal}">${m.posicao}º LUGAR</span>
-                            <h3 class="text-lg sm:text-2xl font-black truncate">${m.nick}</h3>
-                            <div class="bg-black/40 rounded-xl px-4 py-2"><span class="font-black text-white">${m.pontos} Pts</span></div>
+
+            // 2. Ordenar e Atribuir Posição
+            let rankingArray = Object.keys(mapaPontos).map(nick => ({
+                nick: nick, pontos: mapaPontos[nick]
+            })).sort((a, b) => b.pontos - a.pontos);
+
+            rankingArray.forEach((item, index) => item.posicao = index + 1);
+
+            podiumContainer.innerHTML = '';
+            listContainer.innerHTML = '';
+
+            if (rankingArray.length === 0) {
+                emptyRanking.classList.remove('hidden'); emptyRanking.classList.add('flex');
+                listWrapper.style.display = 'none';
+                return;
+            } else {
+                emptyRanking.classList.add('hidden'); emptyRanking.classList.remove('flex');
+                listWrapper.style.display = 'block';
+            }
+
+            // 3. Renderizar Pódio (HTML IDÊNTICO AO ORIGINAL)
+            let top3 = rankingArray.slice(0, 3);
+            let ordemVisual = [];
+            if(top3.length > 1) ordemVisual.push(top3[1]); // 2º
+            if(top3.length > 0) ordemVisual.push(top3[0]); // 1º
+            if(top3.length > 2) ordemVisual.push(top3[2]); // 3º
+
+            ordemVisual.forEach(membro => {
+                let orderClass = membro.posicao === 1 ? "order-2" : membro.posicao === 2 ? "order-1" : "order-3";
+                let alturaCard = membro.posicao === 1 ? "h-36 sm:h-52 md:h-64 lg:h-80" : membro.posicao === 2 ? "h-28 sm:h-44 md:h-52 lg:h-64" : "h-24 sm:h-40 md:h-48 lg:h-60";
+                let widthClass = membro.posicao === 1 ? "w-[32%] sm:w-[30%] md:w-[16rem] lg:w-[22rem]" : "w-[30%] sm:w-[28%] md:w-[15rem] lg:w-[19rem]";
+                let corMedalha = membro.posicao === 1 ? "text-[#FFD700]" : membro.posicao === 2 ? "text-[#E3E4E5]" : "text-[#CD7F32]";
+                let glowMedal = membro.posicao === 1 ? "glow-gold" : membro.posicao === 2 ? "glow-silver" : "glow-bronze";
+                let borderMedal = membro.posicao === 1 ? "border-gold" : membro.posicao === 2 ? "border-silver" : "border-bronze";
+                let nickSize = membro.posicao === 1 ? "text-[11px] sm:text-xl md:text-3xl lg:text-4xl" : "text-[9px] sm:text-lg md:text-2xl lg:text-3xl";
+                let badgeSize = membro.posicao === 1 ? "text-[7px] sm:text-sm md:text-lg lg:text-xl" : "text-[6px] sm:text-xs md:text-base lg:text-lg";
+                let ptsSize = membro.posicao === 1 ? "text-xs sm:text-xl md:text-2xl lg:text-3xl" : "text-[10px] sm:text-lg md:text-xl lg:text-2xl";
+
+                podiumContainer.innerHTML += `
+                    <div class="anim-podium opacity-0 ${widthClass} ${orderClass} mt-12 sm:mt-16 md:mt-0">
+                        <div class="tilt-card ${alturaCard} ${borderMedal} w-full flex flex-col items-center justify-end p-2 sm:p-5 md:p-8" data-tilt data-tilt-glare data-tilt-max-glare="0.1" data-tilt-scale="1.01" data-tilt-perspective="1500">
+                            <div class="neon-glow ${glowMedal}"></div>
+                            <div class="absolute bottom-[calc(100%-0.8rem)] sm:bottom-[calc(100%-1.5rem)] md:bottom-[calc(100%-2.5rem)] lg:bottom-[calc(100%-3rem)] left-1/2 pointer-events-none z-avatar w-full flex justify-center items-end">
+                                <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="object-contain scale-100 sm:scale-110 lg:scale-125 origin-bottom max-w-[150%] sm:max-w-none">
+                            </div>
+                            <div class="z-content text-center w-full mt-auto flex flex-col items-center gap-1.5 sm:gap-3 lg:gap-5">
+                                <div class="z-badge"><span class="font-black ${badgeSize} tracking-[0.1em] sm:tracking-[0.2em] whitespace-nowrap ${corMedalha} drop-shadow-md">${membro.posicao}º LUGAR</span></div>
+                                <h3 class="${nickSize} font-black tracking-tighter text-white whitespace-nowrap group-hover:text-tre-brand transition-colors drop-shadow-lg">${membro.nick}</h3>
+                                <div class="inline-flex items-center justify-center bg-black/40 border border-white/10 rounded-lg sm:rounded-2xl px-2 sm:px-6 md:px-8 py-1 sm:py-2 md:py-3 shadow-inner shadow-black/50">
+                                    <span class="${ptsSize} font-black text-white">${membro.pontos}</span> <span class="text-[6px] sm:text-[10px] lg:text-sm font-semibold text-white/60 ml-1 sm:ml-2 uppercase tracking-widest">Pts</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>`;
+                `;
             });
-            rnk.slice(3).forEach(m => {
-                lst.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
-                    <td class="p-4 text-center font-black text-white/20">${m.posicao}º</td>
-                    <td class="p-4 flex items-center gap-4"><img src="${getAvatarUrl(m.nick,'m')}" class="w-10 h-10 rounded-full bg-black/40"> <span class="font-bold">${m.nick}</span></td>
-                    <td class="p-4 text-right font-black text-xl text-tre-brand">${m.pontos} <span class="text-[10px] opacity-40">Pts</span></td>
-                </tr>`;
+
+            // 4. Renderizar Resto da Tabela (HTML IDÊNTICO AO ORIGINAL)
+            let listaGeral = rankingArray.slice(3);
+            listaGeral.forEach(membro => {
+                listContainer.innerHTML += `
+                    <tr class="anim-row group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default">
+                        <td class="p-3 sm:p-4 md:p-5 md:px-8 text-center font-black text-sm sm:text-lg md:text-xl text-white/20 group-hover:text-tre-brand transition-colors w-12 sm:w-16 md:w-24">${membro.posicao}º</td>
+                        <td class="p-3 sm:p-4 md:p-5 flex items-center gap-2 sm:gap-4 md:gap-6">
+                            <div class="w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors shadow-md">
+                                <img src="${getAvatarUrl(membro.nick, 'm', 'wlk', 'std')}" alt="${membro.nick}" class="absolute -top-1 sm:-top-3 left-1/2 -translate-x-1/2 transition-transform duration-700 group-hover:scale-110">
+                            </div>
+                            <span class="font-bold text-xs sm:text-base md:text-lg tracking-wide transition-transform duration-500 group-hover:translate-x-2 text-white/80 group-hover:text-white">${membro.nick}</span>
+                        </td>
+                        <td class="p-3 sm:p-4 md:p-5 md:px-8 text-right w-20 sm:w-32 md:w-40">
+                            <span class="font-black text-base sm:text-xl md:text-2xl text-white transition-colors group-hover:text-tre-brand">${membro.pontos}</span> <span class="text-[8px] sm:text-[11px] md:text-xs font-bold text-white/40 uppercase ml-0.5 sm:ml-1">Pts</span>
+                        </td>
+                    </tr>
+                `;
             });
-            VanillaTilt.init(document.querySelectorAll("[data-tilt]"));
-            gsap.to(".anim-podium", { y: 0, opacity: 1, stagger: 0.1, duration: 0.8 });
+
+            // Repara os scripts de UI para os novos elementos injetados
+            VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 6, speed: 1200, glare: true, "max-glare": 0.1 });
+            gsap.fromTo(".anim-podium", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out" });
         }
 
-        function renderizarModais(ativs) {
-            const gr = document.getElementById('grade-dinamica-postagem'); gr.innerHTML = '';
-            ativs.forEach(a => {
-                gr.innerHTML += `<div class="activity-grid-card js-activity-card p-3 flex justify-between items-center" data-activity="${a.nome}"><div class="text-left"><span class="text-[9px] opacity-40 block">[${a.grupo}]</span><span class="text-xs font-bold block">${a.nome}</span></div><span class="point-badge ${a.pontos > 0 ? 'point-plus' : 'point-minus'}">${a.pontos > 0 ? '+'+a.pontos : a.pontos}</span></div>`;
-            });
-            document.querySelectorAll('.js-activity-card').forEach(c => c.addEventListener('click', function() { document.querySelectorAll('.js-activity-card').forEach(x => x.classList.remove('active')); this.classList.add('active'); document.getElementById('form-categoria-hidden').value = this.getAttribute('data-activity'); }));
-            const q = document.getElementById('quadro-dinamico-pontos'); q.innerHTML = '';
-            const ag = ativs.reduce((acc, x) => { if(!acc[x.grupo]) acc[x.grupo]=[]; acc[x.grupo].push(x); return acc; }, {});
-            Object.keys(ag).forEach(g => {
-                let h = `<div class="bg-white/5 p-3 rounded-xl border border-white/5"><h4 class="text-[10px] font-black uppercase text-white/40 mb-2">${g}</h4>`;
-                ag[g].forEach(a => h += `<div class="flex justify-between items-center text-xs text-white/70"><span>${a.nome}</span><span class="font-bold text-tre-brand">${a.pontos > 0 ? '+'+a.pontos : a.pontos}</span></div>`);
-                q.innerHTML += h + `</div>`;
-            });
+        function renderizarModaisDinamicos(atividades) {
+            const gridPostagem = document.getElementById('grade-dinamica-postagem');
+            if(gridPostagem) {
+                gridPostagem.innerHTML = '';
+                atividades.forEach(ativ => {
+                    let badgeClass = ativ.pontos > 0 ? 'point-plus' : 'point-minus';
+                    let ptSinal = ativ.pontos > 0 ? `+${ativ.pontos}` : ativ.pontos;
+                    gridPostagem.innerHTML += `
+                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="${ativ.nome}">
+                            <div class="space-y-1">
+                                <span class="text-[11px] text-white/70 block">[${ativ.grupo}]</span>
+                                <span class="text-[11px] font-bold text-white block truncate max-w-[150px]">${ativ.nome}</span>
+                                <span class="text-[9px] text-white/30 tracking-widest uppercase">${ativ.responsavel}</span>
+                            </div>
+                            <span class="point-badge ${badgeClass}">${ptSinal}</span>
+                        </div>
+                    `;
+                });
+
+                document.querySelectorAll('.js-activity-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        document.querySelectorAll('.js-activity-card').forEach(c => c.classList.remove('active'));
+                        this.classList.add('active');
+                        document.getElementById('form-categoria-hidden').value = this.getAttribute('data-activity');
+                    });
+                });
+            }
+
+            const quadroModal = document.getElementById('quadro-dinamico-pontos');
+            if(quadroModal) {
+                quadroModal.innerHTML = '';
+                const categoriasAgrupadas = atividades.reduce((acc, ativ) => {
+                    if (!acc[ativ.grupo]) acc[ativ.grupo] = [];
+                    acc[ativ.grupo].push(ativ);
+                    return acc;
+                }, {});
+
+                Object.keys(categoriasAgrupadas).sort().forEach(nomeGrupo => {
+                    let htmlGrupo = `<div class="bg-white/5 p-3 rounded-lg border border-white/5">
+                        <h4 class="text-[10px] text-white uppercase font-bold tracking-wider">${nomeGrupo}</h4>
+                        <div class="space-y-1.5 mt-2">`;
+                    
+                    categoriasAgrupadas[nomeGrupo].forEach(ativ => {
+                        let badgeClass = ativ.pontos > 0 ? 'point-plus' : 'point-minus';
+                        let ptSinal = ativ.pontos > 0 ? `+${ativ.pontos}` : ativ.pontos;
+                        htmlGrupo += `<div class="flex justify-between items-center">
+                            <span class="text-white/70 text-xs">${ativ.nome} <span class="text-[9px] text-white/30 ml-1">(${ativ.responsavel})</span></span> 
+                            <span class="point-badge ${badgeClass}">${ptSinal}</span>
+                        </div>`;
+                    });
+
+                    htmlGrupo += `</div></div>`;
+                    quadroModal.innerHTML += htmlGrupo;
+                });
+            }
         }
 
-        function toggleModal(id) { const m = document.getElementById(id); const c = m.querySelector('div.relative'); if (m.classList.contains('opacity-0')) { m.classList.remove('opacity-0', 'invisible'); setTimeout(() => c.classList.replace('scale-95', 'scale-100'), 10); } else { c.classList.replace('scale-100', 'scale-95'); setTimeout(() => m.classList.add('opacity-0', 'invisible'), 200); } }
-        function switchView(v) { ['view-login','view-register','view-feedback'].forEach(x => { document.getElementById(x).classList.add('hidden'); document.getElementById(x).classList.add('opacity-0'); }); const target = document.getElementById('view-'+v); target.classList.remove('hidden'); setTimeout(() => target.classList.remove('opacity-0'), 50); }
-        function realizarLogin(e) { e.preventDefault(); const n = document.getElementById('login-nick').value.trim(); const s = document.getElementById('login-senha').value; auth.signInWithEmailAndPassword(n.toLowerCase()+'@treinadores.rcc', s).then(() => window.location.href='admin.html').catch(() => alert("Dados incorretos!")); }
-        function enviarCadastro(e) { e.preventDefault(); const n = document.getElementById('reg-nick').value.trim(); const s = document.getElementById('reg-senha').value; auth.createUserWithEmailAndPassword(n.toLowerCase()+'@treinadores.rcc', s).then(res => db.collection("solicitacoes_acesso").doc(res.user.uid).set({ nick: n, status: "Pendente", dataSolicitacao: firebase.firestore.FieldValue.serverTimestamp() })).then(() => { auth.signOut(); switchView('feedback'); }); }
+        // ==========================================
+        // 4. LÓGICA DE INTERAÇÕES E MODAIS
+        // ==========================================
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            if(id === 'modal-login' && modal.classList.contains('opacity-0')){ switchView('login'); }
 
-        document.getElementById('form-atividade').addEventListener('submit', function(e) {
-            e.preventDefault(); const btn = document.getElementById('btn-enviar-form'); btn.disabled = true;
-            const n = document.getElementById('form-nick').value; const p = document.getElementById('form-prova').value; const c = document.getElementById('form-categoria-hidden').value;
-            if(!c) { alert("Escolha uma atividade!"); btn.disabled = false; return; }
-            db.collection("postagens").add({ nick: n, categoria: c, prova: p, status: "Pendente", dataEnvio: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { alert("Postado!"); location.reload(); });
+            const content = modal.querySelector('div.relative.transform');
+            if (modal.classList.contains('opacity-0')) {
+                modal.classList.remove('opacity-0', 'invisible');
+                setTimeout(() => content.classList.replace('scale-95', 'scale-100'), 10);
+            } else {
+                content.classList.replace('scale-100', 'scale-95');
+                setTimeout(() => modal.classList.add('opacity-0', 'invisible'), 200);
+            }
+        }
+
+        function switchView(view) {
+            const viewLogin = document.getElementById('view-login');
+            const viewRegister = document.getElementById('view-register');
+            const viewFeedback = document.getElementById('view-feedback');
+
+            viewLogin.classList.add('opacity-0');
+            viewRegister.classList.add('opacity-0');
+            viewFeedback.classList.add('opacity-0');
+            
+            setTimeout(() => {
+                viewLogin.classList.add('hidden'); viewLogin.classList.remove('block');
+                viewRegister.classList.add('hidden'); viewRegister.classList.remove('block'); viewRegister.classList.add('translate-x-4');
+                viewFeedback.classList.add('hidden'); viewFeedback.classList.remove('flex'); viewFeedback.classList.add('translate-y-4');
+                
+                if(view === 'login') {
+                    viewLogin.classList.remove('hidden'); viewLogin.classList.add('block');
+                    setTimeout(() => viewLogin.classList.remove('opacity-0'), 50);
+                } else if(view === 'register') {
+                    viewRegister.classList.remove('hidden'); viewRegister.classList.add('block');
+                    setTimeout(() => viewRegister.classList.remove('opacity-0', 'translate-x-4'), 50);
+                } else if(view === 'feedback') {
+                    viewFeedback.classList.remove('hidden'); viewFeedback.classList.add('flex');
+                    setTimeout(() => viewFeedback.classList.remove('opacity-0', 'translate-y-4'), 50);
+                }
+            }, 200);
+        }
+
+        function toggleMesDropdown() {
+            const m = document.getElementById('menu-meses');
+            const s = document.getElementById('icone-seta');
+            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2');
+            s.classList.toggle('rotate-180');
+        }
+        function selecionarMes(el) {
+            mesAtualStr = el.innerText;
+            document.getElementById('texto-mes').innerText = mesAtualStr;
+            toggleMesDropdown();
+            renderizarRanking(); // Recalcula o ranking daquele mês
+        }
+
+        // ==========================================
+        // 5. FIREBASE: LOGIN E CADASTRO E POSTAGEM
+        // ==========================================
+        function enviarCadastro(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-cadastro');
+            const feedback = document.getElementById('reg-feedback');
+            const nick = document.getElementById('reg-nick').value.trim();
+            const senha = document.getElementById('reg-senha').value;
+            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
+            feedback.classList.add('hidden');
+
+            auth.createUserWithEmailAndPassword(emailFake, senha)
+                .then((userCredential) => {
+                    return db.collection("solicitacoes_acesso").doc(userCredential.user.uid).set({
+                        nick: nick, status: "Pendente", dataSolicitacao: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    auth.signOut();
+                    btn.innerHTML = 'Enviar Solicitação'; btn.disabled = false;
+                    document.getElementById('form-cadastro').reset();
+                    switchView('feedback'); 
+                })
+                .catch((error) => {
+                    btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
+                    if(error.code === 'auth/email-already-in-use') { feedback.innerText = "Este Nick já solicitou cadastro!"; } 
+                    else if(error.code === 'auth/weak-password') { feedback.innerText = "A senha deve ter pelo menos 6 caracteres."; } 
+                    else { feedback.innerText = "Erro ao solicitar: " + error.message; }
+                    feedback.classList.remove('hidden'); feedback.classList.add('block');
+                });
+        }
+
+        function realizarLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login-submit');
+            const feedback = document.getElementById('login-feedback');
+            const nick = document.getElementById('login-nick').value.trim();
+            const senha = document.getElementById('login-senha').value;
+            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
+
+            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
+            feedback.classList.add('hidden');
+
+            auth.signInWithEmailAndPassword(emailFake, senha)
+                .then(() => { window.location.href = 'admin.html'; })
+                .catch(() => {
+                    btn.disabled = false; btn.innerHTML = 'Entrar no Painel';
+                    feedback.innerText = "Nick ou senha incorretos!";
+                    feedback.classList.remove('hidden'); feedback.classList.add('block');
+                });
+        }
+
+        const form = document.getElementById('form-atividade');
+        const btnEnviar = document.getElementById('btn-enviar-form');
+        const feedback = document.getElementById('feedback-form');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            btnEnviar.disabled = true;
+            btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+            
+            const nickValue = document.getElementById('form-nick').value;
+            const provaValue = document.getElementById('form-prova').value;
+            const categoriaValue = document.getElementById('form-categoria-hidden').value;
+
+            if(!categoriaValue) {
+                alert("Selecione uma atividade nos cartões!");
+                btnEnviar.disabled = false; btnEnviar.innerHTML = 'Enviar Postagem para Análise';
+                return;
+            }
+
+            db.collection("postagens").add({
+                nick: nickValue, categoria: categoriaValue, prova: provaValue, status: "Pendente", dataEnvio: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                feedback.innerText = "Sucesso! Postagem enviada para análise.";
+                feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
+                form.reset();
+                document.querySelectorAll('.js-activity-card').forEach(c => c.classList.remove('active'));
+                document.getElementById('form-categoria-hidden').value = "";
+            })
+            .catch(error => {
+                console.error("Erro ao enviar:", error);
+                feedback.innerText = "Erro ao enviar. Tente novamente.";
+                feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+            })
+            .finally(() => {
+                btnEnviar.disabled = false;
+                btnEnviar.innerHTML = 'Enviar Postagem para Análise';
+            });
         });
 
-        window.addEventListener('DOMContentLoaded', () => { inicializarDropdown(); gsap.to("#anim-header", { y: 0, opacity: 1, duration: 0.8 }); gsap.to("#anim-title", { y: 0, opacity: 1, duration: 0.8, delay: 0.3 }); });
+        // ==========================================
+        // 6. ANIMAÇÕES GSAP CARREGAMENTO INICIAL
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            inicializarDropdownMeses();
+            
+            const tl = gsap.timeline();
+            tl.to("#anim-header", { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" })
+            .to("#anim-title", { y: 0, opacity: 1, duration: 0.9, ease: "expo.out" }, "-=0.6")
+            .to("#anim-list", { opacity: 1, duration: 1.0, ease: "power2.out" }, "-=0.4");
+        });
     </script>
 </body>
 </html>
