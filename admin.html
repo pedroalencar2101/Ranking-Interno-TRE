@@ -438,7 +438,7 @@
 
         function getAvatarUrl(nick, size = 'l') { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=${size}`; }
 
-        // ==========================================
+     // ==========================================
         // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA
         // ==========================================
         auth.onAuthStateChanged((user) => {
@@ -448,14 +448,20 @@
                     if (doc.exists && doc.data().status === "Aprovado") {
                         currentUserNick = doc.data().nick || "Admin";
                         
-                        // Migração de termos de segurança e atribuição de cargo
+                        // CORREÇÃO DO BUG DE REBAIXAMENTO:
                         let rawRole = doc.data().role;
-                        if (rawRole === "SuperAdmin") currentUserRole = "Admin";
-                        else if (rawRole === "Admin" || !rawRole) currentUserRole = "Convidado";
-                        else currentUserRole = rawRole;
+                        if (rawRole === "SuperAdmin") {
+                            currentUserRole = "Admin"; // Migra o antigo SuperAdmin para Admin
+                        } else if (!rawRole) {
+                            currentUserRole = "Convidado"; // Se for conta nova sem cargo, vira Convidado
+                        } else {
+                            currentUserRole = rawRole; // Se já for Admin ou Convidado, RESPEITA e mantém!
+                        }
 
-                        // Salva no banco o novo padrão se necessário
-                        if(rawRole !== currentUserRole) db.collection("solicitacoes_acesso").doc(user.uid).update({ role: currentUserRole });
+                        // Salva no banco apenas se precisou migrar algo
+                        if(rawRole !== currentUserRole) {
+                            db.collection("solicitacoes_acesso").doc(user.uid).update({ role: currentUserRole });
+                        }
 
                         document.getElementById('admin-user-nick').innerText = currentUserNick.toUpperCase();
                         document.getElementById('admin-user-role').innerText = currentUserRole === "Admin" ? "MINISTÉRIO (ADMIN)" : "CONVIDADO";
@@ -468,19 +474,11 @@
                     } else {
                         auth.signOut().then(() => { alert("Acesso Negado ou Revogado."); window.location.href = 'index.html'; });
                     }
-                }).catch((error) => { auth.signOut().then(() => window.location.href = 'index.html'); });
+                }).catch((error) => { auth.signOut().then(() => window.location.href = 'index.html'; });
             } else {
                 window.location.href = 'index.html';
             }
         });
-
-        function logout() { auth.signOut().then(() => { window.location.href = 'index.html'; }); }
-
-        function aplicarPermissoesUI() {
-            if(currentUserRole === "Admin") document.body.classList.remove('role-convidado');
-            else document.body.classList.add('role-convidado');
-        }
-        function isAdmin() { return currentUserRole === "Admin"; }
 
         // ==========================================
         // 3. UI E NAVEGAÇÃO
