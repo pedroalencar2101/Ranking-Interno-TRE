@@ -35,6 +35,9 @@
     </script>
 
     <style>
+        /* ==========================================
+           ESTILOS GERAIS E BACKGROUND
+           ========================================== */
         body {
             background: #0A0102;
             background-image: radial-gradient(circle at top center, #35060A 0%, #0A0102 90%);
@@ -59,12 +62,15 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        
         .glass-panel-simple:hover {
             background: rgba(35, 6, 8, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Cubos 3D (Z-depth) - VISUAL RESTAURADO */
+        /* ==========================================
+           CUBOS 3D DO PÓDIO (VanillaTilt)
+           ========================================== */
         .tilt-card {
             transform-style: preserve-3d;
             background: linear-gradient(145deg, rgba(35, 6, 8, 0.7) 0%, rgba(10, 1, 2, 0.85) 100%);
@@ -77,11 +83,21 @@
         @media (min-width: 768px) { .tilt-card { border-radius: 2rem; } }
 
         .neon-glow {
-            position: absolute; width: 70%; height: 70%; top: 15%; left: 15%; filter: blur(60px); z-index: -1; opacity: 0.1;
+            position: absolute; 
+            width: 70%; 
+            height: 70%; 
+            top: 15%; 
+            left: 15%; 
+            filter: blur(60px); 
+            z-index: -1; 
+            opacity: 0.1;
             transition: opacity 0.8s ease;
         }
-        .tilt-card:hover .neon-glow { opacity: 0.25; }
+        .tilt-card:hover .neon-glow { 
+            opacity: 0.25; 
+        }
 
+        /* Efeito Pop-out do Avatar no 3D */
         .z-avatar {
             transform-origin: bottom center; 
             transform: translateX(-50%) translateZ(2px); 
@@ -103,7 +119,9 @@
         .glow-silver { background: #E3E4E5; }
         .glow-bronze { background: #CD7F32; }
 
-        /* Inputs e Cards Glass */
+        /* ==========================================
+           INPUTS E CARDS DE ATIVIDADE
+           ========================================== */
         .glass-input {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -137,20 +155,36 @@
             box-shadow: 0 0 20px rgba(211, 21, 34, 0.3);
         }
         .activity-grid-card.active::after {
-            content: ''; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid transparent;
+            content: ''; 
+            position: absolute; 
+            inset: -1px; 
+            border-radius: inherit; 
+            border: 1px solid transparent;
             background: linear-gradient(to bottom right, rgba(211, 21, 34, 1), rgba(211, 21, 34, 0)) border-box;
             mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
             -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: destination-out; mask-composite: exclude; opacity: 0.6;
+            -webkit-mask-composite: destination-out; 
+            mask-composite: exclude; 
+            opacity: 0.6;
         }
 
-        .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 4px; letter-spacing: -0.02em; }
+        .point-badge { 
+            font-family: 'Inter', sans-serif; 
+            font-weight: 800; 
+            font-size: 10px; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            letter-spacing: -0.02em; 
+        }
         .point-plus { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
         .point-minus { background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
+        /* ==========================================
+           SCROLLBARS ESTILIZADAS
+           ========================================== */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0A0102; }
-        ::-webkit-scrollbar-thumb { background: #D31522; rounded: 3px; }
+        ::-webkit-scrollbar-thumb { background: #D31522; border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
@@ -181,6 +215,7 @@
     </header>
 
     <main class="flex-grow container mx-auto px-3 md:px-6">
+        
         <section class="pt-8 md:pt-16 pb-6 text-center relative z-40 opacity-0" id="anim-title">
             <h1 class="flex flex-col items-center text-3xl sm:text-5xl md:text-7xl font-black tracking-tight mb-2 md:mb-4 uppercase drop-shadow-2xl">
                 <span class="text-white leading-none">RANKING DOS</span>
@@ -226,6 +261,7 @@
                     </div>
                 </div>
             </div>
+            
             <div id="empty-ranking" class="hidden flex-col items-center justify-center py-10 text-center">
                 <i class="fa-solid fa-trophy text-4xl text-white/10 mb-4"></i>
                 <h3 class="text-lg font-bold text-white/30">Nenhum ponto registrado</h3>
@@ -335,19 +371,35 @@
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-postagem')"></div>
         <div class="relative w-full max-w-lg lg:max-w-4xl bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-transform duration-300">
             <button onclick="toggleModal('modal-postagem')" class="absolute top-4 right-4 text-white/40 hover:text-tre-brand transition-colors z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-6 flex items-center gap-3 border-b border-white/10 pb-4"><i class="fa-solid fa-paper-plane text-tre-brand"></i> Postar Atividade</h2>
+            
+            <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
+                <i class="fa-solid fa-paper-plane text-tre-brand"></i> Postar Atividade
+            </h2>
+            
             <form id="form-atividade" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-                <div class="space-y-1.5 md:col-span-1"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label><input type="text" name="nick" id="form-nick" required placeholder="Ex: G4VET4" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium"></div>
-                <div class="space-y-1.5 md:col-span-1"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Link da Prova (Imgur/Discord)</label><input type="url" name="prova" id="form-prova" required placeholder="https://..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium"></div>
+                <div class="space-y-1.5 md:col-span-1">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label>
+                    <input type="text" name="nick" id="form-nick" required placeholder="Ex: G4VET4" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
+                </div>
+                
+                <div class="space-y-1.5 md:col-span-1">
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Link da Prova (Imgur/Discord)</label>
+                    <input type="url" name="prova" id="form-prova" required placeholder="https://..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
+                </div>
+                
                 <div class="space-y-2 md:col-span-2">
                     <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Selecione a Atividade Cumprida</label>
                     <input type="hidden" name="categoria" id="form-categoria-hidden" required>
+                    
                     <div class="max-h-[35vh] overflow-y-auto pr-2 custom-scrollbar grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="grade-dinamica-postagem">
                         <p class="text-xs text-white/30 col-span-full text-center py-4"><i class="fa-solid fa-spinner fa-spin"></i> Carregando atividades do Admin...</p>
                     </div>
                 </div>
+                
                 <div class="md:col-span-2 pt-2">
-                    <button type="submit" id="btn-enviar-form" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer text-sm"><span>Enviar Postagem para Análise</span></button>
+                    <button type="submit" id="btn-enviar-form" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer text-sm">
+                        <span>Enviar Postagem para Análise</span>
+                    </button>
                     <div id="feedback-form" class="hidden mt-4 p-3 rounded-xl text-center text-xs font-bold"></div>
                 </div>
             </form>
@@ -380,14 +432,13 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
 
     <script>
         // ==========================================
-        // 1. INICIALIZAÇÃO DO FIREBASE
+        // INICIALIZAÇÃO FIREBASE E VARIÁVEIS
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0",
@@ -397,6 +448,7 @@
             messagingSenderId: "1008986456536",
             appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad"
         };
+        
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
@@ -404,13 +456,24 @@
         let quadroPontosGlobal = [];
         let postagensGlobal = [];
         
-        // ==========================================
-        // 2. GERADOR AUTOMÁTICO DE MESES
-        // ==========================================
         const mesesNomes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
         const dataAtualGlobal = new Date();
         let mesAtualStr = `${mesesNomes[dataAtualGlobal.getMonth()]} ${dataAtualGlobal.getFullYear()}`;
 
+        // ==========================================
+        // FUNÇÕES UTILITÁRIAS
+        // ==========================================
+        function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
+            return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
+        }
+
+        function formatarMesAno(data) {
+            return `${mesesNomes[data.getMonth()]} ${data.getFullYear()}`;
+        }
+
+        // ==========================================
+        // GERADOR DINÂMICO DE MESES
+        // ==========================================
         function inicializarDropdownMeses() {
             const textoMesBtn = document.getElementById('texto-mes');
             const menuMeses = document.getElementById('menu-meses');
@@ -419,7 +482,7 @@
                 textoMesBtn.innerText = mesAtualStr;
                 menuMeses.innerHTML = '';
                 
-                for(let i = 0; i < 6; i++) {
+                for(let i = 0; i < 12; i++) {
                     let d = new Date(dataAtualGlobal.getFullYear(), dataAtualGlobal.getMonth() - i, 1);
                     let nomeMes = `${mesesNomes[d.getMonth()]} ${d.getFullYear()}`;
                     menuMeses.innerHTML += `<button onclick="selecionarMes(this)" class="px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">${nomeMes}</button>`;
@@ -427,14 +490,25 @@
             }
         }
 
-        // ==========================================
-        // 3. CARREGAMENTO DINÂMICO E RANKING
-        // ==========================================
-        function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
-            return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
+        function toggleMesDropdown() {
+            const m = document.getElementById('menu-meses');
+            const s = document.getElementById('icone-seta');
+            m.classList.toggle('opacity-0'); 
+            m.classList.toggle('invisible'); 
+            m.classList.toggle('translate-y-2');
+            s.classList.toggle('rotate-180');
         }
 
-        // Escuta o Quadro de Pontos do Admin
+        function selecionarMes(el) {
+            mesAtualStr = el.innerText;
+            document.getElementById('texto-mes').innerText = mesAtualStr;
+            toggleMesDropdown();
+            renderizarRanking(); // Recalcula o ranking para o mês selecionado
+        }
+
+        // ==========================================
+        // SISTEMA DE RANKING (Escuta e Cálculo Automático)
+        // ==========================================
         db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
             if (doc.exists && doc.data().atividades) {
                 quadroPontosGlobal = doc.data().atividades;
@@ -442,10 +516,6 @@
                 recalcularRankingGlobal();
             }
         });
-
-        function formatarMesAno(data) {
-            return `${mesesNomes[data.getMonth()]} ${data.getFullYear()}`;
-        }
 
         function recalcularRankingGlobal() {
             db.collection("postagens").where("status", "==", "Aprovado").onSnapshot(snapshot => {
@@ -461,24 +531,25 @@
             });
         }
 
-        // A MÁGICA: Recriando o HTML Visual Original, mas com Dados do Banco
         function renderizarRanking() {
             const podiumContainer = document.getElementById('podium-container');
             const listContainer = document.getElementById('list-container');
             const listWrapper = document.getElementById('list-wrapper');
             const emptyRanking = document.getElementById('empty-ranking');
             
-            // 1. Filtrar pelo mês e Agregar pontos
             const postsFiltrados = postagensGlobal.filter(p => p.mesAnoStr === mesAtualStr);
             let mapaPontos = {};
+            
             postsFiltrados.forEach(post => {
-                const config = quadroPontosGlobal.find(q => q.nome === post.categoria);
-                const pontos = config ? config.pontos : 0;
+                let pts = post.pontosOverride;
+                if(pts === undefined) {
+                    const config = quadroPontosGlobal.find(q => q.nome === post.categoria);
+                    pts = config ? config.pontos : 0;
+                }
                 if(!mapaPontos[post.nick]) mapaPontos[post.nick] = 0;
-                mapaPontos[post.nick] += pontos;
+                mapaPontos[post.nick] += pts;
             });
 
-            // 2. Ordenar e Atribuir Posição
             let rankingArray = Object.keys(mapaPontos).map(nick => ({
                 nick: nick, pontos: mapaPontos[nick]
             })).sort((a, b) => b.pontos - a.pontos);
@@ -497,12 +568,11 @@
                 listWrapper.style.display = 'block';
             }
 
-            // 3. Renderizar Pódio (HTML IDÊNTICO AO ORIGINAL)
             let top3 = rankingArray.slice(0, 3);
             let ordemVisual = [];
-            if(top3.length > 1) ordemVisual.push(top3[1]); // 2º
-            if(top3.length > 0) ordemVisual.push(top3[0]); // 1º
-            if(top3.length > 2) ordemVisual.push(top3[2]); // 3º
+            if(top3.length > 1) ordemVisual.push(top3[1]); 
+            if(top3.length > 0) ordemVisual.push(top3[0]); 
+            if(top3.length > 2) ordemVisual.push(top3[2]); 
 
             ordemVisual.forEach(membro => {
                 let orderClass = membro.posicao === 1 ? "order-2" : membro.posicao === 2 ? "order-1" : "order-3";
@@ -534,7 +604,6 @@
                 `;
             });
 
-            // 4. Renderizar Resto da Tabela (HTML IDÊNTICO AO ORIGINAL)
             let listaGeral = rankingArray.slice(3);
             listaGeral.forEach(membro => {
                 listContainer.innerHTML += `
@@ -553,7 +622,6 @@
                 `;
             });
 
-            // Repara os scripts de UI para os novos elementos injetados
             VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 6, speed: 1200, glare: true, "max-glare": 0.1 });
             gsap.fromTo(".anim-podium", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out" });
         }
@@ -562,7 +630,7 @@
             const gridPostagem = document.getElementById('grade-dinamica-postagem');
             if(gridPostagem) {
                 gridPostagem.innerHTML = '';
-                atividades.forEach(ativ => {
+                [...atividades].sort((a,b)=>a.grupo.localeCompare(b.grupo)).forEach(ativ => {
                     let badgeClass = ativ.pontos > 0 ? 'point-plus' : 'point-minus';
                     let ptSinal = ativ.pontos > 0 ? `+${ativ.pontos}` : ativ.pontos;
                     gridPostagem.innerHTML += `
@@ -616,7 +684,7 @@
         }
 
         // ==========================================
-        // 4. LÓGICA DE INTERAÇÕES E MODAIS
+        // 4. CONTROLE DE MODAIS (UI)
         // ==========================================
         function toggleModal(id) {
             const modal = document.getElementById(id);
@@ -659,22 +727,31 @@
             }, 200);
         }
 
-        function toggleMesDropdown() {
-            const m = document.getElementById('menu-meses');
-            const s = document.getElementById('icone-seta');
-            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2');
-            s.classList.toggle('rotate-180');
-        }
-        function selecionarMes(el) {
-            mesAtualStr = el.innerText;
-            document.getElementById('texto-mes').innerText = mesAtualStr;
-            toggleMesDropdown();
-            renderizarRanking(); // Recalcula o ranking daquele mês
+        // ==========================================
+        // 5. MOTOR DE CADASTRO BLINDADO E LOGIN
+        // ==========================================
+        function realizarLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login-submit');
+            const feedback = document.getElementById('login-feedback');
+            const nick = document.getElementById('login-nick').value.trim();
+            const senha = document.getElementById('login-senha').value;
+            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
+
+            btn.disabled = true; 
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
+            feedback.classList.add('hidden');
+
+            auth.signInWithEmailAndPassword(emailFake, senha)
+                .then(() => { window.location.href = 'admin.html'; })
+                .catch(() => {
+                    btn.disabled = false; btn.innerHTML = 'Entrar no Painel';
+                    feedback.innerText = "Nick ou senha incorretos!";
+                    feedback.classList.remove('hidden'); feedback.classList.add('block');
+                });
         }
 
-        // ==========================================
-        // 5. FIREBASE: LOGIN E CADASTRO E POSTAGEM
-        // ==========================================
+        // A SOLUÇÃO DO USUÁRIO FANTASMA (Re-solicitação)
         function enviarCadastro(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-cadastro');
@@ -687,90 +764,110 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
             feedback.classList.add('hidden');
 
-            auth.createUserWithEmailAndPassword(emailFake, senha)
-                .then((userCredential) => {
-                    return db.collection("solicitacoes_acesso").doc(userCredential.user.uid).set({
-                        nick: nick, status: "Pendente", dataSolicitacao: firebase.firestore.FieldValue.serverTimestamp()
+            // Varredura de Segurança
+            db.collection("solicitacoes_acesso").where("nick", "==", nick).get().then(snap => {
+                if (!snap.empty) {
+                    const status = snap.docs[0].data().status;
+                    if (status === "Aprovado") {
+                        feedback.innerText = "Este usuário já possui acesso ativo ao painel.";
+                        feedback.className = "mt-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+                        btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
+                    } else if (status === "Pendente") {
+                        feedback.innerText = "Este Nick já possui uma solicitação em análise.";
+                        feedback.className = "mt-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+                        btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
+                    } else {
+                        // REJEITADO OU REVOGADO: Permitir nova chance
+                        auth.signInWithEmailAndPassword(emailFake, senha).then((userCred) => {
+                            db.collection("solicitacoes_acesso").doc(userCred.user.uid).update({
+                                status: "Pendente",
+                                dataSolicitacao: firebase.firestore.FieldValue.serverTimestamp()
+                            }).then(() => {
+                                auth.signOut();
+                                document.getElementById('form-cadastro').reset();
+                                btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
+                                switchView('feedback');
+                            });
+                        }).catch(err => {
+                            feedback.innerText = "Nick já registrado. Use a MESMA SENHA de antes para solicitar novamente.";
+                            feedback.className = "mt-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+                            btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
+                        });
+                    }
+                } else {
+                    // CONTA NOVA E LIMPA
+                    auth.createUserWithEmailAndPassword(emailFake, senha).then(res => {
+                        return db.collection("solicitacoes_acesso").doc(res.user.uid).set({
+                            nick: nick,
+                            status: "Pendente",
+                            role: "Convidado",
+                            dataSolicitacao: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }).then(() => {
+                        auth.signOut();
+                        document.getElementById('form-cadastro').reset();
+                        btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
+                        switchView('feedback');
+                    }).catch(err => {
+                        feedback.innerText = err.code === 'auth/weak-password' ? "A senha precisa ter no mínimo 6 caracteres." : "Erro no sistema: " + err.message;
+                        feedback.className = "mt-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+                        btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
                     });
-                })
-                .then(() => {
-                    auth.signOut();
-                    btn.innerHTML = 'Enviar Solicitação'; btn.disabled = false;
-                    document.getElementById('form-cadastro').reset();
-                    switchView('feedback'); 
-                })
-                .catch((error) => {
-                    btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
-                    if(error.code === 'auth/email-already-in-use') { feedback.innerText = "Este Nick já solicitou cadastro!"; } 
-                    else if(error.code === 'auth/weak-password') { feedback.innerText = "A senha deve ter pelo menos 6 caracteres."; } 
-                    else { feedback.innerText = "Erro ao solicitar: " + error.message; }
-                    feedback.classList.remove('hidden'); feedback.classList.add('block');
-                });
+                }
+            }).catch(err => {
+                feedback.innerText = "Erro de conexão com o servidor.";
+                feedback.className = "mt-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+                btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
+            });
         }
 
-        function realizarLogin(e) {
+        // ==========================================
+        // 6. ENVIO DE POSTAGENS E ANIMAÇÕES
+        // ==========================================
+        const formPostagem = document.getElementById('form-atividade');
+        const btnEnviarPost = document.getElementById('btn-enviar-form');
+        const feedbackPost = document.getElementById('feedback-form');
+
+        formPostagem.addEventListener('submit', function(e) {
             e.preventDefault();
-            const btn = document.getElementById('btn-login-submit');
-            const feedback = document.getElementById('login-feedback');
-            const nick = document.getElementById('login-nick').value.trim();
-            const senha = document.getElementById('login-senha').value;
-            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
-
-            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
-            feedback.classList.add('hidden');
-
-            auth.signInWithEmailAndPassword(emailFake, senha)
-                .then(() => { window.location.href = 'admin.html'; })
-                .catch(() => {
-                    btn.disabled = false; btn.innerHTML = 'Entrar no Painel';
-                    feedback.innerText = "Nick ou senha incorretos!";
-                    feedback.classList.remove('hidden'); feedback.classList.add('block');
-                });
-        }
-
-        const form = document.getElementById('form-atividade');
-        const btnEnviar = document.getElementById('btn-enviar-form');
-        const feedback = document.getElementById('feedback-form');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            btnEnviar.disabled = true;
-            btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+            btnEnviarPost.disabled = true;
+            btnEnviarPost.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
             
             const nickValue = document.getElementById('form-nick').value;
             const provaValue = document.getElementById('form-prova').value;
             const categoriaValue = document.getElementById('form-categoria-hidden').value;
 
             if(!categoriaValue) {
-                alert("Selecione uma atividade nos cartões!");
-                btnEnviar.disabled = false; btnEnviar.innerHTML = 'Enviar Postagem para Análise';
+                alert("Selecione uma atividade clicando em um dos cartões coloridos!");
+                btnEnviarPost.disabled = false; btnEnviarPost.innerHTML = 'Enviar Postagem para Análise';
                 return;
             }
 
             db.collection("postagens").add({
-                nick: nickValue, categoria: categoriaValue, prova: provaValue, status: "Pendente", dataEnvio: firebase.firestore.FieldValue.serverTimestamp()
+                nick: nickValue, 
+                categoria: categoriaValue, 
+                prova: provaValue, 
+                status: "Pendente", 
+                dataEnvio: firebase.firestore.FieldValue.serverTimestamp()
             })
             .then(() => {
-                feedback.innerText = "Sucesso! Postagem enviada para análise.";
-                feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
-                form.reset();
+                feedbackPost.innerText = "Sucesso! Postagem enviada para análise.";
+                feedbackPost.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
+                formPostagem.reset();
                 document.querySelectorAll('.js-activity-card').forEach(c => c.classList.remove('active'));
                 document.getElementById('form-categoria-hidden').value = "";
             })
             .catch(error => {
-                console.error("Erro ao enviar:", error);
-                feedback.innerText = "Erro ao enviar. Tente novamente.";
-                feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+                feedbackPost.innerText = "Erro ao enviar. Tente novamente.";
+                feedbackPost.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
             })
             .finally(() => {
-                btnEnviar.disabled = false;
-                btnEnviar.innerHTML = 'Enviar Postagem para Análise';
+                btnEnviarPost.disabled = false;
+                btnEnviarPost.innerHTML = 'Enviar Postagem para Análise';
             });
         });
 
-        // ==========================================
-        // 6. ANIMAÇÕES GSAP CARREGAMENTO INICIAL
-        // ==========================================
+        // Inicialização Visual
         window.addEventListener('DOMContentLoaded', () => {
             inicializarDropdownMeses();
             
