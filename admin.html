@@ -18,7 +18,7 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: { tre: { brand: '#D31522', brandHover: '#FA1C2A', bgPanel: 'rgba(20, 4, 5, 0.5)', glassNav: 'rgba(25, 3, 4, 0.85)' } },
-                    boxShadow: { 'vivid': '0 0 20px -5px rgba(211, 21, 34, 0.4)', 'gold': '0 0 30px -5px rgba(255, 215, 0, 0.3)' }
+                    boxShadow: { 'vivid': '0 0 20px -5px rgba(211, 21, 34, 0.4)', 'gold': '0 0 20px -2px rgba(255, 191, 0, 0.6)' }
                 }
             }
         }
@@ -33,29 +33,33 @@
         .nav-item { transition: all 0.3s; border-left: 3px solid transparent; }
         .nav-item.active { background: rgba(211, 21, 34, 0.1); border-left: 3px solid #D31522; color: white; }
         .nav-item:hover:not(.active) { background: rgba(255, 255, 255, 0.05); }
-        .vivid-perfil { transition: all 0.3s; transform-origin: center; cursor: pointer; }
+        
+        .vivid-perfil { transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); transform-origin: center; cursor: pointer; }
         .vivid-perfil:hover { background: rgba(211, 21, 34, 0.15); border-color: rgba(211, 21, 34, 0.3); box-shadow: theme('boxShadow.vivid'); transform: scale(1.02); }
-        .vivid-perfil img { transition: transform 0.5s; }
-        .vivid-perfil:hover img { transform: translateX(-50%) scale(1.15) !important; }
+        .vivid-perfil img.avatar-img { transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
+        .vivid-perfil:hover img.avatar-img { transform: translateX(-50%) scale(1.15) !important; }
+        
         .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
         .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: theme('colors.tre.brand'); outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
         .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 4px; }
         .point-emerald { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34D399; }
         .point-red { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #F87171; }
+        .point-amber { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #FBBF24; }
+        
         ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: #D31522; }
         #auth-loader { z-index: 9999; }
         
-        /* Ocultar elementos para visualizadores comuns */
-        body.role-admin .only-superadmin { display: none !important; }
+        /* Ocultar elementos para Convidados */
+        body.role-convidado .only-admin { display: none !important; }
     </style>
 </head>
-<body class="antialiased selection:bg-tre-brand flex h-screen role-admin">
+<body class="antialiased selection:bg-tre-brand flex h-screen role-convidado">
 
     <div id="auth-loader" class="fixed inset-0 bg-[#0A0102] flex flex-col items-center justify-center backdrop-blur-3xl transition-opacity duration-700">
         <img src="trelogo.png" alt="Logo TRE" class="h-16 mb-6 animate-pulse" onerror="this.src='https://via.placeholder.com/80x80/D31522/FFFFFF?text=TRE'">
-        <i class="fa-solid fa-user-shield text-4xl text-tre-brand mb-4"></i>
-        <h2 class="text-white font-black tracking-widest uppercase text-sm">Sincronizando Módulo Ministerial</h2>
-        <p class="text-white/40 text-xs mt-2" id="loader-text">Autenticando Nível de Acesso...</p>
+        <i class="fa-solid fa-shield-check text-4xl text-tre-brand mb-4"></i>
+        <h2 class="text-white font-black tracking-widest uppercase text-sm">Verificando Acesso</h2>
+        <p class="text-white/40 text-xs mt-2" id="loader-text">Aguarde um momento...</p>
     </div>
 
     <aside id="sidebar" class="glass-panel w-72 h-full flex flex-col fixed md:relative z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 border-r border-white/5">
@@ -80,9 +84,9 @@
                 <i class="fa-solid fa-user-lock w-5 text-center"></i> Registros de Acesso
             </button>
             <button onclick="switchTab('lista-admin', this)" class="nav-item w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
-                <i class="fa-solid fa-users-crown w-5 text-center"></i> Liderança & Equipe
+                <i class="fa-solid fa-users w-5 text-center"></i> Membros com Acesso
             </button>
-            <button onclick="switchTab('config', this)" class="nav-item only-superadmin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
+            <button onclick="switchTab('config', this)" class="nav-item only-admin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
                 <i class="fa-solid fa-sliders w-5 text-center text-amber-500"></i> Configurações Raiz
             </button>
         </nav>
@@ -90,7 +94,7 @@
         <div class="p-6 border-t border-white/5">
             <button onclick="abrirMeuPerfil()" class="w-full glass-card vivid-perfil p-4 flex items-center gap-3.5 mb-4 border border-white/10 hover:border-tre-brand/30 transition-all">
                 <div class="w-12 h-12 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
-                    <img id="sidebar-avatar" src="https://via.placeholder.com/80x80/0A0102/FFFFFF?text=???" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500">
+                    <img id="sidebar-avatar" src="https://via.placeholder.com/80x80/0A0102/FFFFFF?text=???" class="avatar-img absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500">
                 </div>
                 <div class="text-left w-full overflow-hidden">
                     <p class="text-sm font-black text-white group-hover:text-tre-brand truncate" id="admin-user-nick">...</p>
@@ -105,7 +109,6 @@
     </aside>
 
     <main class="flex-1 flex flex-col h-full relative overflow-hidden">
-        
         <header class="glass-panel h-16 flex items-center justify-between px-6 border-b border-white/5 md:hidden flex-shrink-0">
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebar()" class="text-white/70 hover:text-white"><i class="fa-solid fa-bars text-lg"></i></button>
@@ -115,12 +118,12 @@
             <a href="index.html" class="text-xs font-bold text-white/50 hover:text-tre-brand"><i class="fa-solid fa-house"></i> Site</a>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12 custom-scrollbar space-y-12 pb-32">
-            <a href="index.html" class="hidden md:inline-flex items-center gap-2 text-xs font-bold text-white/30 hover:text-white transition-colors uppercase tracking-widest mb-4">
+        <div class="flex-1 overflow-y-auto p-6 md:p-10 lg:p-12 custom-scrollbar space-y-12 pb-32 relative">
+            <a href="index.html" class="hidden md:inline-flex items-center gap-2 text-xs font-bold text-white/30 hover:text-white transition-colors uppercase tracking-widest mb-4 relative z-10">
                 <i class="fa-solid fa-arrow-left"></i> Voltar ao Site Principal
             </a>
 
-            <div id="tab-auditoria" class="tab-content block">
+            <div id="tab-auditoria" class="tab-content block relative z-10">
                 <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
@@ -129,7 +132,7 @@
                         <p class="text-white/40 text-xs md:text-sm">Postagens de atividades aguardando validação ministerial.</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <button onclick="abrirModalLancamentoManual()" class="only-superadmin bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-2.5 rounded-lg shadow-lg transition-all text-sm flex items-center gap-2">
+                        <button onclick="abrirModalLancamentoManual()" class="only-admin bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-2.5 rounded-lg shadow-lg transition-all text-sm flex items-center gap-2">
                             <i class="fa-solid fa-plus"></i> Lançamento Manual
                         </button>
                         <div class="glass-panel px-5 py-2.5 rounded-lg border border-amber-500/20 flex items-center gap-3.5">
@@ -148,17 +151,17 @@
                 </div>
             </div>
 
-            <div id="tab-historico" class="tab-content hidden opacity-0">
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
+            <div id="tab-historico" class="tab-content hidden opacity-0 relative z-[90]">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5 relative z-10">
                     <div>
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                             <i class="fa-solid fa-box-archive text-tre-brand"></i> Histórico Geral
                         </h2>
-                        <p class="text-white/40 text-xs md:text-sm">Arquivo de atividades da Companhia com controle total de edição.</p>
+                        <p class="text-white/40 text-xs md:text-sm">Arquivo de atividades com controle total de edição para Admins.</p>
                     </div>
                 </div>
 
-                <div class="glass-panel-simple p-5 flex flex-wrap items-center justify-between gap-4 mb-6 rounded-xl border border-white/5">
+                <div class="glass-panel-simple p-5 flex flex-wrap items-center justify-between gap-4 mb-6 rounded-xl border border-white/5 relative z-[100] overflow-visible">
                     <div class="relative">
                         <button id="btn-filter-mes" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white hover:text-white transition-colors border border-white/10">
                             <i class="fa-solid fa-calendar-alt text-amber-500"></i> <span id="texto-filter-mes">Carregando...</span> <i id="icone-filter-seta" class="fa-solid fa-chevron-down text-xs ml-1 opacity-40"></i>
@@ -172,7 +175,7 @@
                     </div>
                 </div>
 
-                <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl">
+                <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl relative z-10">
                     <div class="overflow-x-auto pb-2">
                         <table class="w-full text-left border-collapse min-w-full text-sm">
                             <thead class="bg-white/5 text-[10px] uppercase font-black tracking-widest text-white/40 border-b border-white/5">
@@ -181,8 +184,8 @@
                                     <th class="p-4">Atividade Registrada</th>
                                     <th class="p-4 text-center">Pontos</th>
                                     <th class="p-4 text-center">Status</th>
-                                    <th class="p-4">Responsável</th>
-                                    <th class="p-4 text-right only-superadmin">Controles</th>
+                                    <th class="p-4">Detalhes do Processo (Auditoria)</th>
+                                    <th class="p-4 text-right only-admin">Controles</th>
                                 </tr>
                             </thead>
                             <tbody id="table-historico-list"></tbody>
@@ -191,7 +194,7 @@
                 </div>
             </div>
 
-            <div id="tab-acessos" class="tab-content hidden opacity-0">
+            <div id="tab-acessos" class="tab-content hidden opacity-0 relative z-10">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
@@ -216,7 +219,7 @@
                                 <tr>
                                     <th class="p-4 px-6">Usuário</th>
                                     <th class="p-4 text-center">Status Histórico</th>
-                                    <th class="p-4">Cargo / Nível</th>
+                                    <th class="p-4">Nível Cadastrado</th>
                                     <th class="p-4">Data Registro</th>
                                 </tr>
                             </thead>
@@ -226,17 +229,26 @@
                 </div>
             </div>
 
-            <div id="tab-lista-admin" class="tab-content hidden opacity-0">
-                <div class="mb-8 pb-6 border-b border-white/5">
+            <div id="tab-lista-admin" class="tab-content hidden opacity-0 relative z-10">
+                <div class="mb-10 pb-6 border-b border-white/5">
                     <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
-                        <i class="fa-solid fa-users-crown text-tre-brand"></i> Liderança & Equipe
+                        <i class="fa-solid fa-users text-tre-brand"></i> Membros com Acesso
                     </h2>
-                    <p class="text-white/40 text-xs md:text-sm">Clique em um membro para visualizar informações ou gerenciar níveis de acesso.</p>
+                    <p class="text-white/40 text-xs md:text-sm">Lista de usuários cadastrados divididos por poder administrativo.</p>
                 </div>
-                <div id="grid-admin-list" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5"></div>
+
+                <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-widest mb-5 mt-2 flex items-center gap-3">
+                    <i class="fa-solid fa-star text-amber-500"></i> Administração (Ministério)
+                </h3>
+                <div id="grid-admin-list-admins" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16"></div>
+
+                <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-widest mb-5 flex items-center gap-3 border-t border-white/5 pt-10">
+                    <i class="fa-solid fa-user text-white/50"></i> Convidados (Leitura)
+                </h3>
+                <div id="grid-admin-list-convidados" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
             </div>
 
-            <div id="tab-config" class="tab-content hidden opacity-0 relative">
+            <div id="tab-config" class="tab-content hidden opacity-0 relative z-10">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
@@ -278,7 +290,7 @@
             <button onclick="toggleModal('modal-perfil')" class="absolute top-6 right-6 text-white/40 hover:text-tre-brand z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
             
             <div id="modal-perfil-title-container" class="w-full hidden">
-                <h2 class="text-xl font-black tracking-tight text-white uppercase mb-6 flex items-center gap-3 border-b border-white/10 pb-4 w-full">Ficha do Oficial</h2>
+                <h2 class="text-xl font-black tracking-tight text-white uppercase mb-6 flex items-center gap-3 border-b border-white/10 pb-4 w-full">Ficha do Membro</h2>
             </div>
 
             <div class="w-32 h-32 md:w-40 md:h-40 bg-[#0A0102] rounded-full overflow-hidden border-4 border-tre-brand relative mb-4 shadow-vivid flex-shrink-0">
@@ -293,14 +305,14 @@
                 <button id="btn-save-perfil" onclick="salvarDescricaoPerfil(event)" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl mt-2 text-xs transition-colors">Salvar Biografia</button>
             </div>
 
-            <div id="panel-superadmin-gerenciar" class="w-full border-t border-white/10 pt-6 mt-2 hidden">
-                <h4 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-3"><i class="fa-solid fa-shield-halved"></i> Controles de Diretor</h4>
+            <div id="panel-admin-gerenciar" class="w-full border-t border-white/10 pt-6 mt-2 hidden only-admin">
+                <h4 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-3"><i class="fa-solid fa-shield-halved"></i> Controles da Administração</h4>
                 <div class="flex gap-2">
                     <select id="select-mudar-cargo" class="flex-1 glass-input rounded-xl px-3 text-xs font-bold appearance-none cursor-pointer">
-                        <option value="SuperAdmin">Diretor (Acesso Total)</option>
-                        <option value="Admin">Visualizador (Acesso Restrito)</option>
+                        <option value="Admin">Admin (Acesso Total)</option>
+                        <option value="Convidado">Convidado (Leitura Restrita)</option>
                     </select>
-                    <button onclick="mudarCargoUsuario()" class="bg-amber-500/20 hover:bg-amber-500/40 text-amber-500 font-bold px-4 py-2.5 rounded-xl transition-colors text-xs border border-amber-500/30">Atualizar</button>
+                    <button onclick="mudarCargoUsuario()" class="bg-amber-500/20 hover:bg-amber-500/40 text-amber-500 font-bold px-4 py-2.5 rounded-xl transition-colors text-xs border border-amber-500/30">Atualizar Nível</button>
                 </div>
                 <button onclick="expulsarUsuario()" class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 font-bold py-2.5 rounded-xl mt-3 text-xs transition-all border border-red-500/20"><i class="fa-solid fa-ban"></i> Revogar Acesso / Expulsar</button>
             </div>
@@ -317,16 +329,12 @@
             <form id="form-admin-post" onsubmit="salvarLancamentoManual(event)" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nick Favorecido</label><input type="text" id="man-nick" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium"></div>
-                    <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Link (Opcional)</label><input type="text" id="man-prova" value="Isento pelo Diretor" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium"></div>
+                    <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Link (Opcional)</label><input type="text" id="man-prova" value="Isento pelo Ministério" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium"></div>
                 </div>
-                
                 <div class="space-y-1.5">
                     <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Atividade Prestada</label>
-                    <select id="man-categoria" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium appearance-none custom-scrollbar">
-                        <option value="">Carregando quadro de pontos...</option>
-                    </select>
+                    <select id="man-categoria" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium appearance-none custom-scrollbar"></select>
                 </div>
-
                 <div class="space-y-1.5">
                     <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Status Final do Lançamento</label>
                     <select id="man-status" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-bold text-emerald-400 bg-emerald-500/10 appearance-none">
@@ -334,7 +342,6 @@
                         <option value="Pendente" class="text-black">Pendente (Enviar p/ Auditoria)</option>
                     </select>
                 </div>
-
                 <button type="submit" id="btn-save-man" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 text-sm">Lançar no Sistema</button>
             </form>
         </div>
@@ -348,17 +355,14 @@
             
             <form id="form-edit-historico" onsubmit="salvarEdicaoHistorico(event)" class="space-y-4">
                 <input type="hidden" id="edith-id">
-                
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nick Original</label><input type="text" id="edith-nick" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium"></div>
-                    <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-emerald-400 ml-1">Pontos (Opcional)</label><input type="number" id="edith-pontos" placeholder="Forçar valor diferente" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-bold border-emerald-500/30 bg-emerald-500/5"></div>
+                    <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-emerald-400 ml-1">Pontos (Opcional)</label><input type="number" id="edith-pontos" placeholder="Forçar valor" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-bold border-emerald-500/30 bg-emerald-500/5"></div>
                 </div>
-                
                 <div class="space-y-1.5">
                     <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Alterar Atividade</label>
                     <select id="edith-categoria" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium appearance-none"></select>
                 </div>
-
                 <div class="space-y-1.5">
                     <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Alterar Status</label>
                     <select id="edith-status" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-bold appearance-none">
@@ -367,8 +371,7 @@
                         <option value="Pendente" class="text-black">Pendente (Voltar para Auditoria)</option>
                     </select>
                 </div>
-
-                <button type="submit" id="btn-save-edith" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 text-sm">Atualizar Registro Raiz</button>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 text-sm">Atualizar Registro</button>
             </form>
         </div>
     </div>
@@ -430,13 +433,13 @@
         const auth = firebase.auth();
 
         let currentUserNick = "USUARIO"; 
-        let currentUserRole = "Admin"; // Admin (Visualizador) ou SuperAdmin (Diretor)
+        let currentUserRole = "Convidado"; 
         let quadroPontosGlobal = []; 
 
         function getAvatarUrl(nick, size = 'l') { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=${size}`; }
 
         // ==========================================
-        // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA (RBAC)
+        // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA
         // ==========================================
         auth.onAuthStateChanged((user) => {
             const loader = document.getElementById('auth-loader');
@@ -444,22 +447,26 @@
                 db.collection("solicitacoes_acesso").doc(user.uid).get().then((doc) => {
                     if (doc.exists && doc.data().status === "Aprovado") {
                         currentUserNick = doc.data().nick || "Admin";
-                        // Truque de Engenharia: Se a conta for muito antiga e não tiver cargo, ganha SuperAdmin para não trancar o dono.
-                        currentUserRole = doc.data().role || "SuperAdmin"; 
                         
-                        // Garante que o banco seja atualizado com o cargo padrão se não tiver
-                        if(!doc.data().role) db.collection("solicitacoes_acesso").doc(user.uid).update({ role: currentUserRole });
+                        // Migração de termos de segurança e atribuição de cargo
+                        let rawRole = doc.data().role;
+                        if (rawRole === "SuperAdmin") currentUserRole = "Admin";
+                        else if (rawRole === "Admin" || !rawRole) currentUserRole = "Convidado";
+                        else currentUserRole = rawRole;
+
+                        // Salva no banco o novo padrão se necessário
+                        if(rawRole !== currentUserRole) db.collection("solicitacoes_acesso").doc(user.uid).update({ role: currentUserRole });
 
                         document.getElementById('admin-user-nick').innerText = currentUserNick.toUpperCase();
-                        document.getElementById('admin-user-role').innerText = currentUserRole === "SuperAdmin" ? "Diretor Supremo" : "Visualizador";
+                        document.getElementById('admin-user-role').innerText = currentUserRole === "Admin" ? "MINISTÉRIO (ADMIN)" : "CONVIDADO";
                         document.getElementById('sidebar-avatar').src = getAvatarUrl(currentUserNick, 'm');
                         
-                        aplicarPermissoesUI(); // Aplica a mágica da hierarquia
+                        aplicarPermissoesUI();
                         
                         gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
                         carregarConfiguracoesSistema(() => { iniciarEscutasGlobais(); });
                     } else {
-                        auth.signOut().then(() => { alert("Acesso Negado/Revogado."); window.location.href = 'index.html'; });
+                        auth.signOut().then(() => { alert("Acesso Negado ou Revogado."); window.location.href = 'index.html'; });
                     }
                 }).catch((error) => { auth.signOut().then(() => window.location.href = 'index.html'); });
             } else {
@@ -470,30 +477,16 @@
         function logout() { auth.signOut().then(() => { window.location.href = 'index.html'; }); }
 
         function aplicarPermissoesUI() {
-            // Se for Admin comum, a classe CSS "role-admin" no body vai esconder tudo que tem "only-superadmin".
-            // Se for SuperAdmin, nós removemos a classe e ele vê tudo.
-            if(currentUserRole === "SuperAdmin") {
-                document.body.classList.remove('role-admin');
-            } else {
-                document.body.classList.add('role-admin');
-            }
+            if(currentUserRole === "Admin") document.body.classList.remove('role-convidado');
+            else document.body.classList.add('role-convidado');
         }
-        function isSuperAdmin() { return currentUserRole === "SuperAdmin"; }
+        function isAdmin() { return currentUserRole === "Admin"; }
 
         // ==========================================
         // 3. UI E NAVEGAÇÃO
         // ==========================================
-        function toggleSidebar() {
-            const sb = document.getElementById('sidebar'), ov = document.getElementById('sidebar-overlay');
-            sb.classList.toggle('-translate-x-full'); ov.classList.toggle('hidden');
-        }
-
-        function toggleModal(id) {
-            const m = document.getElementById(id), c = m.querySelector('div.relative.transform');
-            if (m.classList.contains('opacity-0')) { m.classList.remove('opacity-0', 'invisible'); setTimeout(() => c.classList.replace('scale-95', 'scale-100'), 10); } 
-            else { c.classList.replace('scale-100', 'scale-95'); setTimeout(() => m.classList.add('opacity-0', 'invisible'), 200); }
-        }
-
+        function toggleSidebar() { const sb = document.getElementById('sidebar'), ov = document.getElementById('sidebar-overlay'); sb.classList.toggle('-translate-x-full'); ov.classList.toggle('hidden'); }
+        function toggleModal(id) { const m = document.getElementById(id), c = m.querySelector('div.relative.transform'); if (m.classList.contains('opacity-0')) { m.classList.remove('opacity-0', 'invisible'); setTimeout(() => c.classList.replace('scale-95', 'scale-100'), 10); } else { c.classList.replace('scale-100', 'scale-95'); setTimeout(() => m.classList.add('opacity-0', 'invisible'), 200); } }
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); btnElement.classList.add('active');
             document.querySelectorAll('.tab-content').forEach(el => { el.classList.add('hidden'); el.classList.remove('block'); el.classList.add('opacity-0'); });
@@ -503,11 +496,17 @@
         }
 
         // ==========================================
-        // 4. MOTOR DINÂMICO DE MESES 
+        // 4. MOTOR DINÂMICO DE MESES E DATA
         // ==========================================
         const mesesNomes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
         const dataAtualGlobal = new Date();
         let mesAtualStr = `${mesesNomes[dataAtualGlobal.getMonth()]} ${dataAtualGlobal.getFullYear()}`;
+
+        function formatarDataHora(fsTimestamp) {
+            if(!fsTimestamp) return '---';
+            const d = fsTimestamp.toDate();
+            return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')} às ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             const textoMesBtn = document.getElementById('texto-filter-mes'); const menuMeses = document.getElementById('menu-filter-meses');
@@ -523,32 +522,23 @@
 
         function toggleFilterDropdown() { const m = document.getElementById('menu-filter-meses'); const s = document.getElementById('icone-filter-seta'); m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2'); s.classList.toggle('rotate-180'); }
         function selecionarFilterMes(el) { mesAtualStr = el.innerText; document.getElementById('texto-filter-mes').innerText = mesAtualStr; toggleFilterDropdown(); carregarTabelaHistorico(); }
-        function filtrarHistoricoBusca() {
-            const t = document.getElementById('search-historico').value.toLowerCase();
-            document.querySelectorAll('#table-historico-list tr').forEach(r => { r.style.display = r.querySelector('.nick-cell').innerText.toLowerCase().includes(t) ? '' : 'none'; });
-        }
+        function filtrarHistoricoBusca() { const t = document.getElementById('search-historico').value.toLowerCase(); document.querySelectorAll('#table-historico-list tr').forEach(r => { r.style.display = r.querySelector('.nick-cell').innerText.toLowerCase().includes(t) ? '' : 'none'; }); }
 
         // ==========================================
-        // 5. CONFIGURAÇÕES (Quadro de Pontos e Selects)
+        // 5. CONFIGURAÇÕES (CRUD Raiz)
         // ==========================================
         function carregarConfiguracoesSistema(callback) {
             db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
                 if (doc.exists && doc.data().atividades) { quadroPontosGlobal = doc.data().atividades; } 
-                else { quadroPontosGlobal = [{ id: "cfg_1", nome: "Destaque Semanal", grupo: "Destaques", pontos: 4, responsavel: "LIDERANÇA" }]; db.collection("configuracoes").doc("quadro_pontos").set({ atividades: quadroPontosGlobal }); }
-                
-                renderizarTabelaConfig();
-                atualizarDropdownsDeAtividade(); // Alimenta os dropdowns de adição/edição manual
+                renderizarTabelaConfig(); atualizarDropdownsDeAtividade();
                 if(callback) callback(); 
             });
         }
-
         function atualizarDropdownsDeAtividade() {
             let html = '<option value="">Selecione uma atividade...</option>';
             [...quadroPontosGlobal].sort((a,b) => a.nome.localeCompare(b.nome)).forEach(a => html += `<option value="${a.nome}" class="text-black">${a.nome} (${a.pontos > 0 ? '+'+a.pontos : a.pontos})</option>`);
-            document.getElementById('man-categoria').innerHTML = html;
-            document.getElementById('edith-categoria').innerHTML = html;
+            document.getElementById('man-categoria').innerHTML = html; document.getElementById('edith-categoria').innerHTML = html;
         }
-
         function renderizarTabelaConfig() {
             const list = document.getElementById('table-config-list'); list.innerHTML = '';
             [...quadroPontosGlobal].sort((a, b) => a.grupo.localeCompare(b.grupo)).forEach(a => {
@@ -558,13 +548,10 @@
                     <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${a.nome}</td>
                     <td class="p-4 text-center"><span class="inline-flex items-center point-badge point-${cor}">${p}</span></td>
                     <td class="p-4 text-xs font-semibold uppercase">${a.responsavel}</td>
-                    <td class="p-4 text-right whitespace-nowrap">
-                        <button onclick="editarAtividadeConfig('${a.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="excluirAtividadeConfig('${a.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
-                    </td></tr>`;
+                    <td class="p-4 text-right whitespace-nowrap"><button onclick="editarAtividadeConfig('${a.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button><button onclick="excluirAtividadeConfig('${a.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>`;
             });
         }
-
         function abrirModalConfigAtividade() { document.getElementById('form-config-atividade').reset(); document.getElementById('config-id').value = ""; toggleModal('modal-config-atividade'); }
         function editarAtividadeConfig(id) { const a = quadroPontosGlobal.find(q => q.id === id); if(a) { document.getElementById('config-id').value = a.id; document.getElementById('config-nome').value = a.nome; document.getElementById('config-grupo').value = a.grupo; document.getElementById('config-pontos').value = a.pontos; document.getElementById('config-responsavel').value = a.responsavel; toggleModal('modal-config-atividade'); } }
         function salvarConfigAtividade(e) {
@@ -573,24 +560,24 @@
             let l = [...quadroPontosGlobal]; if(idInput) { const idx = l.findIndex(q => q.id === idInput); if(idx > -1) l[idx] = n; } else { l.push(n); }
             db.collection("configuracoes").doc("quadro_pontos").update({ atividades: l }).then(() => toggleModal('modal-config-atividade')).catch(err => alert("Erro ao salvar regra."));
         }
-        function excluirAtividadeConfig(id) { if(confirm("Excluir permanentemente do banco?")) db.collection("configuracoes").doc("quadro_pontos").update({ atividades: quadroPontosGlobal.filter(q => q.id !== id) }); }
+        function excluirAtividadeConfig(id) { if(confirm("Excluir permanentemente?")) db.collection("configuracoes").doc("quadro_pontos").update({ atividades: quadroPontosGlobal.filter(q => q.id !== id) }); }
 
         // ==========================================
-        // 6. DADOS GLOBAIS E AUDITORIA
+        // 6. ESCUTAS GLOBAIS E AUDITORIA
         // ==========================================
         function iniciarEscutasGlobais() {
-            // Auditoria
+            // Fila de Auditoria
             db.collection("postagens").where("status", "==", "Pendente").onSnapshot((snap) => {
                 const grid = document.getElementById('grid-atividades'); const empty = document.getElementById('empty-atividades');
                 document.getElementById('count-atividades').innerText = `${snap.size} Pendentes`; grid.innerHTML = ''; 
                 if (snap.empty) { empty.classList.replace('hidden', 'flex'); } else { empty.classList.replace('flex', 'hidden');
-                    snap.forEach((doc) => { const d = doc.data(); let dataStr = "Agora"; if(d.dataEnvio) { const dt = d.dataEnvio.toDate(); dataStr = `${dt.getDate()}/${dt.getMonth()+1} às ${dt.getHours()}:${String(dt.getMinutes()).padStart(2, '0')}`; }
+                    snap.forEach((doc) => { const d = doc.data();
                         grid.innerHTML += `<div class="glass-card p-5 flex flex-col h-full" id="card-${doc.id}">
-                            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5"><div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0"><img src="${getAvatarUrl(d.nick,'m')}" class="absolute -top-2 left-1/2 -translate-x-1/2"></div><div><h4 class="font-bold text-white tracking-wide">${d.nick}</h4><p class="text-[10px] text-white/40 uppercase tracking-widest"><i class="fa-regular fa-clock"></i> ${dataStr}</p></div></div>
+                            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5"><div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0"><img src="${getAvatarUrl(d.nick,'m')}" class="absolute -top-2 left-1/2 -translate-x-1/2"></div><div><h4 class="font-bold text-white tracking-wide">${d.nick}</h4><p class="text-[10px] text-white/40 uppercase tracking-widest"><i class="fa-regular fa-clock"></i> ${formatarDataHora(d.dataEnvio)}</p></div></div>
                             <div class="flex-grow mb-5"><span class="inline-block bg-white/5 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white/40 uppercase mb-2">Categoria</span><p class="text-sm font-semibold text-tre-brand leading-tight">${d.categoria}</p></div>
                             <div class="flex flex-col gap-2 mt-auto">
                                 <a href="${d.prova}" target="_blank" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-bold py-2.5 rounded-lg flex justify-center items-center gap-2"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Prova</a>
-                                <div class="flex gap-2">
+                                <div class="flex gap-2 only-admin">
                                     <button onclick="julgarDoc('${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg"><i class="fa-solid fa-check"></i> Aprovar</button>
                                     <button onclick="iniciarRejeicao('${doc.id}')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg"><i class="fa-solid fa-xmark"></i> Rejeitar</button>
                                 </div>
@@ -599,7 +586,7 @@
                 }
             });
 
-            // Fila de Acessos Pendentes
+            // Acessos Pendentes
             db.collection("solicitacoes_acesso").where("status", "==", "Pendente").onSnapshot((snap) => {
                 const grid = document.getElementById('grid-acessos'); const empty = document.getElementById('empty-acessos'); grid.innerHTML = '';
                 if (snap.empty) { empty.classList.replace('hidden', 'flex'); } else { empty.classList.replace('flex', 'hidden');
@@ -607,7 +594,7 @@
                         grid.innerHTML += `<div class="glass-card p-5 flex flex-col h-full" id="card-${doc.id}">
                             <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5"><div class="w-10 h-10 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0"><img src="${getAvatarUrl(d.nick,'m')}" class="absolute -top-2 left-1/2 -translate-x-1/2"></div><h4 class="font-bold text-white tracking-wide">${d.nick}</h4></div>
                             <p class="text-sm text-white/70 mb-5 flex-grow">Solicitou acesso restrito.</p>
-                            <div class="flex gap-2 mt-auto">
+                            <div class="flex gap-2 mt-auto only-admin">
                                 <button onclick="julgarAcesso('${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg">Liberar</button>
                                 <button onclick="julgarAcesso('${doc.id}', 'Rejeitado')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg">Negar</button>
                             </div></div>`;
@@ -620,21 +607,36 @@
                 const tb = document.getElementById('table-acessos-historico'); tb.innerHTML = '';
                 let hist = []; snap.forEach(doc => hist.push(doc.data()));
                 hist.sort((a,b) => b.dataSolicitacao?.toDate() - a.dataSolicitacao?.toDate()).forEach(d => {
-                    let dt = d.dataSolicitacao ? d.dataSolicitacao.toDate().toLocaleDateString() : 'N/A';
+                    let dt = formatarDataHora(d.dataSolicitacao);
                     let st = d.status === 'Aprovado' ? 'emerald' : d.status === 'Rejeitado' || d.status === 'Revogado' ? 'red' : 'amber';
-                    let crg = d.role === "SuperAdmin" ? "Diretor" : d.role === "Admin" ? "Visualizador" : "---";
-                    tb.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 text-white/80"><td class="p-4 px-6 font-bold flex items-center gap-3"><img src="${getAvatarUrl(d.nick,'s')}" class="w-6 h-6 rounded-full">${d.nick}</td><td class="p-4 text-center"><span class="point-badge point-${st}">${d.status}</span></td><td class="p-4 text-xs">${crg}</td><td class="p-4 text-[10px] font-mono opacity-50">${dt}</td></tr>`;
+                    let crg = d.role === "Admin" ? "Ministério (Admin)" : d.role === "Convidado" ? "Convidado" : "---";
+                    tb.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 text-white/80"><td class="p-4 px-6 font-bold flex items-center gap-3"><img src="${getAvatarUrl(d.nick,'s')}" class="w-6 h-6 rounded-full">${d.nick}</td><td class="p-4 text-center"><span class="point-badge point-${st}">${d.status}</span></td><td class="p-4 text-xs font-semibold">${crg}</td><td class="p-4 text-[10px] font-mono opacity-50">${dt}</td></tr>`;
                 });
             });
 
-            // Lista Liderança Ativa
+            // Lista Liderança (Admins e Convidados)
             db.collection("solicitacoes_acesso").where("status", "==", "Aprovado").onSnapshot((snap) => {
-                const grid = document.getElementById('grid-admin-list'); grid.innerHTML = '';
-                snap.forEach((doc) => { const d = doc.data();
-                    let stLogo = d.role === "SuperAdmin" ? '<i class="fa-solid fa-star text-amber-500 absolute -top-1 -right-1 text-[10px] bg-[#0A0102] rounded-full p-0.5 border border-amber-500/30 shadow-vivid"></i>' : '';
-                    grid.innerHTML += `<button onclick="abrirPerfil('${doc.id}')" class="vivid-perfil h-24 glass-card p-3 flex flex-col items-center justify-center text-center gap-2 border border-white/5 group">
-                        <div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">${stLogo}<img src="${getAvatarUrl(d.nick,'m')}" class="absolute -top-1 left-1/2 -translate-x-1/2"></div>
-                        <p class="text-[11px] font-black text-white group-hover:text-tre-brand truncate w-full">${d.nick}</p></button>`;
+                const gridAdmins = document.getElementById('grid-admin-list-admins'); gridAdmins.innerHTML = '';
+                const gridConvidados = document.getElementById('grid-admin-list-convidados'); gridConvidados.innerHTML = '';
+                
+                snap.forEach((doc) => { 
+                    const d = doc.data();
+                    let stLogo = d.role === "Admin" ? '<i class="fa-solid fa-star text-amber-500 absolute -top-2 -right-2 text-sm bg-[#0A0102] rounded-full p-1 border border-amber-500/50 shadow-vivid z-10"></i>' : '';
+                    let isAdm = d.role === "Admin";
+                    let cardHtml = `<button onclick="abrirPerfil('${doc.id}')" class="vivid-perfil h-32 glass-card p-4 flex flex-col items-center justify-center text-center gap-3 border border-white/5 group">
+                        <div class="relative w-16 h-16 flex-shrink-0">
+                            <div class="w-full h-full rounded-full bg-[#0A0102] border border-white/10 group-hover:border-tre-brand overflow-hidden relative z-0">
+                                <img src="${getAvatarUrl(d.nick,'m')}" class="avatar-img absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500 w-14">
+                            </div>
+                            ${stLogo}
+                        </div>
+                        <div class="w-full">
+                            <p class="text-sm font-black text-white group-hover:text-tre-brand truncate w-full">${d.nick}</p>
+                            <p class="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">${isAdm ? 'Ministério' : 'Convidado'}</p>
+                        </div>
+                    </button>`;
+
+                    if(isAdm) gridAdmins.innerHTML += cardHtml; else gridConvidados.innerHTML += cardHtml;
                 });
             });
 
@@ -650,22 +652,21 @@
         function iniciarRejeicao(id) { document.getElementById('form-reject-docId').value = id; document.getElementById('reject-motivo').value = ''; toggleModal('modal-reject-atividades'); }
         function confirmarRejeicaoPostagem(e) {
             e.preventDefault(); const id = document.getElementById('form-reject-docId').value; const m = document.getElementById('reject-motivo').value.trim();
-            if(!m) { alert("Motivo é obrigatório."); return; } toggleModal('modal-reject-atividades');
+            if(!m) { alert("Motivo obrigatório."); return; } toggleModal('modal-reject-atividades');
             db.collection("postagens").doc(id).update({ status: "Rejeitado", motivoRejeicao: m, dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(), julgadoPor: currentUserNick });
         }
 
-        // NOVO: Lançamento Manual do Admin
         function abrirModalLancamentoManual() { document.getElementById('form-admin-post').reset(); toggleModal('modal-admin-post'); }
         function salvarLancamentoManual(e) {
             e.preventDefault(); const n = document.getElementById('man-nick').value.trim(); const p = document.getElementById('man-prova').value; const c = document.getElementById('man-categoria').value; const s = document.getElementById('man-status').value;
             if(!c) { alert("Escolha a atividade"); return; }
             const docData = { nick: n, categoria: c, prova: p, status: s, dataEnvio: firebase.firestore.FieldValue.serverTimestamp() };
-            if(s === "Aprovado") { docData.dataJulgamento = firebase.firestore.FieldValue.serverTimestamp(); docData.julgadoPor = "Lançado p/ " + currentUserNick; }
+            if(s === "Aprovado") { docData.dataJulgamento = firebase.firestore.FieldValue.serverTimestamp(); docData.julgadoPor = currentUserNick + " (Manual)"; }
             db.collection("postagens").add(docData).then(()=> { toggleModal('modal-admin-post'); alert("Lançamento efetuado!"); });
         }
 
-        // NOVO: Gestão de CRUD do Histórico (Edit / Delete)
-        function apagarHistorico(id) { if(confirm("ALERTA: Essa postagem sumirá do ranking. Confirmar exclusão permanente?")) db.collection("postagens").doc(id).delete(); }
+        // Edição de Histórico (Carimbo de Edição Adicionado)
+        function apagarHistorico(id) { if(confirm("ALERTA: Essa postagem sumirá do ranking. Confirmar exclusão?")) db.collection("postagens").doc(id).delete(); }
         function iniciarEdicaoHistorico(id) {
             db.collection("postagens").doc(id).get().then(doc => {
                 const d = doc.data(); document.getElementById('edith-id').value = id; document.getElementById('edith-nick').value = d.nick; document.getElementById('edith-categoria').value = d.categoria; document.getElementById('edith-status').value = d.status; document.getElementById('edith-pontos').value = d.pontosOverride || ""; toggleModal('modal-edit-historico');
@@ -673,16 +674,16 @@
         }
         function salvarEdicaoHistorico(e) {
             e.preventDefault(); const id = document.getElementById('edith-id').value; const pts = document.getElementById('edith-pontos').value;
-            const update = { nick: document.getElementById('edith-nick').value, categoria: document.getElementById('edith-categoria').value, status: document.getElementById('edith-status').value, julgadoPor: "Editado p/ " + currentUserNick };
-            if(pts !== "") update.pontosOverride = parseInt(pts); else update.pontosOverride = firebase.firestore.FieldValue.delete(); // Remove o override se vazio
+            const update = { nick: document.getElementById('edith-nick').value, categoria: document.getElementById('edith-categoria').value, status: document.getElementById('edith-status').value, editadoPor: currentUserNick, dataEdicao: firebase.firestore.FieldValue.serverTimestamp() };
+            if(pts !== "") update.pontosOverride = parseInt(pts); else update.pontosOverride = firebase.firestore.FieldValue.delete();
             db.collection("postagens").doc(id).update(update).then(()=> { toggleModal('modal-edit-historico'); alert("Registro Atualizado."); });
         }
 
         // ==========================================
-        // 8. RENDERIZAÇÃO DO HISTÓRICO GERAL
+        // 8. RENDERIZAÇÃO DO HISTÓRICO GERAL 
         // ==========================================
         function carregarTabelaHistorico() {
-            const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...</td></tr>';
+            const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando Banco de Dados...</td></tr>';
             db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado", "Pendente"]).onSnapshot((snap) => {
                 let filtrados = []; snap.forEach(doc => { const d = doc.data(); d.id = doc.id; if(d.dataEnvio || d.dataJulgamento) { let t = d.dataJulgamento || d.dataEnvio; d.mesAnoStr = `${mesesNomes[t.toDate().getMonth()]} ${t.toDate().getFullYear()}`; filtrados.push(d); } });
                 filtrados = filtrados.filter(p => p.mesAnoStr === mesAtualStr).sort((a, b) => (b.dataJulgamento||b.dataEnvio).toDate() - (a.dataJulgamento||a.dataEnvio).toDate());
@@ -690,7 +691,8 @@
                 if(filtrados.length === 0) { list.innerHTML = '<tr><td colspan="6" class="p-10 text-center opacity-40">Mês sem registros.</td></tr>'; return; }
                 
                 filtrados.forEach(d => {
-                    let ds = d.dataJulgamento ? d.dataJulgamento.toDate().toLocaleDateString() : 'Na Fila';
+                    let envStr = formatarDataHora(d.dataEnvio); let julgStr = formatarDataHora(d.dataJulgamento); let edStr = formatarDataHora(d.dataEdicao);
+                    
                     let pts = "-"; 
                     if(d.status === "Aprovado") {
                         if(d.pontosOverride !== undefined) pts = d.pontosOverride > 0 ? `+${d.pontosOverride}` : d.pontosOverride;
@@ -698,28 +700,30 @@
                     } else if (d.status === "Rejeitado") pts = "0";
                     let stCl = d.status === "Aprovado" ? "emerald" : d.status === "Rejeitado" ? "red" : "amber"; let ic = d.status === "Aprovado" ? "check" : d.status === "Rejeitado" ? "xmark" : "clock";
                     
-                    // Exibição condicional dos botões dependendo da Rule
-                    let btns = isSuperAdmin() ? `
-                        <button onclick="iniciarEdicaoHistorico('${d.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="apagarHistorico('${d.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
-                    ` : `<span class="text-[9px] opacity-20 uppercase tracking-widest block text-center pt-2">Restrito</span>`;
+                    // Coluna Detalhes do Processo (Carimbos de Auditoria)
+                    let detalhesProcesso = `<div class="space-y-1.5 min-w-[220px]">
+                        <p class="text-white/70"><i class="fa-solid fa-paper-plane text-white/20 w-4"></i> Enviado: <span class="font-mono text-[10px] text-white/50 ml-1">${envStr}</span></p>
+                        ${d.status !== 'Pendente' ? `<p class="text-white/70"><i class="fa-solid fa-gavel text-amber-500/50 w-4"></i> Análise: <span class="font-bold text-white">${d.julgadoPor || 'Sistema'}</span> <span class="font-mono text-[10px] text-white/50 ml-1">(${julgStr})</span></p>` : ''}
+                        ${d.editadoPor ? `<p class="text-emerald-400/90"><i class="fa-solid fa-pen text-emerald-400/50 w-4"></i> Editado: <span class="font-bold">${d.editadoPor}</span> <span class="font-mono text-[10px] text-emerald-400/60 ml-1">(${edStr})</span></p>` : ''}
+                    </div>`;
+
+                    let btns = `<button onclick="iniciarEdicaoHistorico('${d.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button><button onclick="apagarHistorico('${d.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>`;
 
                     list.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 text-white/80 filter-row">
-                        <td class="p-4 px-6 font-bold nick-cell flex items-center gap-3"><img src="${getAvatarUrl(d.nick,'s')}" class="w-6 h-6 rounded-full"> ${d.nick}</td>
+                        <td class="p-4 px-6 font-bold nick-cell flex items-center gap-3"><img src="${getAvatarUrl(d.nick,'s')}" class="w-6 h-6 rounded-full bg-black/40"> ${d.nick}</td>
                         <td class="p-4 font-semibold text-tre-brand">${d.categoria}</td>
                         <td class="p-4 text-center font-black text-lg text-${stCl}-400">${pts}</td>
                         <td class="p-4 text-center"><span class="point-badge point-${stCl} text-${stCl}-400"><i class="fa-solid fa-${ic}"></i> ${d.status}</span></td>
-                        <td class="p-4 text-xs font-semibold">${d.julgadoPor || '---'}${d.pontosOverride!==undefined ? '<br><span class="text-[9px] text-amber-500">Forçado</span>':''}</td>
-                        <td class="p-4 text-right only-superadmin">${btns}</td>
+                        <td class="p-4 text-xs font-medium">${detalhesProcesso}</td>
+                        <td class="p-4 text-right only-admin">${btns}</td>
                     </tr>`;
                 });
-                filtrarHistoricoBusca();
-                aplicarPermissoesUI(); // Reforça as regras de css pra esconder as td's
+                filtrarHistoricoBusca(); aplicarPermissoesUI();
             });
         }
 
         // ==========================================
-        // 9. GESTÃO DE PERFIL E HIERARQUIA
+        // 9. GESTÃO DE PERFIL
         // ==========================================
         function abrirMeuPerfil() { abrirPerfil(auth.currentUser.uid); }
         function abrirPerfil(uid) {
@@ -727,16 +731,16 @@
                 const d = doc.data();
                 document.getElementById('modal-perfil-nick').innerText = d.nick; document.getElementById('modal-avatar').src = getAvatarUrl(d.nick, 'l');
                 const bdg = document.getElementById('modal-perfil-cargo-badge');
-                bdg.innerText = d.role === "SuperAdmin" ? "DIRETOR SUPREMO" : "VISUALIZADOR";
-                bdg.className = d.role === "SuperAdmin" ? "bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6" : "bg-white/10 text-white/60 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6";
+                bdg.innerText = d.role === "Admin" ? "ADMINISTRAÇÃO (Ministério)" : "CONVIDADO (Leitura)";
+                bdg.className = d.role === "Admin" ? "bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6" : "bg-white/10 text-white/60 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6";
                 const txt = document.getElementById('perfil-descricao'); txt.value = d.descricao || "";
                 document.getElementById('modal-perfil-uid').value = uid;
 
-                if (uid === auth.currentUser.uid) { // É você mesmo
-                    txt.readOnly = false; document.getElementById('btn-save-perfil').classList.remove('hidden'); document.getElementById('modal-perfil-title-container').classList.add('hidden'); document.getElementById('panel-superadmin-gerenciar').classList.add('hidden');
-                } else { // Vendo terceiro
+                if (uid === auth.currentUser.uid) {
+                    txt.readOnly = false; document.getElementById('btn-save-perfil').classList.remove('hidden'); document.getElementById('modal-perfil-title-container').classList.add('hidden'); document.getElementById('panel-admin-gerenciar').classList.add('hidden');
+                } else {
                     txt.readOnly = true; document.getElementById('btn-save-perfil').classList.add('hidden'); document.getElementById('modal-perfil-title-container').classList.remove('hidden');
-                    if (isSuperAdmin()) { document.getElementById('panel-superadmin-gerenciar').classList.remove('hidden'); document.getElementById('select-mudar-cargo').value = d.role || "Admin"; } else { document.getElementById('panel-superadmin-gerenciar').classList.add('hidden'); }
+                    if (isAdmin()) { document.getElementById('panel-admin-gerenciar').classList.remove('hidden'); document.getElementById('select-mudar-cargo').value = d.role || "Convidado"; } else { document.getElementById('panel-admin-gerenciar').classList.add('hidden'); }
                 }
                 toggleModal('modal-perfil');
             });
@@ -747,16 +751,14 @@
             db.collection("solicitacoes_acesso").doc(auth.currentUser.uid).update({ descricao: t }).then(()=> { toggleModal('modal-perfil'); alert("Salvo."); });
         }
 
-        // Funções de SuperAdmin
         function mudarCargoUsuario() {
             const uid = document.getElementById('modal-perfil-uid').value; const r = document.getElementById('select-mudar-cargo').value;
-            db.collection("solicitacoes_acesso").doc(uid).update({ role: r }).then(()=> { toggleModal('modal-perfil'); alert("Cargo Atualizado."); });
+            db.collection("solicitacoes_acesso").doc(uid).update({ role: r }).then(()=> { toggleModal('modal-perfil'); alert("Nível Atualizado."); });
         }
         function expulsarUsuario() {
             const uid = document.getElementById('modal-perfil-uid').value;
-            if(confirm("Expulsar membro? Ele perderá acesso ao painel instantaneamente.")) { db.collection("solicitacoes_acesso").doc(uid).update({ status: "Revogado", role: "---" }).then(()=> { toggleModal('modal-perfil'); alert("Membro Expulso."); }); }
+            if(confirm("Revogar credencial? O membro perderá acesso total imediatamente.")) { db.collection("solicitacoes_acesso").doc(uid).update({ status: "Revogado", role: "---" }).then(()=> { toggleModal('modal-perfil'); alert("Acesso Revogado."); }); }
         }
-
     </script>
 </body>
 </html>
