@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transparência | Ministério RCC</title>
+    
+    <link rel="icon" type="image/png" href="logotre.png?v=2">
+    <link rel="apple-touch-icon" href="logotre.png?v=2">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { tre: { brand: '#D31522', brandHover: '#FA1C2A', bgPanel: 'rgba(20, 4, 5, 0.5)', glassNav: 'rgba(25, 3, 4, 0.85)' } },
+                    boxShadow: { '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.5)', 'nav': '0 10px 40px -10px rgba(0, 0, 0, 0.7)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: #0A0102;
+            background-image: radial-gradient(circle at top center, #35060A 0%, #0A0102 90%);
+            color: #FFFFFF; min-height: 100vh; background-attachment: fixed; font-size: 15px; overflow-x: hidden;
+        }
+        .glass-navbar { background: theme('colors.tre.glassNav'); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .glass-panel-simple { background: theme('colors.tre.bgPanel'); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.06); }
+        .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
+        .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: theme('colors.tre.brand'); outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
+        .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 4px; letter-spacing: -0.02em; }
+        .point-plus { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .point-minus { background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0102; }
+        ::-webkit-scrollbar-thumb { background: #D31522; border-radius: 3px; }
+    </style>
+</head>
+<body class="antialiased selection:bg-tre-brand selection:text-white flex flex-col">
+
+    <header class="sticky top-0 z-50 w-full glass-navbar shadow-nav opacity-0" id="anim-header">
+        <div class="container mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4 md:gap-10">
+                <a href="index.html" class="flex items-center hover:opacity-80 transition-opacity">
+                    <img src="trelogo.png" alt="Logo" class="h-8 md:h-12 object-contain" onerror="this.src='https://via.placeholder.com/150x50/D31522/FFFFFF?text=LOGO'">
+                </a>
+            </div>
+            <div>
+                <a href="index.html" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao Início
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 md:px-6 py-10 opacity-0" id="anim-content">
+        <div class="mb-10 text-center md:text-left pb-6 border-b border-white/5">
+            <h1 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-2 flex items-center justify-center md:justify-start gap-4">
+                <i class="fa-solid fa-magnifying-glass-chart text-emerald-500"></i> Portal de Transparência
+            </h1>
+            <p class="text-white/40 text-xs md:text-sm">Histórico público e auditável de todas as postagens julgadas pela Liderança.</p>
+        </div>
+
+        <div class="glass-panel-simple p-5 flex flex-wrap items-center justify-between gap-4 mb-8 rounded-xl relative z-20">
+            <div class="relative">
+                <button id="btn-filter-mes" onclick="toggleDropdown()" class="glass-panel-simple !bg-white/5 px-4 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white cursor-pointer focus:outline-none hover:text-white transition-colors">
+                    <i class="fa-solid fa-calendar-alt text-amber-500"></i> 
+                    <span id="texto-filter-mes">Abril 2026</span> 
+                    <i id="icone-filter-seta" class="fa-solid fa-chevron-down text-xs ml-1 text-white/40 transition-transform duration-300"></i>
+                </button>
+                <div id="menu-filter-meses" class="absolute left-0 top-full mt-2 w-48 glass-panel-simple !bg-[#0A0102]/95 rounded-lg opacity-0 invisible translate-y-2 transition-all duration-300 overflow-hidden flex flex-col text-sm shadow-2xl z-50">
+                    <button onclick="selecionarMes(this)" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Abril 2026</button>
+                    <button onclick="selecionarMes(this)" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Maio 2026</button>
+                </div>
+            </div>
+
+            <div class="relative w-full md:w-72">
+                <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
+                <input type="text" id="search-input" onkeyup="filtrarTabela()" placeholder="Buscar por Nick do Policial..." class="w-full glass-input rounded-lg pl-11 pr-4 py-2.5 text-sm font-medium">
+            </div>
+        </div>
+
+        <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl">
+            <div class="overflow-x-auto pb-2">
+                <table class="w-full text-left border-collapse min-w-full text-sm">
+                    <thead class="bg-white/5 text-[10px] uppercase font-black tracking-widest text-white/40 border-b border-white/5">
+                        <tr>
+                            <th class="p-4 px-6">Nick</th>
+                            <th class="p-4">Atividade Avaliada</th>
+                            <th class="p-4 text-center">Pontos</th>
+                            <th class="p-4 text-center">Status</th>
+                            <th class="p-4">Julgado Por</th>
+                            <th class="p-4">Data Julgamento</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr><td colspan="6" class="p-10 text-center text-white/30"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Carregando banco de dados...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center mt-4 glass-panel-simple rounded-2xl border-dashed border-2 border-white/5">
+            <i class="fa-solid fa-folder-open text-4xl text-white/20 mb-4"></i>
+            <h3 class="text-lg font-bold text-white/50">Nenhum registro encontrado</h3>
+            <p class="text-sm text-white/30 mt-1">Tente selecionar outro mês ou verificar a digitação.</p>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0", authDomain: "tre-ranking.firebaseapp.com", projectId: "tre-ranking", storageBucket: "tre-ranking.firebasestorage.app", messagingSenderId: "1008986456536", appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let quadroPontos = [];
+        let postagensGlobal = [];
+        let mesAtualStr = "Abril 2026";
+
+        function getAvatarUrl(nick) { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=m`; }
+
+        // Inicializa buscando as configurações de pontos, e depois busca os posts
+        db.collection("configuracoes").doc("quadro_pontos").get().then(doc => {
+            if (doc.exists && doc.data().atividades) quadroPontos = doc.data().atividades;
+            carregarDadosDoFirebase();
+        });
+
+        function formatarMesAno(data) {
+            const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            return `${meses[data.getMonth()]} ${data.getFullYear()}`;
+        }
+
+        function carregarDadosDoFirebase() {
+            db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado"]).onSnapshot(snapshot => {
+                postagensGlobal = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if(data.dataJulgamento) {
+                        data.mesAnoStr = formatarMesAno(data.dataJulgamento.toDate());
+                        postagensGlobal.push(data);
+                    }
+                });
+                renderizarTabela();
+            });
+        }
+
+        function renderizarTabela() {
+            const list = document.getElementById('table-body');
+            const empty = document.getElementById('empty-state');
+            list.innerHTML = '';
+            
+            // Filtra pelo mês atual da UI
+            const postsFiltrados = postagensGlobal.filter(p => p.mesAnoStr === mesAtualStr);
+
+            if(postsFiltrados.length === 0) {
+                empty.classList.remove('hidden'); empty.classList.add('flex'); return;
+            } else {
+                empty.classList.add('hidden'); empty.classList.remove('flex');
+            }
+
+            // Ordena do mais recente para o mais antigo
+            postsFiltrados.sort((a, b) => b.dataJulgamento.toDate() - a.dataJulgamento.toDate());
+
+            postsFiltrados.forEach(data => {
+                let dataJulgStr = `${data.dataJulgamento.toDate().getDate()}/${data.dataJulgamento.toDate().getMonth()+1}/${data.dataJulgamento.toDate().getFullYear()}`;
+                
+                let pontosCalculados = "-";
+                if (data.status === "Aprovado") {
+                    const ativConfig = quadroPontos.find(q => q.nome === data.categoria);
+                    pontosCalculados = ativConfig ? (ativConfig.pontos > 0 ? `+${ativConfig.pontos}` : ativConfig.pontos) : "??";
+                } else if (data.status === "Rejeitado") { pontosCalculados = "0"; }
+
+                let statusClass = data.status === "Aprovado" ? "emerald" : "red";
+                let statusIcon = data.status === "Aprovado" ? "check" : "xmark";
+                let motivoTd = data.motivoRejeicao ? `<br><span class="text-[10px] text-white/40">Motivo: ${data.motivoRejeicao}</span>` : "";
+
+                list.innerHTML += `
+                    <tr class="group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default text-white/80 filter-row">
+                        <td class="p-4 px-6 flex items-center gap-3 font-bold group-hover:text-white truncate nick-cell">
+                            <div class="w-8 h-8 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors"><img src="${getAvatarUrl(data.nick)}" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500 group-hover:scale-110"></div>
+                            ${data.nick}
+                        </td>
+                        <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${data.categoria}</td>
+                        <td class="p-4 text-center font-black text-lg text-${statusClass}-500">${pontosCalculados}</td>
+                        <td class="p-4 text-center"><span class="inline-flex items-center gap-1.5 point-badge point-${statusClass} text-${statusClass}-400"><i class="fa-solid fa-${statusIcon}"></i> ${data.status}</span></td>
+                        <td class="p-4 text-xs font-semibold whitespace-nowrap">${data.julgadoPor || 'Sistema'}${motivoTd}</td>
+                        <td class="p-4 text-white/50 text-[11px] font-mono whitespace-nowrap">${dataJulgStr}</td>
+                    </tr>`;
+            });
+            filtrarTabela(); // Reaplica pesquisa em texto se houver
+        }
+
+        // Filtro de Texto (Motor de Busca Nativo)
+        function filtrarTabela() {
+            const termo = document.getElementById('search-input').value.toLowerCase();
+            const linhas = document.querySelectorAll('.filter-row');
+            let mostrouAlgum = false;
+            linhas.forEach(linha => {
+                const nick = linha.querySelector('.nick-cell').innerText.toLowerCase();
+                if (nick.includes(termo)) { linha.style.display = ''; mostrouAlgum = true; } else { linha.style.display = 'none'; }
+            });
+            const empty = document.getElementById('empty-state');
+            if(!mostrouAlgum && linhas.length > 0 && termo !== "") { empty.classList.remove('hidden'); empty.classList.add('flex'); } 
+            else if (mostrouAlgum) { empty.classList.add('hidden'); empty.classList.remove('flex'); }
+        }
+
+        // Interação Dropdown Mês
+        function toggleDropdown() {
+            const m = document.getElementById('menu-filter-meses'); const s = document.getElementById('icone-filter-seta');
+            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2'); s.classList.toggle('rotate-180');
+        }
+        function selecionarMes(el) {
+            mesAtualStr = el.innerText;
+            document.getElementById('texto-filter-mes').innerText = mesAtualStr;
+            toggleDropdown();
+            renderizarTabela(); // Recalcula a tabela pro novo mês
+        }
+
+        window.addEventListener('load', () => {
+            gsap.to("#anim-header", { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" });
+            gsap.to("#anim-content", { y: 0, opacity: 1, duration: 0.9, ease: "expo.out", delay: 0.2 });
+        });
+    </script>
+</body>
+</html>
