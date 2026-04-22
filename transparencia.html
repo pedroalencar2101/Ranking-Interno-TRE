@@ -31,12 +31,12 @@
             color: #FFFFFF; min-height: 100vh; background-attachment: fixed; font-size: 15px; overflow-x: hidden;
         }
         .glass-navbar { background: theme('colors.tre.glassNav'); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
-        .glass-panel-simple { background: theme('colors.tre.bgPanel'); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.06); }
+        .glass-panel-simple { background: rgba(20, 4, 5, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
         .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: theme('colors.tre.brand'); outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
-        .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 4px; letter-spacing: -0.02em; }
-        .point-plus { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .point-minus { background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 4px; letter-spacing: -0.02em; }
+        .point-emerald { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .point-red { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0A0102; }
         ::-webkit-scrollbar-thumb { background: #D31522; border-radius: 3px; }
@@ -52,7 +52,7 @@
                 </a>
             </div>
             <div>
-                <a href="index.html" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2">
+                <a href="index.html" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2">
                     <i class="fa-solid fa-arrow-left"></i> Voltar ao Início
                 </a>
             </div>
@@ -67,26 +67,24 @@
             <p class="text-white/40 text-xs md:text-sm">Histórico público e auditável de todas as postagens julgadas pela Liderança.</p>
         </div>
 
-        <div class="glass-panel-simple p-5 flex flex-wrap items-center justify-between gap-4 mb-8 rounded-xl relative z-20">
+        <div class="glass-panel-simple p-5 flex flex-wrap items-center justify-between gap-4 mb-8 rounded-xl border border-white/5 relative z-[100]">
             <div class="relative">
-                <button id="btn-filter-mes" onclick="toggleDropdown()" class="glass-panel-simple !bg-white/5 px-4 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white cursor-pointer focus:outline-none hover:text-white transition-colors">
+                <button id="btn-filter-mes" onclick="toggleDropdown()" class="glass-panel-simple !bg-white/5 px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white cursor-pointer focus:outline-none hover:text-white transition-colors border border-white/10">
                     <i class="fa-solid fa-calendar-alt text-amber-500"></i> 
-                    <span id="texto-filter-mes">Abril 2026</span> 
+                    <span id="texto-filter-mes">Carregando...</span> 
                     <i id="icone-filter-seta" class="fa-solid fa-chevron-down text-xs ml-1 text-white/40 transition-transform duration-300"></i>
                 </button>
-                <div id="menu-filter-meses" class="absolute left-0 top-full mt-2 w-48 glass-panel-simple !bg-[#0A0102]/95 rounded-lg opacity-0 invisible translate-y-2 transition-all duration-300 overflow-hidden flex flex-col text-sm shadow-2xl z-50">
-                    <button onclick="selecionarMes(this)" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Abril 2026</button>
-                    <button onclick="selecionarMes(this)" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Maio 2026</button>
-                </div>
+                <div id="menu-filter-meses" class="absolute left-0 top-full mt-2 w-56 glass-panel-simple !bg-[#0A0102]/95 rounded-lg opacity-0 invisible translate-y-2 transition-all duration-300 overflow-hidden flex flex-col text-sm shadow-2xl border border-white/10 max-h-64 overflow-y-auto custom-scrollbar">
+                    </div>
             </div>
 
-            <div class="relative w-full md:w-72">
+            <div class="relative w-full md:w-80">
                 <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
-                <input type="text" id="search-input" onkeyup="filtrarTabela()" placeholder="Buscar por Nick do Policial..." class="w-full glass-input rounded-lg pl-11 pr-4 py-2.5 text-sm font-medium">
+                <input type="text" id="search-input" onkeyup="filtrarTabela()" placeholder="Buscar por Nick do Policial..." class="w-full glass-input rounded-lg pl-11 pr-4 py-3 text-sm font-medium">
             </div>
         </div>
 
-        <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl">
+        <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl relative z-10 border border-white/5">
             <div class="overflow-x-auto pb-2">
                 <table class="w-full text-left border-collapse min-w-full text-sm">
                     <thead class="bg-white/5 text-[10px] uppercase font-black tracking-widest text-white/40 border-b border-white/5">
@@ -100,7 +98,7 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <tr><td colspan="6" class="p-10 text-center text-white/30"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Carregando banco de dados...</td></tr>
+                        <tr><td colspan="6" class="p-10 text-center text-white/30"><i class="fa-solid fa-spinner fa-spin mr-2 text-xl"></i><br>Consultando Banco de Dados...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -109,7 +107,7 @@
         <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center mt-4 glass-panel-simple rounded-2xl border-dashed border-2 border-white/5">
             <i class="fa-solid fa-folder-open text-4xl text-white/20 mb-4"></i>
             <h3 class="text-lg font-bold text-white/50">Nenhum registro encontrado</h3>
-            <p class="text-sm text-white/30 mt-1">Tente selecionar outro mês ou verificar a digitação.</p>
+            <p class="text-sm text-white/30 mt-1 max-w-sm">Tente selecionar outro mês no filtro acima ou verifique a ortografia da sua pesquisa.</p>
         </div>
     </main>
 
@@ -118,55 +116,90 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0", authDomain: "tre-ranking.firebaseapp.com", projectId: "tre-ranking", storageBucket: "tre-ranking.firebasestorage.app", messagingSenderId: "1008986456536", appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad" };
+        // ==========================================
+        // 1. INICIALIZAÇÃO FIREBASE
+        // ==========================================
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0", 
+            authDomain: "tre-ranking.firebaseapp.com", 
+            projectId: "tre-ranking", 
+            storageBucket: "tre-ranking.firebasestorage.app", 
+            messagingSenderId: "1008986456536", 
+            appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad" 
+        };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
         let quadroPontos = [];
         let postagensGlobal = [];
+        
         // ==========================================
-        // GERADOR AUTOMÁTICO DE MESES
+        // 2. MOTOR DINÂMICO DE MESES
         // ==========================================
         const mesesNomes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
         const dataAtualGlobal = new Date();
-        let mesAtualStr = `${mesesNomes[dataAtualGlobal.getMonth()]} ${dataAtualGlobal.getFullYear()}`;
+        let mesAtualStr = "";
 
         function inicializarDropdownMeses() {
-            // Tenta achar o botão de texto (depende de qual arquivo estamos)
-            const textoMesBtn = document.getElementById('texto-mes') || document.getElementById('texto-filter-mes');
-            const menuMeses = document.getElementById('menu-meses') || document.getElementById('menu-filter-meses');
-            
-            if(textoMesBtn && menuMeses) {
-                textoMesBtn.innerText = mesAtualStr;
-                menuMeses.innerHTML = '';
+            const textoMesBtn = document.getElementById('texto-filter-mes');
+            const menuMeses = document.getElementById('menu-filter-meses');
+
+            // Define o mês atual como padrão
+            mesAtualStr = `${mesesNomes[dataAtualGlobal.getMonth()]} ${dataAtualGlobal.getFullYear()}`;
+            textoMesBtn.innerText = mesAtualStr;
+            menuMeses.innerHTML = '';
+
+            // Gera os últimos 12 meses automaticamente para a aba de Transparência
+            for(let i = 0; i < 12; i++) {
+                let d = new Date(dataAtualGlobal.getFullYear(), dataAtualGlobal.getMonth() - i, 1);
+                let nomeMes = `${mesesNomes[d.getMonth()]} ${d.getFullYear()}`;
                 
-                // Gera automaticamente o mês atual e os 5 meses anteriores
-                for(let i = 0; i < 6; i++) {
-                    let d = new Date(dataAtualGlobal.getFullYear(), dataAtualGlobal.getMonth() - i, 1);
-                    let nomeMes = `${mesesNomes[d.getMonth()]} ${d.getFullYear()}`;
-                    
-                    // A função onclick varia um pouco dependendo se é o index (selecionarMes) ou admin/transparencia (selecionarFilterMes)
-                    let funcaoClick = document.getElementById('texto-filter-mes') ? 'selecionarFilterMes(this)' : 'selecionarMes(this)';
-                    
-                    menuMeses.innerHTML += `<button onclick="${funcaoClick}" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">${nomeMes}</button>`;
-                }
+                // Botão gerado. Note a chamada exata para a função: onclick="selecionarMes(this)"
+                menuMeses.innerHTML += `<button onclick="selecionarMes(this)" class="px-5 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full cursor-pointer font-medium">${nomeMes}</button>`;
             }
         }
-        
-        // Roda a função assim que o site carrega
-        window.addEventListener('DOMContentLoaded', inicializarDropdownMeses);
 
-        function getAvatarUrl(nick) { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=m`; }
+        function toggleDropdown() {
+            const m = document.getElementById('menu-filter-meses'); 
+            const s = document.getElementById('icone-filter-seta');
+            m.classList.toggle('opacity-0'); 
+            m.classList.toggle('invisible'); 
+            m.classList.toggle('translate-y-2'); 
+            s.classList.toggle('rotate-180');
+        }
 
-        // Inicializa buscando as configurações de pontos, e depois busca os posts
+        // Função de clique corrigida
+        function selecionarMes(el) {
+            mesAtualStr = el.innerText;
+            document.getElementById('texto-filter-mes').innerText = mesAtualStr;
+            toggleDropdown();
+            renderizarTabela(); 
+        }
+
+        // Fechar dropdown se clicar fora
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('menu-filter-meses');
+            const btn = document.getElementById('btn-filter-mes');
+            if (dropdown && !dropdown.classList.contains('invisible') && !btn.contains(event.target) && !dropdown.contains(event.target)) {
+                toggleDropdown();
+            }
+        });
+
+        // ==========================================
+        // 3. COLETA DE DADOS DO BANCO
+        // ==========================================
+        function getAvatarUrl(nick) { 
+            return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=m`; 
+        }
+
+        // Busca o valor atualizado das atividades antes de processar o histórico
         db.collection("configuracoes").doc("quadro_pontos").get().then(doc => {
             if (doc.exists && doc.data().atividades) quadroPontos = doc.data().atividades;
             carregarDadosDoFirebase();
         });
 
-        function formatarMesAno(data) {
-            const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-            return `${meses[data.getMonth()]} ${data.getFullYear()}`;
+        function formatarMesAnoStrParaFiltro(data) {
+            return `${mesesNomes[data.getMonth()]} ${data.getFullYear()}`;
         }
 
         function carregarDadosDoFirebase() {
@@ -175,7 +208,7 @@
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     if(data.dataJulgamento) {
-                        data.mesAnoStr = formatarMesAno(data.dataJulgamento.toDate());
+                        data.mesAnoStr = formatarMesAnoStrParaFiltro(data.dataJulgamento.toDate());
                         postagensGlobal.push(data);
                     }
                 });
@@ -183,12 +216,14 @@
             });
         }
 
+        // ==========================================
+        // 4. RENDERIZAÇÃO E FILTROS DA TABELA
+        // ==========================================
         function renderizarTabela() {
             const list = document.getElementById('table-body');
             const empty = document.getElementById('empty-state');
             list.innerHTML = '';
             
-            // Filtra pelo mês atual da UI
             const postsFiltrados = postagensGlobal.filter(p => p.mesAnoStr === mesAtualStr);
 
             if(postsFiltrados.length === 0) {
@@ -197,65 +232,80 @@
                 empty.classList.add('hidden'); empty.classList.remove('flex');
             }
 
-            // Ordena do mais recente para o mais antigo
+            // Ordem Decrescente (Mais recentes no topo)
             postsFiltrados.sort((a, b) => b.dataJulgamento.toDate() - a.dataJulgamento.toDate());
 
             postsFiltrados.forEach(data => {
-                let dataJulgStr = `${data.dataJulgamento.toDate().getDate()}/${data.dataJulgamento.toDate().getMonth()+1}/${data.dataJulgamento.toDate().getFullYear()}`;
+                const dateObj = data.dataJulgamento.toDate();
+                let dataJulgStr = `${dateObj.getDate()}/${dateObj.getMonth()+1}/${dateObj.getFullYear()} às ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
                 
+                // Cálculo de Pontos Históricos
                 let pontosCalculados = "-";
                 if (data.status === "Aprovado") {
                     const ativConfig = quadroPontos.find(q => q.nome === data.categoria);
                     pontosCalculados = ativConfig ? (ativConfig.pontos > 0 ? `+${ativConfig.pontos}` : ativConfig.pontos) : "??";
-                } else if (data.status === "Rejeitado") { pontosCalculados = "0"; }
+                } else if (data.status === "Rejeitado") { 
+                    pontosCalculados = "0"; 
+                }
 
                 let statusClass = data.status === "Aprovado" ? "emerald" : "red";
                 let statusIcon = data.status === "Aprovado" ? "check" : "xmark";
+                let txtCor = data.status === "Aprovado" ? "text-emerald-400" : "text-red-400";
                 let motivoTd = data.motivoRejeicao ? `<br><span class="text-[10px] text-white/40">Motivo: ${data.motivoRejeicao}</span>` : "";
 
                 list.innerHTML += `
                     <tr class="group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default text-white/80 filter-row">
                         <td class="p-4 px-6 flex items-center gap-3 font-bold group-hover:text-white truncate nick-cell">
-                            <div class="w-8 h-8 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors"><img src="${getAvatarUrl(data.nick)}" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500 group-hover:scale-110"></div>
+                            <div class="w-8 h-8 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors">
+                                <img src="${getAvatarUrl(data.nick)}" class="absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500 group-hover:scale-110">
+                            </div>
                             ${data.nick}
                         </td>
                         <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${data.categoria}</td>
-                        <td class="p-4 text-center font-black text-lg text-${statusClass}-500">${pontosCalculados}</td>
-                        <td class="p-4 text-center"><span class="inline-flex items-center gap-1.5 point-badge point-${statusClass} text-${statusClass}-400"><i class="fa-solid fa-${statusIcon}"></i> ${data.status}</span></td>
+                        <td class="p-4 text-center font-black text-lg ${txtCor}">${pontosCalculados}</td>
+                        <td class="p-4 text-center">
+                            <span class="inline-flex items-center gap-1.5 point-badge point-${statusClass} ${txtCor}">
+                                <i class="fa-solid fa-${statusIcon}"></i> ${data.status}
+                            </span>
+                        </td>
                         <td class="p-4 text-xs font-semibold whitespace-nowrap">${data.julgadoPor || 'Sistema'}${motivoTd}</td>
                         <td class="p-4 text-white/50 text-[11px] font-mono whitespace-nowrap">${dataJulgStr}</td>
                     </tr>`;
             });
-            filtrarTabela(); // Reaplica pesquisa em texto se houver
+            
+            filtrarTabela(); // Reaplica pesquisa em texto se houver nome no input
         }
 
-        // Filtro de Texto (Motor de Busca Nativo)
+        // Filtro em tempo real de Texto
         function filtrarTabela() {
             const termo = document.getElementById('search-input').value.toLowerCase();
             const linhas = document.querySelectorAll('.filter-row');
             let mostrouAlgum = false;
+            
             linhas.forEach(linha => {
                 const nick = linha.querySelector('.nick-cell').innerText.toLowerCase();
-                if (nick.includes(termo)) { linha.style.display = ''; mostrouAlgum = true; } else { linha.style.display = 'none'; }
+                if (nick.includes(termo)) { 
+                    linha.style.display = ''; 
+                    mostrouAlgum = true; 
+                } else { 
+                    linha.style.display = 'none'; 
+                }
             });
+            
             const empty = document.getElementById('empty-state');
-            if(!mostrouAlgum && linhas.length > 0 && termo !== "") { empty.classList.remove('hidden'); empty.classList.add('flex'); } 
-            else if (mostrouAlgum) { empty.classList.add('hidden'); empty.classList.remove('flex'); }
+            if(!mostrouAlgum && linhas.length > 0 && termo !== "") { 
+                empty.classList.remove('hidden'); empty.classList.add('flex'); 
+            } else if (mostrouAlgum) { 
+                empty.classList.add('hidden'); empty.classList.remove('flex'); 
+            }
         }
 
-        // Interação Dropdown Mês
-        function toggleDropdown() {
-            const m = document.getElementById('menu-filter-meses'); const s = document.getElementById('icone-filter-seta');
-            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2'); s.classList.toggle('rotate-180');
-        }
-        function selecionarMes(el) {
-            mesAtualStr = el.innerText;
-            document.getElementById('texto-filter-mes').innerText = mesAtualStr;
-            toggleDropdown();
-            renderizarTabela(); // Recalcula a tabela pro novo mês
-        }
-
-        window.addEventListener('load', () => {
+        // ==========================================
+        // 5. INICIALIZAÇÃO E ANIMAÇÕES
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            inicializarDropdownMeses();
+            
             gsap.to("#anim-header", { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" });
             gsap.to("#anim-content", { y: 0, opacity: 1, duration: 0.9, ease: "expo.out", delay: 0.2 });
         });
