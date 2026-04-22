@@ -17,144 +17,40 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        tre: {
-                            brand: '#D31522',
-                            brandHover: '#FA1C2A',
-                            bgPanel: 'rgba(20, 4, 5, 0.5)',
-                            glassNav: 'rgba(25, 3, 4, 0.85)',
-                        }
-                    },
-                    boxShadow: {
-                        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.5)',
-                        'nav': '0 10px 40px -10px rgba(0, 0, 0, 0.7)',
-                    }
+                    colors: { tre: { brand: '#D31522', brandHover: '#FA1C2A', bgPanel: 'rgba(20, 4, 5, 0.5)', glassNav: 'rgba(25, 3, 4, 0.85)' } },
+                    boxShadow: { '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.5)', 'nav': '0 10px 40px -10px rgba(0, 0, 0, 0.7)' }
                 }
             }
         }
     </script>
 
     <style>
-        body {
-            background: #0A0102;
-            background-image: radial-gradient(circle at top center, #35060A 0%, #0A0102 90%);
-            color: #FFFFFF;
-            min-height: 100vh;
-            background-attachment: fixed;
-            font-size: 15px;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+        body { background: #0A0102; background-image: radial-gradient(circle at top center, #35060A 0%, #0A0102 90%); color: #FFFFFF; min-height: 100vh; background-attachment: fixed; font-size: 15px; overflow-x: hidden; scroll-behavior: smooth; }
+        .glass-navbar { background: theme('colors.tre.glassNav'); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .glass-panel-simple { background: theme('colors.tre.bgPanel'); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.06); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .glass-panel-simple:hover { background: rgba(35, 6, 8, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); }
         
-        .glass-navbar {
-            background: theme('colors.tre.glassNav');
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        .glass-panel-simple {
-            background: theme('colors.tre.bgPanel');
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .glass-panel-simple:hover {
-            background: rgba(35, 6, 8, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Cubos 3D (Z-depth) */
-        .tilt-card {
-            transform-style: preserve-3d;
-            background: linear-gradient(145deg, rgba(35, 6, 8, 0.7) 0%, rgba(10, 1, 2, 0.85) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            border-radius: 1.5rem;
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-            position: relative;
-        }
+        .tilt-card { transform-style: preserve-3d; background: linear-gradient(145deg, rgba(35, 6, 8, 0.7) 0%, rgba(10, 1, 2, 0.85) 100%); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); border-radius: 1.5rem; box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08); position: relative; }
         @media (min-width: 768px) { .tilt-card { border-radius: 2rem; } }
-
-        .neon-glow {
-            position: absolute; width: 70%; height: 70%; top: 15%; left: 15%; filter: blur(60px); z-index: -1; opacity: 0.1;
-            transition: opacity 0.8s ease;
-        }
+        .neon-glow { position: absolute; width: 70%; height: 70%; top: 15%; left: 15%; filter: blur(60px); z-index: -1; opacity: 0.1; transition: opacity 0.8s ease; }
         .tilt-card:hover .neon-glow { opacity: 0.25; }
-
-        /* Ancoragem do Avatar */
-        .z-avatar {
-            transform-origin: bottom center; 
-            transform: translateX(-50%) translateZ(2px); 
-            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
-            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease;
-        }
-        .tilt-card:hover .z-avatar {
-            transform: translateX(-50%) translateZ(8px) scale(1.04);
-            filter: drop-shadow(0 25px 25px rgba(0,0,0,0.8));
-        }
-
-        .z-content { transform: translateZ(20px); }
-        .z-badge { transform: translateZ(30px); }
-
-        .border-gold { border-top: 1px solid rgba(255, 215, 0, 0.5); }
-        .border-silver { border-top: 1px solid rgba(227, 228, 229, 0.5); }
-        .border-bronze { border-top: 1px solid rgba(205, 127, 50, 0.5); }
-        .glow-gold { background: #FFD700; }
-        .glow-silver { background: #E3E4E5; }
-        .glow-bronze { background: #CD7F32; }
-
-        /* Inputs e Cards de Atividade Glass */
-        .glass-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: theme('colors.tre.brand');
-            outline: none;
-            box-shadow: 0 0 15px rgba(211, 21, 34, 0.2);
-        }
-
-        .activity-grid-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 0.75rem;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        .activity-grid-card:hover {
-            border-color: rgba(211, 21, 34, 0.3);
-            background: rgba(35, 6, 8, 0.5);
-            transform: scale(1.02);
-        }
-        .activity-grid-card.active {
-            border-color: theme('colors.tre.brand');
-            background: rgba(35, 6, 8, 0.8);
-            box-shadow: 0 0 20px rgba(211, 21, 34, 0.3);
-        }
-        .activity-grid-card.active::after {
-            content: ''; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid transparent;
-            background: linear-gradient(to bottom right, rgba(211, 21, 34, 1), rgba(211, 21, 34, 0)) border-box;
-            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: destination-out; mask-composite: exclude; opacity: 0.6;
-        }
-
+        
+        .z-avatar { transform-origin: bottom center; transform: translateX(-50%) translateZ(2px); filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5)); transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease; }
+        .tilt-card:hover .z-avatar { transform: translateX(-50%) translateZ(8px) scale(1.04); filter: drop-shadow(0 25px 25px rgba(0,0,0,0.8)); }
+        .z-content { transform: translateZ(20px); } .z-badge { transform: translateZ(30px); }
+        .border-gold { border-top: 1px solid rgba(255, 215, 0, 0.5); } .border-silver { border-top: 1px solid rgba(227, 228, 229, 0.5); } .border-bronze { border-top: 1px solid rgba(205, 127, 50, 0.5); }
+        .glow-gold { background: #FFD700; } .glow-silver { background: #E3E4E5; } .glow-bronze { background: #CD7F32; }
+        
+        .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
+        .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: theme('colors.tre.brand'); outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
+        .activity-grid-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.75rem; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); cursor: pointer; position: relative; overflow: hidden; }
+        .activity-grid-card:hover { border-color: rgba(211, 21, 34, 0.3); background: rgba(35, 6, 8, 0.5); transform: scale(1.02); }
+        .activity-grid-card.active { border-color: theme('colors.tre.brand'); background: rgba(35, 6, 8, 0.8); box-shadow: 0 0 20px rgba(211, 21, 34, 0.3); }
+        .activity-grid-card.active::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid transparent; background: linear-gradient(to bottom right, rgba(211, 21, 34, 1), rgba(211, 21, 34, 0)) border-box; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; opacity: 0.6; }
         .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 4px; letter-spacing: -0.02em; }
         .point-plus { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
         .point-minus { background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0A0102; }
-        ::-webkit-scrollbar-thumb { background: #D31522; rounded: 3px; }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: #0A0102; } ::-webkit-scrollbar-thumb { background: #D31522; border-radius: 3px; } .custom-scrollbar::-webkit-scrollbar { width: 4px; } .custom-scrollbar::-webkit-scrollbar-track { background: transparent; } .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand selection:text-white flex flex-col" id="topo">
@@ -162,9 +58,7 @@
     <header class="sticky top-0 z-50 w-full glass-navbar shadow-nav opacity-0" id="anim-header">
         <div class="container mx-auto px-3 sm:px-4 md:px-6 h-14 md:h-20 flex items-center justify-between">
             <div class="flex items-center gap-3 sm:gap-6 md:gap-10">
-                <a href="#topo" class="flex items-center hover:opacity-80 transition-opacity">
-                    <img src="trelogo.png" alt="Logo" class="h-6 sm:h-8 md:h-12 object-contain" onerror="this.src='https://via.placeholder.com/150x50/D31522/FFFFFF?text=LOGO'">
-                </a>
+                <a href="#topo" class="flex items-center hover:opacity-80 transition-opacity"><img src="trelogo.png" alt="Logo" class="h-6 sm:h-8 md:h-12 object-contain" onerror="this.src='https://via.placeholder.com/150x50/D31522/FFFFFF?text=LOGO'"></a>
                 <nav class="flex gap-3 sm:gap-6 text-[8px] sm:text-[10px] md:text-[13px] font-bold uppercase tracking-wider text-white/70 items-center">
                     <a href="#topo" class="hover:text-white transition-colors">Início</a>
                     <button onclick="toggleModal('modal-regras')" class="hover:text-white transition-colors cursor-pointer uppercase">Regras</button>
@@ -197,8 +91,8 @@
                         <i id="icone-seta" class="fa-solid fa-chevron-down text-[8px] sm:text-[10px] ml-1 text-white/40 transition-transform duration-300"></i>
                     </button>
                     <div id="menu-meses" class="absolute left-0 top-full mt-2 w-full glass-panel-simple !bg-[#0A0102]/95 rounded-lg sm:rounded-xl opacity-0 invisible translate-y-2 transition-all duration-300 overflow-hidden flex flex-col text-[10px] sm:text-sm shadow-2xl z-50">
-                        <button onclick="selecionarMes(this)" class="px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Março 2026</button>
-                        <button onclick="selecionarMes(this)" class="px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Fevereiro 2026</button>
+                        <button onclick="selecionarMes(this)" class="px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Abril 2026</button>
+                        <button onclick="selecionarMes(this)" class="px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full">Maio 2026</button>
                     </div>
                 </div>
 
@@ -206,18 +100,20 @@
                     <i class="fa-solid fa-star"></i> Quadro de Pontos
                 </button>
 
-                <a href="LINK_DA_PLANILHA_AQUI" target="_blank" class="glass-panel-simple px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10 transition-all shadow-lg">
-                    <i class="fa-solid fa-file-excel"></i> Transparência
+                <a href="transparencia.html" class="glass-panel-simple px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10 transition-all shadow-lg">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i> Transparência
                 </a>
             </div>
         </section>
 
         <section class="py-8 md:py-20 relative z-10 overflow-visible">
-            <div class="flex flex-row items-end justify-center gap-1.5 sm:gap-6 md:gap-12 lg:gap-16 max-w-6xl mx-auto mt-16 sm:mt-24 md:mt-32" id="podium-container"></div>
+            <div class="flex flex-row items-end justify-center gap-1.5 sm:gap-6 md:gap-12 lg:gap-16 max-w-6xl mx-auto mt-16 sm:mt-24 md:mt-32" id="podium-container">
+                <div class="w-full text-center text-white/30 text-sm font-bold mt-10"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Calculando Ranking Global...</div>
+            </div>
         </section>
 
         <section class="py-8 md:py-16 opacity-0" id="anim-list">
-            <div class="max-w-4xl mx-auto">
+            <div class="max-w-4xl mx-auto" id="list-wrapper" style="display:none;">
                 <h2 class="text-[9px] sm:text-[11px] md:text-sm font-black tracking-widest uppercase text-white/30 mb-4 md:mb-6 pl-3 md:pl-4 border-l-2 border-tre-brand">Demais Classificados</h2>
                 <div class="glass-panel-simple rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden p-1 shadow-3xl">
                     <div class="overflow-x-auto pb-1 sm:pb-2">
@@ -227,6 +123,11 @@
                     </div>
                 </div>
             </div>
+            <div id="empty-ranking" class="hidden flex-col items-center justify-center py-10 text-center">
+                <i class="fa-solid fa-trophy text-4xl text-white/10 mb-4"></i>
+                <h3 class="text-lg font-bold text-white/30">Nenhum ponto registrado</h3>
+                <p class="text-sm text-white/20 mt-1">O ranking deste mês ainda está zerado.</p>
+            </div>
         </section>
     </main>
 
@@ -235,94 +136,41 @@
             <p class="text-lg sm:text-xl md:text-2xl font-black tracking-tighter uppercase mb-1">Companhia dos Treinadores</p>
             <p class="text-[8px] sm:text-[10px] md:text-xs font-medium uppercase tracking-[0.2em] sm:tracking-[0.3em]">RCC • Todos os direitos reservados</p>
             <div class="mt-4 md:mt-6 pt-4 md:pt-5 border-t border-white/5 inline-block">
-                <p class="text-[9px] sm:text-[11px] md:text-xs font-semibold tracking-widest text-white/40">
-                    <span class="font-mono text-tre-brand font-bold text-xs sm:text-sm">&lt;/&gt;</span> por <span class="text-white/80">G4VET4</span> &bull; &copy; 2026 Companhia dos Treinadores
-                </p>
+                <p class="text-[9px] sm:text-[11px] md:text-xs font-semibold tracking-widest text-white/40"><span class="font-mono text-tre-brand font-bold text-xs sm:text-sm">&lt;/&gt;</span> por <span class="text-white/80">G4VET4</span> &bull; &copy; 2026 Companhia dos Treinadores</p>
             </div>
         </div>
     </footer>
 
     <div id="modal-login" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-login')"></div>
-        
-        <div class="relative w-full max-w-md bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-all duration-300">
-            
-            <button onclick="toggleModal('modal-login')" class="absolute top-4 right-4 md:top-6 md:right-6 text-white/40 hover:text-tre-brand transition-colors z-10">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-
+        <div class="relative w-full max-w-md bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8 transform scale-95 transition-all duration-300 overflow-hidden">
+            <button onclick="toggleModal('modal-login')" class="absolute top-4 right-4 text-white/40 hover:text-tre-brand transition-colors z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
             <div id="view-login" class="block transition-all duration-300">
-                <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4">
-                    <i class="fa-solid fa-lock text-tre-brand"></i> Acesso Restrito
-                </h2>
-                
-                <div class="bg-tre-brand/10 border border-tre-brand/20 text-tre-brand text-[9px] md:text-[10px] font-bold uppercase tracking-widest p-3 rounded-lg text-center mb-6">
-                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Área exclusiva do Ministério
-                </div>
-
+                <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4"><i class="fa-solid fa-lock text-tre-brand"></i> Acesso Restrito</h2>
+                <div class="bg-tre-brand/10 border border-tre-brand/20 text-tre-brand text-[9px] md:text-[10px] font-bold uppercase tracking-widest p-3 rounded-lg text-center mb-6"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Área exclusiva do Ministério</div>
                 <div id="login-feedback" class="hidden mb-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30"></div>
-
                 <form id="form-login" class="space-y-4" onsubmit="realizarLogin(event)">
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label>
-                        <input type="text" id="login-nick" required placeholder="Seu nick..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
-                    </div>
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Senha de Acesso</label>
-                        <input type="password" id="login-senha" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium">
-                    </div>
-                    <button type="submit" id="btn-login-submit" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">
-                        Entrar no Painel
-                    </button>
+                    <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label><input type="text" id="login-nick" required placeholder="Seu nick..." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium"></div>
+                    <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Senha de Acesso</label><input type="password" id="login-senha" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium"></div>
+                    <button type="submit" id="btn-login-submit" class="w-full bg-tre-brand hover:bg-tre-brandHover text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">Entrar no Painel</button>
                 </form>
-
-                <div class="mt-6 text-center border-t border-white/5 pt-4">
-                    <p class="text-xs text-white/50">Ainda não tem acesso?</p>
-                    <button onclick="switchView('register')" class="text-tre-brand font-bold text-sm hover:text-white transition-colors mt-1 cursor-pointer">Solicitar Cadastro</button>
-                </div>
+                <div class="mt-6 text-center border-t border-white/5 pt-4"><p class="text-xs text-white/50">Ainda não tem acesso?</p><button onclick="switchView('register')" class="text-tre-brand font-bold text-sm hover:text-white transition-colors mt-1 cursor-pointer">Solicitar Cadastro</button></div>
             </div>
-
             <div id="view-register" class="hidden opacity-0 translate-x-4 transition-all duration-300">
-                <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4">
-                    <i class="fa-solid fa-user-plus text-tre-brand"></i> Solicitar Acesso
-                </h2>
-                
+                <h2 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase mb-4 flex items-center gap-3 border-b border-white/10 pb-4"><i class="fa-solid fa-user-plus text-tre-brand"></i> Solicitar Acesso</h2>
                 <div id="reg-feedback" class="hidden mb-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30"></div>
-
                 <form id="form-cadastro" class="space-y-4" onsubmit="enviarCadastro(event)">
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label>
-                        <input type="text" id="reg-nick" required placeholder="Ex: G4VET4" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
-                    </div>
-                    
-                    <div class="space-y-1.5">
-                        <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Criar Senha</label>
-                        <input type="password" id="reg-senha" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium">
-                    </div>
-                    
-                    <button type="submit" id="btn-cadastro" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">
-                        Enviar Solicitação
-                    </button>
+                    <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nickname no Habbo</label><input type="text" id="reg-nick" required placeholder="Ex: G4VET4" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium"></div>
+                    <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Criar Senha</label><input type="password" id="reg-senha" required placeholder="••••••••" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium"></div>
+                    <button type="submit" id="btn-cadastro" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3 rounded-xl shadow-lg transition-all mt-4 cursor-pointer text-sm flex justify-center items-center">Enviar Solicitação</button>
                 </form>
-
-                <div class="mt-4 text-center border-t border-white/5 pt-4">
-                    <button type="button" onclick="switchView('login')" class="text-white/50 text-xs hover:text-white transition-colors cursor-pointer flex items-center justify-center w-full">
-                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Voltar para Login
-                    </button>
-                </div>
+                <div class="mt-4 text-center border-t border-white/5 pt-4"><button type="button" onclick="switchView('login')" class="text-white/50 text-xs hover:text-white transition-colors cursor-pointer flex items-center justify-center w-full"><i class="fa-solid fa-arrow-left mr-1.5"></i> Voltar para Login</button></div>
             </div>
-
             <div id="view-feedback" class="hidden opacity-0 translate-y-4 transition-all duration-300 flex-col items-center justify-center text-center pt-4">
-                <div class="w-20 h-20 bg-amber-500/10 border-2 border-amber-500/30 rounded-full flex items-center justify-center mb-6 mx-auto">
-                    <i class="fa-solid fa-clock-rotate-left text-3xl text-amber-500"></i>
-                </div>
+                <div class="w-20 h-20 bg-amber-500/10 border-2 border-amber-500/30 rounded-full flex items-center justify-center mb-6 mx-auto"><i class="fa-solid fa-clock-rotate-left text-3xl text-amber-500"></i></div>
                 <h2 class="text-xl font-black text-white uppercase mb-3">Solicitação Recebida</h2>
-                <p class="text-white/60 text-sm leading-relaxed mb-8">
-                    Aguarde enquanto o Ministério analisa sua solicitação de cadastro.
-                </p>
-                <button onclick="toggleModal('modal-login')" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3 rounded-xl transition-all cursor-pointer text-sm">
-                    Entendido
-                </button>
+                <p class="text-white/60 text-sm leading-relaxed mb-8">Aguarde enquanto o Ministério analisa sua solicitação de cadastro.</p>
+                <button onclick="toggleModal('modal-login')" class="w-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3 rounded-xl transition-all cursor-pointer text-sm">Entendido</button>
             </div>
         </div>
     </div>
@@ -338,15 +186,8 @@
                 <div class="space-y-2 md:col-span-2">
                     <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Selecione a Atividade Cumprida</label>
                     <input type="hidden" name="categoria" id="form-categoria-hidden" required>
-                    <div class="max-h-[35vh] overflow-y-auto pr-2 custom-scrollbar grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="Destaque Semanal CDC"><div class="space-y-1"><span class="text-[11px] text-white/70 block">[B] Destaque Semanal</span><span class="text-[9px] text-white/30 tracking-widest uppercase">Ministro/CDC</span></div><span class="point-badge point-plus">+8</span></div>
-                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="Destaque Semanal Executivo"><div class="space-y-1"><span class="text-[11px] text-white/70 block">[B] Destaque Semanal</span><span class="text-[9px] text-white/30 tracking-widest uppercase">Treinador/Sup</span></div><span class="point-badge point-plus">+4</span></div>
-                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="Ministração Aula Geral"><div class="space-y-1"><span class="text-[11px] text-white/70 block">[D] Aula Geral</span><span class="text-[9px] text-white/30 tracking-widest uppercase tracking-tighter">Ministrador</span></div><span class="point-badge point-plus">+6</span></div>
-                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="Recorde Quebrado"><div class="space-y-1"><span class="text-[11px] text-white/70 block">[D] Quebra de Recorde</span><span class="text-[9px] text-white/30 tracking-widest uppercase">Geral</span></div><span class="point-badge point-plus">+6</span></div>
-                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="Promoção Oficial"><div class="space-y-1"><span class="text-[11px] text-white/70 block">[C] Promoção Oficial</span><span class="text-[9px] text-white/30 tracking-widest uppercase tracking-tighter">Conselho</span></div><span class="point-badge point-plus">+5</span></div>
-                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="Ouvidoria Sugestão/Correção"><div class="space-y-1"><span class="text-[11px] text-white/70 block">[A] Ouvidoria Aprovada</span><span class="text-[9px] text-white/30 tracking-widest uppercase">Correção/Sugerir</span></div><span class="point-badge point-plus">+2/+4</span></div>
-                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="Meta Cumprida Individual"><div class="space-y-1"><span class="text-[11px] text-white/70 block">[C] Meta Individual</span><span class="text-[9px] text-white/30 tracking-widest uppercase tracking-tighter">Treinador/Sup</span></div><span class="point-badge point-plus">+2</span></div>
-                        <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="Presença Evento/Reunião"><div class="space-y-1"><span class="text-[11px] text-white/70 block">[D] Diversos</span><span class="text-[9px] text-white/30 tracking-widest uppercase">Presença</span></div><span class="point-badge point-plus">+2</span></div>
+                    <div class="max-h-[35vh] overflow-y-auto pr-2 custom-scrollbar grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="grade-dinamica-postagem">
+                        <p class="text-xs text-white/30 col-span-full text-center py-4"><i class="fa-solid fa-spinner fa-spin"></i> Carregando configurações...</p>
                     </div>
                 </div>
                 <div class="md:col-span-2 pt-2">
@@ -374,11 +215,8 @@
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-pontos')"></div>
         <div class="relative w-full max-w-2xl bg-[#0A0102] border border-white/10 rounded-2xl p-6 shadow-2xl transform scale-95 transition-all">
             <h2 class="text-xl font-black text-white uppercase border-b border-white/10 pb-4 mb-4">Quadro de Pontos Oficial</h2>
-            <div class="max-h-[60vh] overflow-y-auto text-xs space-y-2.5 pr-2 custom-scrollbar">
-                <div class="bg-white/5 p-3 rounded-lg border border-white/5"><h4 class="text-[10px] text-white uppercase font-bold tracking-wider">[A] Ouvidoria</h4><div class="space-y-1.5 mt-2"><div class="flex justify-between items-center"><span class="text-white/70">Projeto Aprovado</span> <span class="point-badge point-plus">+6</span></div></div></div>
-                <div class="bg-white/5 p-3 rounded-lg border border-white/5"><h4 class="text-[10px] text-white uppercase font-bold tracking-wider">[B] Destaques Semanais</h4><div class="space-y-1.5 mt-2"><div class="flex justify-between items-center"><span class="text-white/70">Destaque Conselho</span> <span class="point-badge point-plus">+8</span></div><div class="flex justify-between items-center"><span class="text-white/70">Destaque Executivo</span> <span class="point-badge point-plus">+4</span></div></div></div>
-                <div class="bg-white/5 p-3 rounded-lg border border-white/5"><h4 class="text-[10px] text-white uppercase font-bold tracking-wider">[C] Hierarquia / Metas</h4><div class="space-y-1.5 mt-2"><div class="flex justify-between items-center"><span class="text-white/70">Promoção Oficial</span> <span class="point-badge point-plus">+5</span></div><div class="flex justify-between items-center"><span class="text-white/70">Rebaixamento Oficial</span> <span class="point-badge point-minus">-5</span></div></div></div>
-                <div class="bg-white/5 p-3 rounded-lg border border-white/5"><h4 class="text-[10px] text-white uppercase font-bold tracking-wider">[D] Diversos</h4><div class="space-y-1.5 mt-2"><div class="flex justify-between items-center"><span class="text-white/70">Ministração Aula Geral</span> <span class="point-badge point-plus">+6</span></div></div></div>
+            <div class="max-h-[60vh] overflow-y-auto text-xs space-y-2.5 pr-2 custom-scrollbar" id="quadro-dinamico-pontos">
+                <p class="text-xs text-white/30 text-center py-4"><i class="fa-solid fa-spinner fa-spin"></i> Carregando configurações...</p>
             </div>
             <button onclick="toggleModal('modal-pontos')" class="mt-6 w-full bg-white/5 py-2 rounded-lg text-white font-bold border border-white/10 text-xs">Entendido</button>
         </div>
@@ -386,312 +224,165 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
 
     <script>
-        // ==========================================
-        // 1. INICIALIZAÇÃO DO FIREBASE
-        // ==========================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0",
-            authDomain: "tre-ranking.firebaseapp.com",
-            projectId: "tre-ranking",
-            storageBucket: "tre-ranking.firebasestorage.app",
-            messagingSenderId: "1008986456536",
-            appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0", authDomain: "tre-ranking.firebaseapp.com", projectId: "tre-ranking", storageBucket: "tre-ranking.firebasestorage.app", messagingSenderId: "1008986456536", appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // ==========================================
-        // 2. RENDERIZAÇÃO DO PÓDIO
-        // ==========================================
-        const dadosRanking = [
-            { posicao: 1, nick: "G4VET4", pontos: 185 }, { posicao: 2, nick: "benjlfbaby", pontos: 150 }, { posicao: 3, nick: "BeGomes94.", pontos: 130 },
-            { posicao: 4, nick: "Granno", pontos: 110 }, { posicao: 5, nick: "@Allyzon", pontos: 95 }, { posicao: 6, nick: "andrej0128s", pontos: 80 },
-            { posicao: 7, nick: "Evange", pontos: 75 }, { posicao: 8, nick: "AGUA.1598", pontos: 60 }
-        ];
+        let quadroPontosGlobal = [];
+        let postagensGlobal = [];
+        let mesAtualStr = "Abril 2026"; // Filtro de Mês Padrão
 
         function getAvatarUrl(nick, size = 'l', action = 'std', gesture = 'sml') {
             return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=${action}&direction=2&head_direction=2&gesture=${gesture}&size=${size}`;
         }
 
-        const podiumContainer = document.getElementById('podium-container');
-        const ordemPodio = [dadosRanking[1], dadosRanking[0], dadosRanking[2]]; 
-        ordemPodio.forEach(membro => {
-            if(!membro) return;
-            let orderClass = membro.posicao === 1 ? "order-2" : membro.posicao === 2 ? "order-1" : "order-3";
-            let alturaCard = membro.posicao === 1 ? "h-36 sm:h-52 md:h-64 lg:h-80" : membro.posicao === 2 ? "h-28 sm:h-44 md:h-52 lg:h-64" : "h-24 sm:h-40 md:h-48 lg:h-60";
-            let widthClass = membro.posicao === 1 ? "w-[32%] sm:w-[30%] md:w-[16rem] lg:w-[22rem]" : "w-[30%] sm:w-[28%] md:w-[15rem] lg:w-[19rem]";
-            let corMedalha = membro.posicao === 1 ? "text-[#FFD700]" : membro.posicao === 2 ? "text-[#E3E4E5]" : "text-[#CD7F32]";
-            let glowMedal = membro.posicao === 1 ? "glow-gold" : membro.posicao === 2 ? "glow-silver" : "glow-bronze";
-            let borderMedal = membro.posicao === 1 ? "border-gold" : membro.posicao === 2 ? "border-silver" : "border-bronze";
-            let nickSize = membro.posicao === 1 ? "text-[11px] sm:text-xl md:text-3xl lg:text-4xl" : "text-[9px] sm:text-lg md:text-2xl lg:text-3xl";
-            let badgeSize = membro.posicao === 1 ? "text-[7px] sm:text-sm md:text-lg lg:text-xl" : "text-[6px] sm:text-xs md:text-base lg:text-lg";
-            let ptsSize = membro.posicao === 1 ? "text-xs sm:text-xl md:text-2xl lg:text-3xl" : "text-[10px] sm:text-lg md:text-xl lg:text-2xl";
-
-            podiumContainer.innerHTML += `
-                <div class="anim-podium opacity-0 ${widthClass} ${orderClass} mt-12 sm:mt-16 md:mt-0">
-                    <div class="tilt-card ${alturaCard} ${borderMedal} w-full flex flex-col items-center justify-end p-2 sm:p-5 md:p-8" data-tilt data-tilt-glare data-tilt-max-glare="0.1" data-tilt-scale="1.01" data-tilt-perspective="1500">
-                        <div class="neon-glow ${glowMedal}"></div>
-                        <div class="absolute bottom-[calc(100%-0.8rem)] sm:bottom-[calc(100%-1.5rem)] md:bottom-[calc(100%-2.5rem)] lg:bottom-[calc(100%-3rem)] left-1/2 pointer-events-none z-avatar w-full flex justify-center items-end">
-                            <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" alt="${membro.nick}" class="object-contain scale-100 sm:scale-110 lg:scale-125 origin-bottom max-w-[150%] sm:max-w-none">
-                        </div>
-                        <div class="z-content text-center w-full mt-auto flex flex-col items-center gap-1.5 sm:gap-3 lg:gap-5">
-                            <div class="z-badge"><span class="font-black ${badgeSize} tracking-[0.1em] sm:tracking-[0.2em] whitespace-nowrap ${corMedalha} drop-shadow-md">${membro.posicao}º LUGAR</span></div>
-                            <h3 class="${nickSize} font-black tracking-tighter text-white whitespace-nowrap group-hover:text-tre-brand transition-colors drop-shadow-lg">${membro.nick}</h3>
-                            <div class="inline-flex items-center justify-center bg-black/40 border border-white/10 rounded-lg sm:rounded-2xl px-2 sm:px-6 md:px-8 py-1 sm:py-2 md:py-3 shadow-inner shadow-black/50">
-                                <span class="${ptsSize} font-black text-white">${membro.pontos}</span> <span class="text-[6px] sm:text-[10px] lg:text-sm font-semibold text-white/60 ml-1 sm:ml-2 uppercase tracking-widest">Pts</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        const listContainer = document.getElementById('list-container');
-        dadosRanking.slice(3).forEach(membro => {
-            listContainer.innerHTML += `
-                <tr class="anim-row group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default">
-                    <td class="p-3 sm:p-4 md:p-5 md:px-8 text-center font-black text-sm sm:text-lg md:text-xl text-white/20 group-hover:text-tre-brand transition-colors w-12 sm:w-16 md:w-24">${membro.posicao}º</td>
-                    <td class="p-3 sm:p-4 md:p-5 flex items-center gap-2 sm:gap-4 md:gap-6">
-                        <div class="w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors shadow-md">
-                            <img src="${getAvatarUrl(membro.nick, 'm', 'wlk', 'std')}" alt="${membro.nick}" class="absolute -top-1 sm:-top-3 left-1/2 -translate-x-1/2 transition-transform duration-700 group-hover:scale-110">
-                        </div>
-                        <span class="font-bold text-xs sm:text-base md:text-lg tracking-wide transition-transform duration-500 group-hover:translate-x-2 text-white/80 group-hover:text-white">${membro.nick}</span>
-                    </td>
-                    <td class="p-3 sm:p-4 md:p-5 md:px-8 text-right w-20 sm:w-32 md:w-40">
-                        <span class="font-black text-base sm:text-xl md:text-2xl text-white transition-colors group-hover:text-tre-brand">${membro.pontos}</span> <span class="text-[8px] sm:text-[11px] md:text-xs font-bold text-white/40 uppercase ml-0.5 sm:ml-1">Pts</span>
-                    </td>
-                </tr>
-            `;
-        });
-
-        // ==========================================
-        // 3. LÓGICA DE INTERAÇÕES E MODAIS
-        // ==========================================
-        function toggleModal(id) {
-            const modal = document.getElementById(id);
-            if(id === 'modal-login' && modal.classList.contains('opacity-0')){ switchView('login'); }
-
-            const content = modal.querySelector('div.relative.transform');
-            if (modal.classList.contains('opacity-0')) {
-                modal.classList.remove('opacity-0', 'invisible');
-                setTimeout(() => content.classList.replace('scale-95', 'scale-100'), 10);
-            } else {
-                content.classList.replace('scale-100', 'scale-95');
-                setTimeout(() => modal.classList.add('opacity-0', 'invisible'), 200);
-            }
-        }
-
-        function switchView(view) {
-            const viewLogin = document.getElementById('view-login');
-            const viewRegister = document.getElementById('view-register');
-            const viewFeedback = document.getElementById('view-feedback');
-
-            viewLogin.classList.add('opacity-0');
-            viewRegister.classList.add('opacity-0');
-            viewFeedback.classList.add('opacity-0');
-            
-            setTimeout(() => {
-                viewLogin.classList.add('hidden'); viewLogin.classList.remove('block');
-                viewRegister.classList.add('hidden'); viewRegister.classList.remove('block'); viewRegister.classList.add('translate-x-4');
-                viewFeedback.classList.add('hidden'); viewFeedback.classList.remove('flex'); viewFeedback.classList.add('translate-y-4');
-                
-                if(view === 'login') {
-                    viewLogin.classList.remove('hidden'); viewLogin.classList.add('block');
-                    setTimeout(() => viewLogin.classList.remove('opacity-0'), 50);
-                } else if(view === 'register') {
-                    viewRegister.classList.remove('hidden'); viewRegister.classList.add('block');
-                    setTimeout(() => viewRegister.classList.remove('opacity-0', 'translate-x-4'), 50);
-                } else if(view === 'feedback') {
-                    viewFeedback.classList.remove('hidden'); viewFeedback.classList.add('flex');
-                    setTimeout(() => viewFeedback.classList.remove('opacity-0', 'translate-y-4'), 50);
-                }
-            }, 200);
-        }
-
-        // ==========================================
-        // 4. FIREBASE: CADASTRO E LOGIN (O COFRE)
-        // ==========================================
-
-        function enviarCadastro(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-cadastro');
-            const feedback = document.getElementById('reg-feedback');
-            
-            const nick = document.getElementById('reg-nick').value.trim();
-            const senha = document.getElementById('reg-senha').value;
-            
-            // Truque de Engenharia: Converte Nick em Email para o Firebase
-            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
-            feedback.classList.add('hidden');
-
-            auth.createUserWithEmailAndPassword(emailFake, senha)
-                .then((userCredential) => {
-                    // Cadastrou com sucesso. Agora salva o pedido no banco de dados.
-                    return db.collection("solicitacoes_acesso").doc(userCredential.user.uid).set({
-                        nick: nick,
-                        status: "Pendente",
-                        dataSolicitacao: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                })
-                .then(() => {
-                    // Desloga imediatamente para ele não entrar no painel antes da aprovação
-                    auth.signOut();
-                    
-                    // Mostra tela de sucesso
-                    btn.innerHTML = 'Enviar Solicitação';
-                    btn.disabled = false;
-                    document.getElementById('form-cadastro').reset();
-                    switchView('feedback'); 
-                })
-                .catch((error) => {
-                    btn.disabled = false;
-                    btn.innerHTML = 'Enviar Solicitação';
-                    
-                    // Tratamento de erros comuns
-                    if(error.code === 'auth/email-already-in-use') {
-                        feedback.innerText = "Este Nick já solicitou cadastro!";
-                    } else if(error.code === 'auth/weak-password') {
-                        feedback.innerText = "A senha deve ter pelo menos 6 caracteres.";
-                    } else {
-                        feedback.innerText = "Erro ao solicitar: " + error.message;
-                    }
-                    feedback.classList.remove('hidden');
-                    feedback.classList.add('block');
-                });
-        }
-
-        function realizarLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-login-submit');
-            const feedback = document.getElementById('login-feedback');
-            
-            const nick = document.getElementById('login-nick').value.trim();
-            const senha = document.getElementById('login-senha').value;
-            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
-            feedback.classList.add('hidden');
-
-            auth.signInWithEmailAndPassword(emailFake, senha)
-                .then((userCredential) => {
-                    // Entrou com sucesso. Redireciona para o Painel Admin.
-                    window.location.href = 'admin.html';
-                })
-                .catch((error) => {
-                    btn.disabled = false;
-                    btn.innerHTML = 'Entrar no Painel';
-                    feedback.innerText = "Nick ou senha incorretos!";
-                    feedback.classList.remove('hidden');
-                    feedback.classList.add('block');
-                });
-        }
-
-        // ==========================================
-        // 5. ENVIO DE POSTAGEM DE ATIVIDADE
-        // ==========================================
-        const activityCards = document.querySelectorAll('.js-activity-card');
-        const hiddenInput = document.getElementById('form-categoria-hidden');
-        activityCards.forEach(card => {
-            card.addEventListener('click', function() {
-                activityCards.forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-                hiddenInput.value = this.getAttribute('data-activity');
-            });
-        });
-
-        const form = document.getElementById('form-atividade');
-        const btnEnviar = document.getElementById('btn-enviar-form');
-        const feedback = document.getElementById('feedback-form');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            btnEnviar.disabled = true;
-            btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
-            
-            const nickValue = document.getElementById('form-nick').value;
-            const provaValue = document.getElementById('form-prova').value;
-            const categoriaValue = hiddenInput.value;
-            const scriptURL = 'SEU_LINK_DO_APPS_SCRIPT_AQUI'; 
-
-            const promessaFirebase = db.collection("postagens").add({
-                nick: nickValue,
-                categoria: categoriaValue,
-                prova: provaValue,
-                status: "Pendente",
-                dataEnvio: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-            let promessaPlanilha = Promise.resolve(); 
-            if (scriptURL && scriptURL !== 'SEU_LINK_DO_APPS_SCRIPT_AQUI') {
-                promessaPlanilha = fetch(scriptURL, { method: 'POST', body: new FormData(form)});
-            }
-
-            Promise.all([promessaFirebase, promessaPlanilha])
-                .then(() => {
-                    feedback.innerText = "Sucesso! Postagem enviada para análise.";
-                    feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
-                    form.reset();
-                    activityCards.forEach(c => c.classList.remove('active'));
-                    hiddenInput.value = "";
-                })
-                .catch(error => {
-                    feedback.innerText = "Erro ao enviar. Tente novamente.";
-                    feedback.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
-                })
-                .finally(() => {
-                    btnEnviar.disabled = false;
-                    btnEnviar.innerHTML = 'Enviar Postagem para Análise';
-                });
-        });
-
-        // ==========================================
-        // 6. UTILIDADES E ANIMAÇÕES
-        // ==========================================
-        function toggleDropdown() {
-            const m = document.getElementById('menu-meses');
-            const s = document.getElementById('icone-seta');
-            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2');
-            s.classList.toggle('rotate-180');
-        }
-        function selecionarMes(el) {
-            document.getElementById('texto-mes').innerText = el.innerText;
-            toggleDropdown();
-        }
-
-        window.addEventListener('load', () => {
-            const tl = gsap.timeline();
-            tl.to("#anim-header", { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" })
-            .to("#anim-title", { y: 0, opacity: 1, duration: 0.9, ease: "expo.out" }, "-=0.6")
-            .to(".anim-podium", { y: 0, opacity: 1, duration: 1.4, stagger: 0.2, ease: "back.out(1.2)" }, "-=0.5")
-            .to("#anim-list", { opacity: 1, duration: 1.0, ease: "power2.out" }, "-=0.4");
-        });
-
-        VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 6, speed: 1200, glare: true, "max-glare": 0.1 });
-
         // ==========================================
         // CARREGAMENTO DINÂMICO DO QUADRO DE PONTOS
-        // (Isso faz o site principal escutar o admin)
         // ==========================================
         db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
             if (doc.exists && doc.data().atividades) {
-                renderizarModaisDinamicos(doc.data().atividades);
+                quadroPontosGlobal = doc.data().atividades;
+                renderizarModaisDinamicos(quadroPontosGlobal);
+                // Após o quadro chegar, nós puxamos as postagens para calcular
+                recalcularRankingGlobal();
             }
         });
 
+        // ==========================================
+        // PUXA POSTAGENS E CALCULA RANKING (Headless Logic)
+        // ==========================================
+        function formatarMesAno(data) {
+            const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            return `${meses[data.getMonth()]} ${data.getFullYear()}`;
+        }
+
+        function recalcularRankingGlobal() {
+            db.collection("postagens").where("status", "==", "Aprovado").onSnapshot(snapshot => {
+                postagensGlobal = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if(data.dataJulgamento) {
+                        data.mesAnoStr = formatarMesAno(data.dataJulgamento.toDate());
+                        postagensGlobal.push(data);
+                    }
+                });
+                renderizarRanking();
+            });
+        }
+
+        function renderizarRanking() {
+            const podiumContainer = document.getElementById('podium-container');
+            const listContainer = document.getElementById('list-container');
+            const listWrapper = document.getElementById('list-wrapper');
+            const emptyRanking = document.getElementById('empty-ranking');
+            
+            // 1. Filtrar pelo mês
+            const postsFiltrados = postagensGlobal.filter(p => p.mesAnoStr === mesAtualStr);
+            
+            // 2. Agregar pontos por Nick
+            let mapaPontos = {};
+            postsFiltrados.forEach(post => {
+                const config = quadroPontosGlobal.find(q => q.nome === post.categoria);
+                const pontos = config ? config.pontos : 0;
+                
+                if(!mapaPontos[post.nick]) mapaPontos[post.nick] = 0;
+                mapaPontos[post.nick] += pontos;
+            });
+
+            // 3. Transformar em Array e Ordenar
+            let rankingArray = Object.keys(mapaPontos).map(nick => ({
+                nick: nick,
+                pontos: mapaPontos[nick]
+            })).sort((a, b) => b.pontos - a.pontos); // Ordem decrescente
+
+            // Atribui posições (tratando empates visualmente depois se necessário, mas posção estática aqui)
+            rankingArray.forEach((item, index) => item.posicao = index + 1);
+
+            // Zera HTML
+            podiumContainer.innerHTML = '';
+            listContainer.innerHTML = '';
+
+            if (rankingArray.length === 0) {
+                emptyRanking.classList.remove('hidden'); emptyRanking.classList.add('flex');
+                listWrapper.style.display = 'none';
+                return;
+            } else {
+                emptyRanking.classList.add('hidden'); emptyRanking.classList.remove('flex');
+                listWrapper.style.display = 'block';
+            }
+
+            // 4. Renderizar Pódio (Top 3) - REORDENADO [2º, 1º, 3º] para visualização em pirâmide
+            let top3 = rankingArray.slice(0, 3);
+            let ordemVisual = [];
+            if(top3.length > 1) ordemVisual.push(top3[1]); // 2º Lugar na esquerda
+            if(top3.length > 0) ordemVisual.push(top3[0]); // 1º Lugar no meio
+            if(top3.length > 2) ordemVisual.push(top3[2]); // 3º Lugar na direita
+
+            ordemVisual.forEach(membro => {
+                let orderClass = membro.posicao === 1 ? "order-2" : membro.posicao === 2 ? "order-1" : "order-3";
+                let alturaCard = membro.posicao === 1 ? "h-36 sm:h-52 md:h-64 lg:h-80" : membro.posicao === 2 ? "h-28 sm:h-44 md:h-52 lg:h-64" : "h-24 sm:h-40 md:h-48 lg:h-60";
+                let widthClass = membro.posicao === 1 ? "w-[32%] sm:w-[30%] md:w-[16rem] lg:w-[22rem]" : "w-[30%] sm:w-[28%] md:w-[15rem] lg:w-[19rem]";
+                let corMedalha = membro.posicao === 1 ? "text-[#FFD700]" : membro.posicao === 2 ? "text-[#E3E4E5]" : "text-[#CD7F32]";
+                let glowMedal = membro.posicao === 1 ? "glow-gold" : membro.posicao === 2 ? "glow-silver" : "glow-bronze";
+                let borderMedal = membro.posicao === 1 ? "border-gold" : membro.posicao === 2 ? "border-silver" : "border-bronze";
+                let nickSize = membro.posicao === 1 ? "text-[11px] sm:text-xl md:text-3xl lg:text-4xl" : "text-[9px] sm:text-lg md:text-2xl lg:text-3xl";
+                let badgeSize = membro.posicao === 1 ? "text-[7px] sm:text-sm md:text-lg lg:text-xl" : "text-[6px] sm:text-xs md:text-base lg:text-lg";
+                let ptsSize = membro.posicao === 1 ? "text-xs sm:text-xl md:text-2xl lg:text-3xl" : "text-[10px] sm:text-lg md:text-xl lg:text-2xl";
+
+                podiumContainer.innerHTML += `
+                    <div class="anim-podium opacity-0 ${widthClass} ${orderClass} mt-12 sm:mt-16 md:mt-0">
+                        <div class="tilt-card ${alturaCard} ${borderMedal} w-full flex flex-col items-center justify-end p-2 sm:p-5 md:p-8" data-tilt data-tilt-glare data-tilt-max-glare="0.1" data-tilt-scale="1.01" data-tilt-perspective="1500">
+                            <div class="neon-glow ${glowMedal}"></div>
+                            <div class="absolute bottom-[calc(100%-0.8rem)] sm:bottom-[calc(100%-1.5rem)] md:bottom-[calc(100%-2.5rem)] lg:bottom-[calc(100%-3rem)] left-1/2 pointer-events-none z-avatar w-full flex justify-center items-end">
+                                <img src="${getAvatarUrl(membro.nick, 'l', 'std', 'sml')}" class="object-contain scale-100 sm:scale-110 lg:scale-125 origin-bottom max-w-[150%] sm:max-w-none">
+                            </div>
+                            <div class="z-content text-center w-full mt-auto flex flex-col items-center gap-1.5 sm:gap-3 lg:gap-5">
+                                <div class="z-badge"><span class="font-black ${badgeSize} tracking-[0.1em] sm:tracking-[0.2em] whitespace-nowrap ${corMedalha} drop-shadow-md">${membro.posicao}º LUGAR</span></div>
+                                <h3 class="${nickSize} font-black tracking-tighter text-white whitespace-nowrap group-hover:text-tre-brand transition-colors drop-shadow-lg">${membro.nick}</h3>
+                                <div class="inline-flex items-center justify-center bg-black/40 border border-white/10 rounded-lg sm:rounded-2xl px-2 sm:px-6 md:px-8 py-1 sm:py-2 md:py-3 shadow-inner shadow-black/50">
+                                    <span class="${ptsSize} font-black text-white">${membro.pontos}</span> <span class="text-[6px] sm:text-[10px] lg:text-sm font-semibold text-white/60 ml-1 sm:ml-2 uppercase tracking-widest">Pts</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 5. Renderizar o Resto da Lista
+            let listaGeral = rankingArray.slice(3);
+            if(listaGeral.length === 0) listWrapper.style.display = 'none';
+
+            listaGeral.forEach(membro => {
+                listContainer.innerHTML += `
+                    <tr class="anim-row group border-b border-white/5 hover:bg-white/5 transition-colors cursor-default">
+                        <td class="p-3 sm:p-4 md:p-5 md:px-8 text-center font-black text-sm sm:text-lg md:text-xl text-white/20 group-hover:text-tre-brand transition-colors w-12 sm:w-16 md:w-24">${membro.posicao}º</td>
+                        <td class="p-3 sm:p-4 md:p-5 flex items-center gap-2 sm:gap-4 md:gap-6">
+                            <div class="w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0 group-hover:border-tre-brand transition-colors shadow-md">
+                                <img src="${getAvatarUrl(membro.nick, 'm', 'wlk', 'std')}" class="absolute -top-1 sm:-top-3 left-1/2 -translate-x-1/2 transition-transform duration-700 group-hover:scale-110">
+                            </div>
+                            <span class="font-bold text-xs sm:text-base md:text-lg tracking-wide transition-transform duration-500 group-hover:translate-x-2 text-white/80 group-hover:text-white">${membro.nick}</span>
+                        </td>
+                        <td class="p-3 sm:p-4 md:p-5 md:px-8 text-right w-20 sm:w-32 md:w-40">
+                            <span class="font-black text-base sm:text-xl md:text-2xl text-white transition-colors group-hover:text-tre-brand">${membro.pontos}</span> <span class="text-[8px] sm:text-[11px] md:text-xs font-bold text-white/40 uppercase ml-0.5 sm:ml-1">Pts</span>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Restarta a inicialização do tilt e das animações visuais!
+            VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 6, speed: 1200, glare: true, "max-glare": 0.1 });
+            gsap.fromTo(".anim-podium", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out" });
+        }
+
+
         function renderizarModaisDinamicos(atividades) {
-            // 1. Atualiza o Formulário de Postagem (Cards de Seleção)
-            const gridPostagem = document.querySelector('#form-atividade .grid.gap-3');
+            const gridPostagem = document.getElementById('grade-dinamica-postagem');
             if(gridPostagem) {
                 gridPostagem.innerHTML = '';
                 atividades.forEach(ativ => {
@@ -699,17 +390,10 @@
                     let ptSinal = ativ.pontos > 0 ? `+${ativ.pontos}` : ativ.pontos;
                     gridPostagem.innerHTML += `
                         <div class="activity-grid-card js-activity-card p-3 flex justify-between items-center gap-3" data-activity="${ativ.nome}">
-                            <div class="space-y-1">
-                                <span class="text-[11px] text-white/70 block">[${ativ.grupo}]</span>
-                                <span class="text-[11px] font-bold text-white block truncate max-w-[150px]">${ativ.nome}</span>
-                                <span class="text-[9px] text-white/30 tracking-widest uppercase">${ativ.responsavel}</span>
-                            </div>
+                            <div class="space-y-1"><span class="text-[11px] text-white/70 block">[${ativ.grupo}]</span><span class="text-[11px] font-bold text-white block truncate max-w-[150px]">${ativ.nome}</span><span class="text-[9px] text-white/30 tracking-widest uppercase">${ativ.responsavel}</span></div>
                             <span class="point-badge point-${badgeClass}">${ptSinal}</span>
-                        </div>
-                    `;
+                        </div>`;
                 });
-
-                // Readiciona o evento de clique aos novos cards renderizados
                 document.querySelectorAll('.js-activity-card').forEach(card => {
                     card.addEventListener('click', function() {
                         document.querySelectorAll('.js-activity-card').forEach(c => c.classList.remove('active'));
@@ -719,38 +403,134 @@
                 });
             }
 
-            // 2. Atualiza o Modal Oficial do Quadro de Pontos
-            const quadroModal = document.querySelector('#modal-pontos .custom-scrollbar');
+            const quadroModal = document.getElementById('quadro-dinamico-pontos');
             if(quadroModal) {
                 quadroModal.innerHTML = '';
-                
-                // Agrupa atividades por categoria
                 const categoriasAgrupadas = atividades.reduce((acc, ativ) => {
                     if (!acc[ativ.grupo]) acc[ativ.grupo] = [];
                     acc[ativ.grupo].push(ativ);
                     return acc;
                 }, {});
 
-                // Renderiza cada grupo
                 Object.keys(categoriasAgrupadas).sort().forEach(nomeGrupo => {
-                    let htmlGrupo = `<div class="bg-white/5 p-3 rounded-lg border border-white/5">
-                        <h4 class="text-[10px] text-white uppercase font-bold tracking-wider">${nomeGrupo}</h4>
-                        <div class="space-y-1.5 mt-2">`;
-                    
+                    let htmlGrupo = `<div class="bg-white/5 p-3 rounded-lg border border-white/5"><h4 class="text-[10px] text-white uppercase font-bold tracking-wider">${nomeGrupo}</h4><div class="space-y-1.5 mt-2">`;
                     categoriasAgrupadas[nomeGrupo].forEach(ativ => {
                         let badgeClass = ativ.pontos > 0 ? 'plus' : 'minus';
                         let ptSinal = ativ.pontos > 0 ? `+${ativ.pontos}` : ativ.pontos;
-                        htmlGrupo += `<div class="flex justify-between items-center">
-                            <span class="text-white/70 text-xs">${ativ.nome} <span class="text-[9px] text-white/30 ml-1">(${ativ.responsavel})</span></span> 
-                            <span class="point-badge point-${badgeClass}">${ptSinal}</span>
-                        </div>`;
+                        htmlGrupo += `<div class="flex justify-between items-center"><span class="text-white/70 text-xs">${ativ.nome} <span class="text-[9px] text-white/30 ml-1">(${ativ.responsavel})</span></span> <span class="point-badge point-${badgeClass}">${ptSinal}</span></div>`;
                     });
-
                     htmlGrupo += `</div></div>`;
                     quadroModal.innerHTML += htmlGrupo;
                 });
             }
         }
+
+        // ==========================================
+        // INTERAÇÕES BÁSICAS
+        // ==========================================
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            if(id === 'modal-login' && modal.classList.contains('opacity-0')){ switchView('login'); }
+            const content = modal.querySelector('div.relative.transform');
+            if (modal.classList.contains('opacity-0')) {
+                modal.classList.remove('opacity-0', 'invisible'); setTimeout(() => content.classList.replace('scale-95', 'scale-100'), 10);
+            } else {
+                content.classList.replace('scale-100', 'scale-95'); setTimeout(() => modal.classList.add('opacity-0', 'invisible'), 200);
+            }
+        }
+
+        function switchView(view) {
+            const vL = document.getElementById('view-login'), vR = document.getElementById('view-register'), vF = document.getElementById('view-feedback');
+            vL.classList.add('opacity-0'); vR.classList.add('opacity-0'); vF.classList.add('opacity-0');
+            setTimeout(() => {
+                vL.classList.add('hidden'); vL.classList.remove('block');
+                vR.classList.add('hidden'); vR.classList.remove('block'); vR.classList.add('translate-x-4');
+                vF.classList.add('hidden'); vF.classList.remove('flex'); vF.classList.add('translate-y-4');
+                if(view === 'login') { vL.classList.remove('hidden'); vL.classList.add('block'); setTimeout(() => vL.classList.remove('opacity-0'), 50); } 
+                else if(view === 'register') { vR.classList.remove('hidden'); vR.classList.add('block'); setTimeout(() => vR.classList.remove('opacity-0', 'translate-x-4'), 50); } 
+                else if(view === 'feedback') { vF.classList.remove('hidden'); vF.classList.add('flex'); setTimeout(() => vF.classList.remove('opacity-0', 'translate-y-4'), 50); }
+            }, 200);
+        }
+
+        function enviarCadastro(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-cadastro'); const feedback = document.getElementById('reg-feedback');
+            const nick = document.getElementById('reg-nick').value.trim(); const senha = document.getElementById('reg-senha').value;
+            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
+            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...'; feedback.classList.add('hidden');
+            auth.createUserWithEmailAndPassword(emailFake, senha).then((userCredential) => {
+                return db.collection("solicitacoes_acesso").doc(userCredential.user.uid).set({ nick: nick, status: "Pendente", dataSolicitacao: firebase.firestore.FieldValue.serverTimestamp() });
+            }).then(() => {
+                auth.signOut(); btn.innerHTML = 'Enviar Solicitação'; btn.disabled = false; document.getElementById('form-cadastro').reset(); switchView('feedback'); 
+            }).catch((error) => {
+                btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
+                if(error.code === 'auth/email-already-in-use') { feedback.innerText = "Este Nick já solicitou cadastro!"; } 
+                else if(error.code === 'auth/weak-password') { feedback.innerText = "A senha deve ter pelo menos 6 caracteres."; } 
+                else { feedback.innerText = "Erro ao solicitar: " + error.message; }
+                feedback.classList.remove('hidden'); feedback.classList.add('block');
+            });
+        }
+
+        function realizarLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login-submit'); const feedback = document.getElementById('login-feedback');
+            const nick = document.getElementById('login-nick').value.trim(); const senha = document.getElementById('login-senha').value;
+            const emailFake = `${nick.toLowerCase()}@treinadores.rcc`;
+            btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...'; feedback.classList.add('hidden');
+            auth.signInWithEmailAndPassword(emailFake, senha).then(() => { window.location.href = 'admin.html'; })
+            .catch(() => {
+                btn.disabled = false; btn.innerHTML = 'Entrar no Painel'; feedback.innerText = "Nick ou senha incorretos!"; feedback.classList.remove('hidden'); feedback.classList.add('block');
+            });
+        }
+
+        function toggleDropdown() {
+            const m = document.getElementById('menu-meses'); const s = document.getElementById('icone-seta');
+            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2'); s.classList.toggle('rotate-180');
+        }
+        function selecionarMes(el) {
+            mesAtualStr = el.innerText;
+            document.getElementById('texto-mes').innerText = mesAtualStr;
+            toggleDropdown();
+            renderizarRanking(); // Refaz o ranking pro novo mês
+        }
+
+        const formAtividade = document.getElementById('form-atividade');
+        const btnEnviarForm = document.getElementById('btn-enviar-form');
+        const feedbackForm = document.getElementById('feedback-form');
+        formAtividade.addEventListener('submit', function(e) {
+            e.preventDefault();
+            btnEnviarForm.disabled = true; btnEnviarForm.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+            const nickValue = document.getElementById('form-nick').value;
+            const provaValue = document.getElementById('form-prova').value;
+            const categoriaValue = document.getElementById('form-categoria-hidden').value;
+
+            if(!categoriaValue) {
+                alert("Por favor, selecione uma atividade clicando em um dos cartões.");
+                btnEnviarForm.disabled = false; btnEnviarForm.innerHTML = 'Enviar Postagem para Análise'; return;
+            }
+
+            db.collection("postagens").add({
+                nick: nickValue, categoria: categoriaValue, prova: provaValue, status: "Pendente", dataEnvio: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                feedbackForm.innerText = "Sucesso! Postagem enviada para análise.";
+                feedbackForm.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
+                formAtividade.reset();
+                document.querySelectorAll('.js-activity-card').forEach(c => c.classList.remove('active'));
+                document.getElementById('form-categoria-hidden').value = "";
+            }).catch(error => {
+                feedbackForm.innerText = "Erro ao enviar. Tente novamente.";
+                feedbackForm.className = "mt-4 p-3 rounded-xl text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
+            }).finally(() => {
+                btnEnviarForm.disabled = false; btnEnviarForm.innerHTML = 'Enviar Postagem para Análise';
+            });
+        });
+
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#anim-header", { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" })
+            .to("#anim-title", { y: 0, opacity: 1, duration: 0.9, ease: "expo.out" }, "-=0.6")
+            .to("#anim-list", { opacity: 1, duration: 1.0, ease: "power2.out" }, "-=0.4");
+        });
     </script>
 </body>
 </html>
