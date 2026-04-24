@@ -97,7 +97,6 @@
             opacity: 0.25; 
         }
 
-        /* Efeito Pop-out do Avatar no 3D */
         .z-avatar {
             transform-origin: bottom center; 
             transform: translateX(-50%) translateZ(2px); 
@@ -410,12 +409,11 @@
         <div class="absolute inset-0 bg-black/70 backdrop-blur-md" onclick="toggleModal('modal-regras')"></div>
         <div class="relative w-full max-w-2xl bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl p-6 shadow-2xl transform scale-95 transition-all">
             <h2 class="text-xl font-black text-white uppercase border-b border-white/10 pb-4 mb-4">Regras do Ranking</h2>
-            <div class="custom-scrollbar overflow-y-auto max-h-[50vh] pr-2 text-white/70 text-sm space-y-3">
-                <p>• Pontos válidos apenas para atividades aprovadas pelo Ministério da Companhia dos Treinadores.</p>
-                <p>• Prazo de postagem: Às 23:59h do último dia do mês vigente.</p>
-                <p>• Fraudes nas provas resultam em punição e zeramento de pontos.</p>
-                <p>• Algumas atividades são postadas automaticamente pelo Ministério sem a necessidade de solicitação.</p>
+            
+            <div id="regras-dinamicas-container" class="custom-scrollbar overflow-y-auto max-h-[50vh] pr-2 text-white/70 text-sm space-y-3">
+                <p class="text-center py-4"><i class="fa-solid fa-spinner fa-spin"></i> Carregando regras do sistema...</p>
             </div>
+
             <button onclick="toggleModal('modal-regras')" class="mt-6 w-full bg-white/5 py-2 rounded-lg text-white font-bold border border-white/10 text-xs">Fechar</button>
         </div>
     </div>
@@ -504,8 +502,25 @@
             mesAtualStr = el.innerText;
             document.getElementById('texto-mes').innerText = mesAtualStr;
             toggleMesDropdown();
-            renderizarRanking(); // Recalcula o ranking para o mês selecionado
+            renderizarRanking();
         }
+
+        // ==========================================
+        // CARREGAMENTO DINÂMICO DE REGRAS (NOVO)
+        // ==========================================
+        db.collection("configuracoes").doc("regras_sistema").onSnapshot(doc => {
+            const container = document.getElementById('regras-dinamicas-container');
+            if (container) {
+                if (doc.exists && doc.data().regras && doc.data().regras.length > 0) {
+                    container.innerHTML = '';
+                    doc.data().regras.forEach(regra => {
+                        container.innerHTML += `<p>• ${regra}</p>`;
+                    });
+                } else {
+                    container.innerHTML = '<p class="text-center text-white/40">Nenhuma regra cadastrada pelo Ministério.</p>';
+                }
+            }
+        });
 
         // ==========================================
         // SISTEMA DE RANKING (Escuta e Cálculo Automático)
@@ -752,7 +767,6 @@
                 });
         }
 
-        // A SOLUÇÃO DO USUÁRIO FANTASMA (Re-solicitação)
         function enviarCadastro(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-cadastro');
@@ -765,7 +779,6 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processando...';
             feedback.classList.add('hidden');
 
-            // Varredura de Segurança
             db.collection("solicitacoes_acesso").where("nick", "==", nick).get().then(snap => {
                 if (!snap.empty) {
                     const status = snap.docs[0].data().status;
@@ -778,7 +791,6 @@
                         feedback.className = "mt-4 p-2 rounded text-center text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30 block";
                         btn.disabled = false; btn.innerHTML = 'Enviar Solicitação';
                     } else {
-                        // REJEITADO OU REVOGADO: Permitir nova chance
                         auth.signInWithEmailAndPassword(emailFake, senha).then((userCred) => {
                             db.collection("solicitacoes_acesso").doc(userCred.user.uid).update({
                                 status: "Pendente",
@@ -796,7 +808,6 @@
                         });
                     }
                 } else {
-                    // CONTA NOVA E LIMPA
                     auth.createUserWithEmailAndPassword(emailFake, senha).then(res => {
                         return db.collection("solicitacoes_acesso").doc(res.user.uid).set({
                             nick: nick,
