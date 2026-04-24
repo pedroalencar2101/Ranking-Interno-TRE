@@ -171,7 +171,9 @@
                         </div>
                     </div>
                 </div>
+
                 <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                
                 <div id="empty-atividades" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
                     <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
                     <h3 class="text-xl font-black uppercase text-white tracking-widest">Fila Limpa!</h3>
@@ -391,7 +393,7 @@
                         <option value="Pendente" class="text-black">Pendente (Enviar p/ Auditoria)</option>
                     </select>
                 </div>
-                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 text-sm">Lançar no Sistema</button>
+                <button type="submit" id="btn-save-man" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 text-sm">Lançar no Sistema</button>
             </form>
         </div>
     </div>
@@ -486,8 +488,7 @@
         let currentUserNick = "USUARIO"; 
         let currentUserRole = "Convidado"; 
         let quadroPontosGlobal = []; 
-        
-        let editorRegrasQuill; // Variável global para o Editor de Texto (Estilo Word)
+        let editorRegrasQuill; 
 
         function getAvatarUrl(nick, size = 'l') { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=${size}`; }
 
@@ -520,7 +521,6 @@
                         
                         gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
                         
-                        // Inicia o Editor do Word
                         inicializarEditorQuill();
                         carregarConfiguracoesSistema(() => { iniciarEscutasGlobais(); });
                     } else {
@@ -586,7 +586,6 @@
         // 5. EDITOR DE REGRAS (TIPO WORD - QUILLJS)
         // ==========================================
         function inicializarEditorQuill() {
-            // Inicializa a ferramenta WYSIWYG
             editorRegrasQuill = new Quill('#editor-regras', {
                 theme: 'snow',
                 placeholder: 'Escreva e formate as regras do sistema aqui...',
@@ -602,10 +601,8 @@
                 }
             });
 
-            // Carrega as regras do banco para dentro do editor
             db.collection("configuracoes").doc("regras_sistema").onSnapshot(doc => {
                 if (doc.exists && doc.data().conteudoHTML) {
-                    // Só atualiza se a pessoa não estiver na aba de regras (pra não apagar o que ela tá digitando)
                     if(document.getElementById('tab-regras').classList.contains('hidden')){
                         editorRegrasQuill.root.innerHTML = doc.data().conteudoHTML;
                     }
@@ -617,7 +614,6 @@
             const btn = document.getElementById('btn-salvar-regras');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
             
-            // Pega todo o HTML (texto formatado) do editor Word
             const htmlContent = editorRegrasQuill.root.innerHTML;
 
             db.collection("configuracoes").doc("regras_sistema").set({ 
@@ -630,7 +626,7 @@
                 btn.innerHTML = '<i class="fa-solid fa-save"></i> Salvar Regras';
             })
             .catch(err => { 
-                alert("Erro ao salvar regras no banco de dados."); 
+                alert("Erro ao salvar regras."); 
                 btn.innerHTML = '<i class="fa-solid fa-save"></i> Salvar Regras';
             });
         }
@@ -678,13 +674,12 @@
             let l = [...quadroPontosGlobal]; if(idInput) { const idx = l.findIndex(q => q.id === idInput); if(idx > -1) l[idx] = n; } else { l.push(n); }
             db.collection("configuracoes").doc("quadro_pontos").update({ atividades: l }).then(() => toggleModal('modal-config-atividade')).catch(err => alert("Erro ao salvar atividade."));
         }
-        function excluirAtividadeConfig(id) { if(confirm("Excluir atividade permanentemente?")) db.collection("configuracoes").doc("quadro_pontos").update({ atividades: quadroPontosGlobal.filter(q => q.id !== id) }); }
+        function excluirAtividadeConfig(id) { if(confirm("Excluir permanentemente?")) db.collection("configuracoes").doc("quadro_pontos").update({ atividades: quadroPontosGlobal.filter(q => q.id !== id) }); }
 
         // ==========================================
         // 7. ESCUTAS GLOBAIS E AUDITORIA
         // ==========================================
         function iniciarEscutasGlobais() {
-            // Fila de Auditoria
             db.collection("postagens").where("status", "==", "Pendente").onSnapshot((snap) => {
                 const grid = document.getElementById('grid-atividades'); const empty = document.getElementById('empty-atividades');
                 document.getElementById('count-atividades').innerText = `${snap.size} Pendentes`; grid.innerHTML = ''; 
@@ -704,7 +699,6 @@
                 }
             });
 
-            // Acessos Pendentes
             db.collection("solicitacoes_acesso").where("status", "==", "Pendente").onSnapshot((snap) => {
                 const grid = document.getElementById('grid-acessos'); const empty = document.getElementById('empty-acessos'); grid.innerHTML = '';
                 if (snap.empty) { empty.classList.replace('hidden', 'flex'); } else { empty.classList.replace('flex', 'hidden');
@@ -720,7 +714,6 @@
                 }
             });
 
-            // Histórico Total de Acessos
             db.collection("solicitacoes_acesso").onSnapshot((snap) => {
                 const tb = document.getElementById('table-acessos-historico'); tb.innerHTML = '';
                 let hist = []; snap.forEach(doc => hist.push(doc.data()));
@@ -732,7 +725,6 @@
                 });
             });
 
-            // Lista Liderança Ativa
             db.collection("solicitacoes_acesso").where("status", "==", "Aprovado").onSnapshot((snap) => {
                 const gridAdmins = document.getElementById('grid-admin-list-admins'); gridAdmins.innerHTML = '';
                 const gridConvidados = document.getElementById('grid-admin-list-convidados'); gridConvidados.innerHTML = '';
@@ -839,19 +831,24 @@
         }
 
         // ==========================================
-        // 10. GESTÃO DE PERFIL
+        // 10. GESTÃO DE PERFIL E DATAS NO MODAL
         // ==========================================
         function abrirMeuPerfil() { abrirPerfil(auth.currentUser.uid); }
+        
         function abrirPerfil(uid) {
             db.collection("solicitacoes_acesso").doc(uid).get().then(doc => {
                 const d = doc.data();
-                document.getElementById('modal-perfil-nick').innerText = d.nick; document.getElementById('modal-avatar').src = getAvatarUrl(d.nick, 'l');
+                document.getElementById('modal-perfil-nick').innerText = d.nick; 
+                document.getElementById('modal-avatar').src = getAvatarUrl(d.nick, 'l');
+                
                 const bdg = document.getElementById('modal-perfil-cargo-badge');
                 bdg.innerText = d.role === "Admin" ? "ADMINISTRAÇÃO (Ministério)" : "CONVIDADO (Leitura)";
                 bdg.className = d.role === "Admin" ? "bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6" : "bg-white/10 text-white/60 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6";
-                const txt = document.getElementById('perfil-descricao'); txt.value = d.descricao || "";
-                document.getElementById('modal-perfil-uid').value = uid;
                 
+                const txt = document.getElementById('perfil-descricao'); 
+                txt.value = d.descricao || "";
+                document.getElementById('modal-perfil-uid').value = uid;
+
                 let dataStr = "Data não registrada";
                 if(d.dataSolicitacao) { 
                     const dateObj = d.dataSolicitacao.toDate(); 
@@ -861,10 +858,20 @@
                 if(campoData) campoData.innerText = dataStr;
 
                 if (uid === auth.currentUser.uid) {
-                    txt.readOnly = false; document.getElementById('btn-save-perfil').classList.remove('hidden'); document.getElementById('modal-perfil-title-container').classList.add('hidden'); document.getElementById('panel-admin-gerenciar').classList.add('hidden');
+                    txt.readOnly = false; 
+                    document.getElementById('btn-save-perfil').classList.remove('hidden'); 
+                    document.getElementById('modal-perfil-title-container').classList.add('hidden'); 
+                    document.getElementById('panel-admin-gerenciar').classList.add('hidden');
                 } else {
-                    txt.readOnly = true; document.getElementById('btn-save-perfil').classList.add('hidden'); document.getElementById('modal-perfil-title-container').classList.remove('hidden');
-                    if (isAdmin()) { document.getElementById('panel-admin-gerenciar').classList.remove('hidden'); document.getElementById('select-mudar-cargo').value = d.role || "Convidado"; } else { document.getElementById('panel-admin-gerenciar').classList.add('hidden'); }
+                    txt.readOnly = true; 
+                    document.getElementById('btn-save-perfil').classList.add('hidden'); 
+                    document.getElementById('modal-perfil-title-container').classList.remove('hidden');
+                    if (isAdmin()) { 
+                        document.getElementById('panel-admin-gerenciar').classList.remove('hidden'); 
+                        document.getElementById('select-mudar-cargo').value = d.role || "Convidado"; 
+                    } else { 
+                        document.getElementById('panel-admin-gerenciar').classList.add('hidden'); 
+                    }
                 }
                 toggleModal('modal-perfil');
             });
