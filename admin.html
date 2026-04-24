@@ -46,7 +46,10 @@
         .point-red { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #F87171; }
         .point-amber { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #FBBF24; }
         
-        ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: #D31522; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; } 
+        ::-webkit-scrollbar-track { background: transparent; } 
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; } 
+        ::-webkit-scrollbar-thumb:hover { background: #D31522; }
         #auth-loader { z-index: 9999; }
         
         /* Ocultar elementos restritos se o body tiver a classe de convidado */
@@ -234,7 +237,7 @@
                     <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                         <i class="fa-solid fa-users text-tre-brand"></i> Membros com Acesso
                     </h2>
-                    <p class="text-white/40 text-xs md:text-sm">Lista de usuários cadastrados:</p>
+                    <p class="text-white/40 text-xs md:text-sm">Lista de usuários cadastrados divididos por poder administrativo.</p>
                 </div>
 
                 <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-widest mb-5 mt-2 flex items-center gap-3">
@@ -298,9 +301,11 @@
             </div>
             <h3 class="text-3xl font-black text-white mb-1" id="modal-perfil-nick">Nick</h3>
             <span id="modal-perfil-cargo-badge" class="bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6">Cargo</span>
+            
             <div class="w-full space-y-2 mb-6 text-left p-4 rounded-xl bg-white/5 border border-white/10">
                 <p class="text-sm text-white/70"><i class="fa-solid fa-calendar-check text-tre-brand mr-2"></i>Acesso desde: <span class="font-bold text-white" id="modal-perfil-dataRegistro">Carregando...</span></p>
             </div>
+            
             <div class="w-full space-y-1.5 mb-6 text-left">
                 <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Biografia Profissional</label>
                 <textarea id="perfil-descricao" rows="3" placeholder="Sem biografia." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium custom-scrollbar"></textarea>
@@ -441,7 +446,7 @@
         function getAvatarUrl(nick, size = 'l') { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=${size}`; }
 
         // ==========================================
-        // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA (BUG RESOLVIDO)
+        // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA
         // ==========================================
         auth.onAuthStateChanged((user) => {
             const loader = document.getElementById('auth-loader');
@@ -451,7 +456,6 @@
                         currentUserNick = doc.data().nick || "Admin";
                         
                         let rawRole = doc.data().role;
-                        
                         if (rawRole === "SuperAdmin") {
                             currentUserRole = "Admin";
                             db.collection("solicitacoes_acesso").doc(user.uid).update({ role: "Admin" });
@@ -626,7 +630,7 @@
                 });
             });
 
-            // Lista Liderança (Admins e Convidados com visual gigante)
+            // Lista Liderança Ativa
             db.collection("solicitacoes_acesso").where("status", "==", "Aprovado").onSnapshot((snap) => {
                 const gridAdmins = document.getElementById('grid-admin-list-admins'); gridAdmins.innerHTML = '';
                 const gridConvidados = document.getElementById('grid-admin-list-convidados'); gridConvidados.innerHTML = '';
@@ -691,10 +695,10 @@
         }
 
         // ==========================================
-        // 8. RENDERIZAÇÃO DO HISTÓRICO GERAL (Com Carimbos)
+        // 8. RENDERIZAÇÃO DO HISTÓRICO GERAL 
         // ==========================================
         function carregarTabelaHistorico() {
-            const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...</td></tr>';
+            const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando Banco de Dados...</td></tr>';
             db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado", "Pendente"]).onSnapshot((snap) => {
                 let filtrados = []; snap.forEach(doc => { const d = doc.data(); d.id = doc.id; if(d.dataEnvio || d.dataJulgamento) { let t = d.dataJulgamento || d.dataEnvio; d.mesAnoStr = `${mesesNomes[t.toDate().getMonth()]} ${t.toDate().getFullYear()}`; filtrados.push(d); } });
                 filtrados = filtrados.filter(p => p.mesAnoStr === mesAtualStr).sort((a, b) => (b.dataJulgamento||b.dataEnvio).toDate() - (a.dataJulgamento||a.dataEnvio).toDate());
@@ -733,19 +737,25 @@
         }
 
         // ==========================================
-        // 9. GESTÃO DE PERFIL
+        // 9. GESTÃO DE PERFIL E DATAS NO MODAL
         // ==========================================
         function abrirMeuPerfil() { abrirPerfil(auth.currentUser.uid); }
+        
         function abrirPerfil(uid) {
             db.collection("solicitacoes_acesso").doc(uid).get().then(doc => {
                 const d = doc.data();
-                document.getElementById('modal-perfil-nick').innerText = d.nick; document.getElementById('modal-avatar').src = getAvatarUrl(d.nick, 'l');
+                document.getElementById('modal-perfil-nick').innerText = d.nick; 
+                document.getElementById('modal-avatar').src = getAvatarUrl(d.nick, 'l');
+                
                 const bdg = document.getElementById('modal-perfil-cargo-badge');
                 bdg.innerText = d.role === "Admin" ? "ADMINISTRAÇÃO (Ministério)" : "CONVIDADO (Leitura)";
                 bdg.className = d.role === "Admin" ? "bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6" : "bg-white/10 text-white/60 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6";
-                const txt = document.getElementById('perfil-descricao'); txt.value = d.descricao || "";
+                
+                const txt = document.getElementById('perfil-descricao'); 
+                txt.value = d.descricao || "";
                 document.getElementById('modal-perfil-uid').value = uid;
-                // Formata e exibe a data de registro
+
+                // Formata e exibe a data de registro na caixinha nova
                 let dataStr = "Data não registrada";
                 if(d.dataSolicitacao) { 
                     const dateObj = d.dataSolicitacao.toDate(); 
@@ -755,10 +765,20 @@
                 if(campoData) campoData.innerText = dataStr;
 
                 if (uid === auth.currentUser.uid) {
-                    txt.readOnly = false; document.getElementById('btn-save-perfil').classList.remove('hidden'); document.getElementById('modal-perfil-title-container').classList.add('hidden'); document.getElementById('panel-admin-gerenciar').classList.add('hidden');
+                    txt.readOnly = false; 
+                    document.getElementById('btn-save-perfil').classList.remove('hidden'); 
+                    document.getElementById('modal-perfil-title-container').classList.add('hidden'); 
+                    document.getElementById('panel-admin-gerenciar').classList.add('hidden');
                 } else {
-                    txt.readOnly = true; document.getElementById('btn-save-perfil').classList.add('hidden'); document.getElementById('modal-perfil-title-container').classList.remove('hidden');
-                    if (isAdmin()) { document.getElementById('panel-admin-gerenciar').classList.remove('hidden'); document.getElementById('select-mudar-cargo').value = d.role || "Convidado"; } else { document.getElementById('panel-admin-gerenciar').classList.add('hidden'); }
+                    txt.readOnly = true; 
+                    document.getElementById('btn-save-perfil').classList.add('hidden'); 
+                    document.getElementById('modal-perfil-title-container').classList.remove('hidden');
+                    if (isAdmin()) { 
+                        document.getElementById('panel-admin-gerenciar').classList.remove('hidden'); 
+                        document.getElementById('select-mudar-cargo').value = d.role || "Convidado"; 
+                    } else { 
+                        document.getElementById('panel-admin-gerenciar').classList.add('hidden'); 
+                    }
                 }
                 toggleModal('modal-perfil');
             });
