@@ -11,6 +11,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -46,14 +48,34 @@
         .point-red { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #F87171; }
         .point-amber { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #FBBF24; }
         
-        ::-webkit-scrollbar { width: 6px; height: 6px; } 
-        ::-webkit-scrollbar-track { background: transparent; } 
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; } 
-        ::-webkit-scrollbar-thumb:hover { background: #D31522; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: #D31522; }
         #auth-loader { z-index: 9999; }
-        
-        /* Ocultar elementos restritos se o body tiver a classe de convidado */
         body.role-convidado .only-admin { display: none !important; }
+
+        /* Estilos customizados para o Editor Word (QuillJS) no tema Glassmorphism */
+        .ql-toolbar.ql-snow {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 1rem 1rem 0 0;
+            padding: 12px;
+        }
+        .ql-container.ql-snow {
+            background: rgba(10, 1, 2, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-top: none !important;
+            border-radius: 0 0 1rem 1rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            min-height: 400px;
+        }
+        .ql-snow .ql-stroke { stroke: rgba(255, 255, 255, 0.7); }
+        .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill { fill: rgba(255, 255, 255, 0.7); }
+        .ql-snow .ql-picker { color: rgba(255, 255, 255, 0.7); }
+        .ql-snow .ql-picker-options { background-color: #0A0102; border-color: rgba(255,255,255,0.1); }
+        .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke { stroke: #D31522; }
+        .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill { fill: #D31522; }
+        .ql-editor p { margin-bottom: 0.75em; }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand flex h-screen role-convidado">
@@ -67,7 +89,7 @@
 
     <aside id="sidebar" class="glass-panel w-72 h-full flex flex-col fixed md:relative z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 border-r border-white/5">
         <div class="p-6 border-b border-white/5 flex items-center gap-4">
-            <img src="trelogo.png" alt="TRE" class="h-10 object-contain" onerror="this.src='https://via.placeholder.com/50x50/D31522/FFFFFF?text=TRE'">
+            <img src="trelogo.png" alt="TRE" class="h-10 object-contain">
             <div>
                 <h1 class="text-xl font-black text-white tracking-tighter leading-none">COMANDO</h1>
                 <p class="text-[9px] text-tre-brand font-bold uppercase tracking-widest mt-1">Ministério RCC</p>
@@ -89,6 +111,11 @@
             <button onclick="switchTab('lista-admin', this)" class="nav-item w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
                 <i class="fa-solid fa-users w-5 text-center"></i> Membros com Acesso
             </button>
+            
+            <button onclick="switchTab('regras', this)" class="nav-item only-admin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
+                <i class="fa-solid fa-file-contract w-5 text-center text-blue-400"></i> Regras do Sistema
+            </button>
+
             <button onclick="switchTab('config', this)" class="nav-item only-admin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
                 <i class="fa-solid fa-sliders w-5 text-center text-amber-500"></i> Configurações Raiz
             </button>
@@ -97,7 +124,7 @@
         <div class="p-6 border-t border-white/5">
             <button onclick="abrirMeuPerfil()" class="w-full glass-card vivid-perfil p-4 flex items-center gap-3.5 mb-4 border border-white/10 hover:border-tre-brand/30 transition-all">
                 <div class="w-12 h-12 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
-                    <img id="sidebar-avatar" src="https://via.placeholder.com/80x80/0A0102/FFFFFF?text=???" class="avatar-img absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500">
+                    <img id="sidebar-avatar" src="" class="avatar-img absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500">
                 </div>
                 <div class="text-left w-full overflow-hidden">
                     <p class="text-sm font-black text-white group-hover:text-tre-brand truncate" id="admin-user-nick">...</p>
@@ -144,9 +171,7 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-                
                 <div id="empty-atividades" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
                     <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
                     <h3 class="text-xl font-black uppercase text-white tracking-widest">Fila Limpa!</h3>
@@ -171,7 +196,6 @@
                         </button>
                         <div id="menu-filter-meses" class="absolute left-0 top-full mt-2 w-56 glass-panel-simple !bg-[#0A0102]/95 rounded-lg opacity-0 invisible translate-y-2 transition-all z-50 overflow-hidden flex flex-col text-sm border border-white/10 max-h-64 overflow-y-auto custom-scrollbar"></div>
                     </div>
-
                     <div class="relative w-full md:w-80">
                         <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
                         <input type="text" id="search-historico" onkeyup="filtrarHistoricoBusca()" placeholder="Buscar por Nick..." class="w-full glass-input rounded-lg pl-11 pr-4 py-2.5 text-sm font-medium">
@@ -251,16 +275,34 @@
                 <div id="grid-admin-list-convidados" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10"></div>
             </div>
 
+            <div id="tab-regras" class="tab-content hidden opacity-0 relative z-10">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
+                    <div>
+                        <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
+                            <i class="fa-solid fa-file-contract text-blue-400"></i> Editor de Regras
+                        </h2>
+                        <p class="text-white/40 text-xs md:text-sm">Edição em Tempo Real. O que você digitar aqui será exibido para todos no site principal.</p>
+                    </div>
+                    <button id="btn-salvar-regras" onclick="salvarRegrasWord()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition-all text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-save"></i> Salvar Regras
+                    </button>
+                </div>
+                
+                <div class="bg-[#0A0102] rounded-2xl shadow-3xl">
+                    <div id="editor-regras"></div>
+                </div>
+            </div>
+
             <div id="tab-config" class="tab-content hidden opacity-0 relative z-10">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                             <i class="fa-solid fa-sliders text-amber-500"></i> Configurações Raiz
                         </h2>
-                        <p class="text-white/40 text-xs md:text-sm">Área perigosa. Gestão central do Quadro de Pontos e banco de dados.</p>
+                        <p class="text-white/40 text-xs md:text-sm">Gestão central do Quadro de Pontos (Atividades e Valores).</p>
                     </div>
                     <button onclick="abrirModalConfigAtividade()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition-all text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Adicionar Regra
+                        <i class="fa-solid fa-plus"></i> Adicionar Atividade
                     </button>
                 </div>
 
@@ -343,13 +385,13 @@
                     <select id="man-categoria" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium appearance-none custom-scrollbar"></select>
                 </div>
                 <div class="space-y-1.5">
-                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Status Final do Lançamento</label>
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Status Final</label>
                     <select id="man-status" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-bold text-emerald-400 bg-emerald-500/10 appearance-none">
                         <option value="Aprovado" class="text-black">Aprovado (Lançar Pontos Agora)</option>
                         <option value="Pendente" class="text-black">Pendente (Enviar p/ Auditoria)</option>
                     </select>
                 </div>
-                <button type="submit" id="btn-save-man" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 text-sm">Lançar no Sistema</button>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 text-sm">Lançar no Sistema</button>
             </form>
         </div>
     </div>
@@ -402,7 +444,7 @@
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-config-atividade')"></div>
         <div class="relative w-full max-w-md bg-[#0A0102] border border-white/10 rounded-3xl p-8 transform scale-95 transition-all">
             <button onclick="toggleModal('modal-config-atividade')" class="absolute top-6 right-6 text-white/40 hover:text-tre-brand"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h2 class="text-xl font-black text-white uppercase mb-6 flex items-center gap-2 border-b border-white/10 pb-4"><i class="fa-solid fa-pen-to-square text-amber-500"></i> Gerenciar Regra</h2>
+            <h2 class="text-xl font-black text-white uppercase mb-6 flex items-center gap-2 border-b border-white/10 pb-4"><i class="fa-solid fa-layer-group text-amber-500"></i> Gerenciar Atividade</h2>
             
             <form id="form-config-atividade" onsubmit="salvarConfigAtividade(event)" class="space-y-4">
                 <input type="hidden" id="config-id">
@@ -420,7 +462,7 @@
                         </select>
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 text-sm">Salvar Regra</button>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4 text-sm">Salvar Atividade</button>
             </form>
         </div>
     </div>
@@ -429,6 +471,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
     <script>
         // ==========================================
@@ -442,11 +486,13 @@
         let currentUserNick = "USUARIO"; 
         let currentUserRole = "Convidado"; 
         let quadroPontosGlobal = []; 
+        
+        let editorRegrasQuill; // Variável global para o Editor de Texto (Estilo Word)
 
         function getAvatarUrl(nick, size = 'l') { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=${size}`; }
 
         // ==========================================
-        // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA
+        // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA 
         // ==========================================
         auth.onAuthStateChanged((user) => {
             const loader = document.getElementById('auth-loader');
@@ -473,6 +519,9 @@
                         aplicarPermissoesUI();
                         
                         gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
+                        
+                        // Inicia o Editor do Word
+                        inicializarEditorQuill();
                         carregarConfiguracoesSistema(() => { iniciarEscutasGlobais(); });
                     } else {
                         auth.signOut().then(() => { alert("Acesso Negado ou Revogado."); window.location.href = 'index.html'; });
@@ -534,7 +583,60 @@
         function filtrarHistoricoBusca() { const t = document.getElementById('search-historico').value.toLowerCase(); document.querySelectorAll('#table-historico-list tr').forEach(r => { r.style.display = r.querySelector('.nick-cell').innerText.toLowerCase().includes(t) ? '' : 'none'; }); }
 
         // ==========================================
-        // 5. CONFIGURAÇÕES (CRUD Raiz)
+        // 5. EDITOR DE REGRAS (TIPO WORD - QUILLJS)
+        // ==========================================
+        function inicializarEditorQuill() {
+            // Inicializa a ferramenta WYSIWYG
+            editorRegrasQuill = new Quill('#editor-regras', {
+                theme: 'snow',
+                placeholder: 'Escreva e formate as regras do sistema aqui...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['link', 'clean']
+                    ]
+                }
+            });
+
+            // Carrega as regras do banco para dentro do editor
+            db.collection("configuracoes").doc("regras_sistema").onSnapshot(doc => {
+                if (doc.exists && doc.data().conteudoHTML) {
+                    // Só atualiza se a pessoa não estiver na aba de regras (pra não apagar o que ela tá digitando)
+                    if(document.getElementById('tab-regras').classList.contains('hidden')){
+                        editorRegrasQuill.root.innerHTML = doc.data().conteudoHTML;
+                    }
+                }
+            });
+        }
+
+        function salvarRegrasWord() {
+            const btn = document.getElementById('btn-salvar-regras');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+            
+            // Pega todo o HTML (texto formatado) do editor Word
+            const htmlContent = editorRegrasQuill.root.innerHTML;
+
+            db.collection("configuracoes").doc("regras_sistema").set({ 
+                conteudoHTML: htmlContent,
+                atualizadoPor: currentUserNick,
+                dataAtualizacao: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => { 
+                alert("As regras do site foram atualizadas com sucesso!"); 
+                btn.innerHTML = '<i class="fa-solid fa-save"></i> Salvar Regras';
+            })
+            .catch(err => { 
+                alert("Erro ao salvar regras no banco de dados."); 
+                btn.innerHTML = '<i class="fa-solid fa-save"></i> Salvar Regras';
+            });
+        }
+
+        // ==========================================
+        // 6. CONFIGURAÇÕES RAIZ (Atividades)
         // ==========================================
         function carregarConfiguracoesSistema(callback) {
             db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
@@ -574,12 +676,12 @@
             e.preventDefault(); const idInput = document.getElementById('config-id').value;
             const n = { id: idInput ? idInput : "cfg_" + Date.now(), nome: document.getElementById('config-nome').value.trim(), grupo: document.getElementById('config-grupo').value, pontos: parseInt(document.getElementById('config-pontos').value), responsavel: document.getElementById('config-responsavel').value };
             let l = [...quadroPontosGlobal]; if(idInput) { const idx = l.findIndex(q => q.id === idInput); if(idx > -1) l[idx] = n; } else { l.push(n); }
-            db.collection("configuracoes").doc("quadro_pontos").update({ atividades: l }).then(() => toggleModal('modal-config-atividade')).catch(err => alert("Erro ao salvar regra."));
+            db.collection("configuracoes").doc("quadro_pontos").update({ atividades: l }).then(() => toggleModal('modal-config-atividade')).catch(err => alert("Erro ao salvar atividade."));
         }
-        function excluirAtividadeConfig(id) { if(confirm("Excluir permanentemente?")) db.collection("configuracoes").doc("quadro_pontos").update({ atividades: quadroPontosGlobal.filter(q => q.id !== id) }); }
+        function excluirAtividadeConfig(id) { if(confirm("Excluir atividade permanentemente?")) db.collection("configuracoes").doc("quadro_pontos").update({ atividades: quadroPontosGlobal.filter(q => q.id !== id) }); }
 
         // ==========================================
-        // 6. ESCUTAS GLOBAIS E AUDITORIA
+        // 7. ESCUTAS GLOBAIS E AUDITORIA
         // ==========================================
         function iniciarEscutasGlobais() {
             // Fila de Auditoria
@@ -660,7 +762,7 @@
         }
 
         // ==========================================
-        // 7. AÇÕES E MOTOR DE JULGAMENTO
+        // 8. AÇÕES E MOTOR DE JULGAMENTO
         // ==========================================
         function julgarDoc(docId, st) { db.collection("postagens").doc(docId).update({ status: st, dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(), julgadoPor: currentUserNick }).catch(e => alert("Erro ao processar.")); }
         function julgarAcesso(docId, st) { db.collection("solicitacoes_acesso").doc(docId).update({ status: st }).catch(e => alert("Erro de permissão.")); }
@@ -695,10 +797,10 @@
         }
 
         // ==========================================
-        // 8. RENDERIZAÇÃO DO HISTÓRICO GERAL 
+        // 9. RENDERIZAÇÃO DO HISTÓRICO GERAL (Com Carimbos)
         // ==========================================
         function carregarTabelaHistorico() {
-            const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando Banco de Dados...</td></tr>';
+            const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...</td></tr>';
             db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado", "Pendente"]).onSnapshot((snap) => {
                 let filtrados = []; snap.forEach(doc => { const d = doc.data(); d.id = doc.id; if(d.dataEnvio || d.dataJulgamento) { let t = d.dataJulgamento || d.dataEnvio; d.mesAnoStr = `${mesesNomes[t.toDate().getMonth()]} ${t.toDate().getFullYear()}`; filtrados.push(d); } });
                 filtrados = filtrados.filter(p => p.mesAnoStr === mesAtualStr).sort((a, b) => (b.dataJulgamento||b.dataEnvio).toDate() - (a.dataJulgamento||a.dataEnvio).toDate());
@@ -737,25 +839,19 @@
         }
 
         // ==========================================
-        // 9. GESTÃO DE PERFIL E DATAS NO MODAL
+        // 10. GESTÃO DE PERFIL
         // ==========================================
         function abrirMeuPerfil() { abrirPerfil(auth.currentUser.uid); }
-        
         function abrirPerfil(uid) {
             db.collection("solicitacoes_acesso").doc(uid).get().then(doc => {
                 const d = doc.data();
-                document.getElementById('modal-perfil-nick').innerText = d.nick; 
-                document.getElementById('modal-avatar').src = getAvatarUrl(d.nick, 'l');
-                
+                document.getElementById('modal-perfil-nick').innerText = d.nick; document.getElementById('modal-avatar').src = getAvatarUrl(d.nick, 'l');
                 const bdg = document.getElementById('modal-perfil-cargo-badge');
                 bdg.innerText = d.role === "Admin" ? "ADMINISTRAÇÃO (Ministério)" : "CONVIDADO (Leitura)";
                 bdg.className = d.role === "Admin" ? "bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6" : "bg-white/10 text-white/60 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6";
-                
-                const txt = document.getElementById('perfil-descricao'); 
-                txt.value = d.descricao || "";
+                const txt = document.getElementById('perfil-descricao'); txt.value = d.descricao || "";
                 document.getElementById('modal-perfil-uid').value = uid;
-
-                // Formata e exibe a data de registro na caixinha nova
+                
                 let dataStr = "Data não registrada";
                 if(d.dataSolicitacao) { 
                     const dateObj = d.dataSolicitacao.toDate(); 
@@ -765,20 +861,10 @@
                 if(campoData) campoData.innerText = dataStr;
 
                 if (uid === auth.currentUser.uid) {
-                    txt.readOnly = false; 
-                    document.getElementById('btn-save-perfil').classList.remove('hidden'); 
-                    document.getElementById('modal-perfil-title-container').classList.add('hidden'); 
-                    document.getElementById('panel-admin-gerenciar').classList.add('hidden');
+                    txt.readOnly = false; document.getElementById('btn-save-perfil').classList.remove('hidden'); document.getElementById('modal-perfil-title-container').classList.add('hidden'); document.getElementById('panel-admin-gerenciar').classList.add('hidden');
                 } else {
-                    txt.readOnly = true; 
-                    document.getElementById('btn-save-perfil').classList.add('hidden'); 
-                    document.getElementById('modal-perfil-title-container').classList.remove('hidden');
-                    if (isAdmin()) { 
-                        document.getElementById('panel-admin-gerenciar').classList.remove('hidden'); 
-                        document.getElementById('select-mudar-cargo').value = d.role || "Convidado"; 
-                    } else { 
-                        document.getElementById('panel-admin-gerenciar').classList.add('hidden'); 
-                    }
+                    txt.readOnly = true; document.getElementById('btn-save-perfil').classList.add('hidden'); document.getElementById('modal-perfil-title-container').classList.remove('hidden');
+                    if (isAdmin()) { document.getElementById('panel-admin-gerenciar').classList.remove('hidden'); document.getElementById('select-mudar-cargo').value = d.role || "Convidado"; } else { document.getElementById('panel-admin-gerenciar').classList.add('hidden'); }
                 }
                 toggleModal('modal-perfil');
             });
