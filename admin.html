@@ -171,9 +171,7 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-                
                 <div id="empty-atividades" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
                     <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
                     <h3 class="text-xl font-black uppercase text-white tracking-widest">Fila Limpa!</h3>
@@ -359,10 +357,23 @@
             <div id="panel-admin-gerenciar" class="w-full border-t border-white/10 pt-6 mt-2 hidden only-admin">
                 <h4 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-3"><i class="fa-solid fa-shield-halved"></i> Controles da Administração</h4>
                 <div class="flex gap-2">
-                    <select id="select-mudar-cargo" class="flex-1 glass-input rounded-xl px-3 text-xs font-bold appearance-none cursor-pointer">
-                        <option value="Admin">Admin (Acesso Total)</option>
-                        <option value="Convidado">Convidado (Leitura Restrita)</option>
-                    </select>
+                    <div class="relative flex-1">
+                        <button type="button" onclick="toggleCargoDropdown()" class="w-full glass-input rounded-xl px-4 py-2.5 text-xs font-bold flex items-center justify-between cursor-pointer focus:outline-none hover:bg-white/5 transition-colors">
+                            <span id="texto-cargo-selecionado">Carregando...</span>
+                            <i id="icone-cargo-seta" class="fa-solid fa-chevron-up text-[10px] text-white/40 transition-transform duration-300"></i>
+                        </button>
+                        
+                        <div id="menu-cargo-dropdown" class="absolute left-0 bottom-full mb-2 w-full glass-panel-simple !bg-[#0A0102]/95 rounded-xl opacity-0 invisible translate-y-2 transition-all duration-300 overflow-hidden flex flex-col text-xs shadow-2xl z-50 border border-white/10">
+                            <button type="button" onclick="selecionarCargoMenu('Admin', 'Admin (Acesso Total)')" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white hover:text-amber-400 border-b border-white/5 font-bold w-full flex items-center justify-between">
+                                Admin (Acesso Total) <i class="fa-solid fa-star text-amber-500"></i>
+                            </button>
+                            <button type="button" onclick="selecionarCargoMenu('Convidado', 'Convidado (Leitura Restrita)')" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white w-full font-medium flex items-center justify-between">
+                                Convidado (Leitura Restrita) <i class="fa-solid fa-user text-white/30"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="select-mudar-cargo" value="Convidado">
+                    
                     <button onclick="mudarCargoUsuario()" class="bg-amber-500/20 hover:bg-amber-500/40 text-amber-500 font-bold px-4 py-2.5 rounded-xl transition-colors text-xs border border-amber-500/30">Atualizar Nível</button>
                 </div>
                 <button onclick="expulsarUsuario()" class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 font-bold py-2.5 rounded-xl mt-3 text-xs transition-all border border-red-500/20"><i class="fa-solid fa-ban"></i> Revogar Acesso / Expulsar</button>
@@ -833,6 +844,21 @@
         // ==========================================
         // 10. GESTÃO DE PERFIL E DATAS NO MODAL
         // ==========================================
+        function toggleCargoDropdown() {
+            const menu = document.getElementById('menu-cargo-dropdown');
+            const seta = document.getElementById('icone-cargo-seta');
+            menu.classList.toggle('opacity-0'); 
+            menu.classList.toggle('invisible'); 
+            menu.classList.toggle('translate-y-2');
+            seta.classList.toggle('rotate-180');
+        }
+
+        function selecionarCargoMenu(valor, texto) {
+            document.getElementById('select-mudar-cargo').value = valor;
+            document.getElementById('texto-cargo-selecionado').innerText = texto;
+            toggleCargoDropdown();
+        }
+
         function abrirMeuPerfil() { abrirPerfil(auth.currentUser.uid); }
         
         function abrirPerfil(uid) {
@@ -868,7 +894,9 @@
                     document.getElementById('modal-perfil-title-container').classList.remove('hidden');
                     if (isAdmin()) { 
                         document.getElementById('panel-admin-gerenciar').classList.remove('hidden'); 
-                        document.getElementById('select-mudar-cargo').value = d.role || "Convidado"; 
+                        let cargoMembro = d.role || "Convidado";
+                        document.getElementById('select-mudar-cargo').value = cargoMembro; 
+                        document.getElementById('texto-cargo-selecionado').innerText = cargoMembro === "Admin" ? "Admin (Acesso Total)" : "Convidado (Leitura Restrita)";
                     } else { 
                         document.getElementById('panel-admin-gerenciar').classList.add('hidden'); 
                     }
