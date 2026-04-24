@@ -11,7 +11,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <script>
@@ -37,12 +36,12 @@
         .nav-item:hover:not(.active) { background: rgba(255, 255, 255, 0.05); }
         
         .vivid-perfil { transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); transform-origin: center; cursor: pointer; }
-        .vivid-perfil:hover { background: rgba(211, 21, 34, 0.15); border-color: rgba(211, 21, 34, 0.3); box-shadow: theme('boxShadow.vivid'); transform: scale(1.02); }
+        .vivid-perfil:hover { background: rgba(211, 21, 34, 0.15); border-color: rgba(211, 21, 34, 0.3); box-shadow: 0 0 20px -5px rgba(211, 21, 34, 0.4); transform: scale(1.02); }
         .vivid-perfil img.avatar-img { transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
         .vivid-perfil:hover img.avatar-img { transform: translateX(-50%) scale(1.15) !important; }
         
         .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
-        .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: theme('colors.tre.brand'); outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
+        .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: #D31522; outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
         .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 4px; }
         .point-emerald { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34D399; }
         .point-red { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #F87171; }
@@ -52,16 +51,28 @@
         #auth-loader { z-index: 9999; }
         body.role-convidado .only-admin { display: none !important; }
 
-        /* Estilos do QuillJS adaptados para o tema Escuro/Vidro */
+        /* QuillJS Dark Theme */
         .ql-toolbar.ql-snow { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 1rem 1rem 0 0; padding: 12px; }
         .ql-container.ql-snow { background: rgba(10, 1, 2, 0.6); border: 1px solid rgba(255, 255, 255, 0.1) !important; border-top: none !important; border-radius: 0 0 1rem 1rem; color: white; font-family: 'Inter', sans-serif; font-size: 14px; min-height: 400px; }
         .ql-snow .ql-stroke { stroke: rgba(255, 255, 255, 0.7); } .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill { fill: rgba(255, 255, 255, 0.7); } .ql-snow .ql-picker { color: rgba(255, 255, 255, 0.7); } .ql-snow .ql-picker-options { background-color: #0A0102; border-color: rgba(255,255,255,0.1); }
         .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke { stroke: #D31522; } .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill { fill: #D31522; }
         .ql-editor p { margin-bottom: 0.75em; }
+
+        /* Toast System */
+        #toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 99999; display: flex; flex-direction: column; gap: 0.75rem; pointer-events: none; }
+        .toast { padding: 0.875rem 1.25rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; pointer-events: all; backdrop-filter: blur(20px); border: 1px solid; animation: toastIn 0.35s cubic-bezier(0.23, 1, 0.32, 1) forwards; max-width: 340px; transition: opacity 0.3s ease; }
+        .toast.success { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #34D399; }
+        .toast.error   { background: rgba(239, 68, 68, 0.15);  border-color: rgba(239, 68, 68, 0.3);  color: #F87171; }
+        .toast.info    { background: rgba(211, 21, 34, 0.15);  border-color: rgba(211, 21, 34, 0.3);  color: #FA1C2A; }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* Btn loading state */
+        button:disabled { cursor: not-allowed; }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand flex h-screen role-convidado">
 
+    <!-- AUTH LOADER -->
     <div id="auth-loader" class="fixed inset-0 bg-[#0A0102] flex flex-col items-center justify-center backdrop-blur-3xl transition-opacity duration-700">
         <img src="trelogo.png" alt="Logo TRE" class="h-16 mb-6 animate-pulse" onerror="this.src='https://via.placeholder.com/80x80/D31522/FFFFFF?text=TRE'">
         <i class="fa-solid fa-shield-check text-4xl text-tre-brand mb-4"></i>
@@ -69,6 +80,7 @@
         <p class="text-white/40 text-xs mt-2" id="loader-text">Aguarde um momento...</p>
     </div>
 
+    <!-- SIDEBAR -->
     <aside id="sidebar" class="glass-panel w-72 h-full flex flex-col fixed md:relative z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 border-r border-white/5">
         <div class="p-6 border-b border-white/5 flex items-center gap-4">
             <img src="trelogo.png" alt="TRE" class="h-10 object-contain">
@@ -106,7 +118,7 @@
 
         <div class="p-6 border-t border-white/5">
             <button onclick="abrirMeuPerfil()" class="w-full glass-card vivid-perfil p-4 flex items-center gap-3.5 mb-4 border border-white/10 hover:border-tre-brand/30 transition-all">
-                <div class="w-12 h-12 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0 group-hover:border-tre-brand">
+                <div class="w-12 h-12 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0">
                     <img id="sidebar-avatar" src="" class="avatar-img absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500">
                 </div>
                 <div class="text-left w-full overflow-hidden">
@@ -120,6 +132,7 @@
         </div>
     </aside>
 
+    <!-- MAIN -->
     <main class="flex-1 flex flex-col h-full relative overflow-hidden">
         <header class="glass-panel h-16 flex items-center justify-between px-6 border-b border-white/5 md:hidden flex-shrink-0">
             <div class="flex items-center gap-3">
@@ -135,6 +148,7 @@
                 <i class="fa-solid fa-arrow-left"></i> Voltar ao Site Principal
             </a>
 
+            <!-- TAB: DASHBOARD -->
             <div id="tab-dashboard" class="tab-content block relative z-10">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5 relative z-10">
                     <div>
@@ -143,14 +157,12 @@
                         </h2>
                         <p class="text-white/40 text-xs md:text-sm">Dashboard</p>
                     </div>
-                    
                     <div class="relative z-50">
                         <button id="btn-filter-mes-dash" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white hover:text-white transition-colors border border-white/10">
                             <i class="fa-solid fa-calendar-alt text-amber-500"></i> <span id="texto-filter-mes-dash">Carregando...</span> <i id="icone-filter-seta-dash" class="fa-solid fa-chevron-down text-xs ml-1 opacity-40"></i>
                         </button>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="glass-card p-6 flex flex-col items-start border-l-4 border-l-blue-500">
                         <i class="fa-solid fa-layer-group text-blue-500 text-2xl mb-4"></i>
@@ -176,6 +188,7 @@
                 </div>
             </div>
 
+            <!-- TAB: AUDITORIA -->
             <div id="tab-auditoria" class="tab-content hidden opacity-0 relative z-10">
                 <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
@@ -196,12 +209,13 @@
                 </div>
                 <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
                 <div id="empty-atividades" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
-                    <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
+                    <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
                     <h3 class="text-xl font-black uppercase text-white tracking-widest">Fila Limpa!</h3>
                     <p class="text-sm text-white/40 mt-1 max-w-sm">Nenhuma atividade pendente de análise.</p>
                 </div>
             </div>
 
+            <!-- TAB: HISTÓRICO -->
             <div id="tab-historico" class="tab-content hidden opacity-0 relative z-[90]">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5 relative z-10">
                     <div>
@@ -211,7 +225,6 @@
                         <p class="text-white/40 text-xs md:text-sm">Arquivo de atividades com controle total de edição para Admins.</p>
                     </div>
                 </div>
-
                 <div class="glass-panel-simple p-5 flex flex-wrap items-center justify-between gap-4 mb-6 rounded-xl border border-white/5 relative z-[100] overflow-visible">
                     <div class="relative">
                         <button id="btn-filter-mes-hist" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white hover:text-white transition-colors border border-white/10">
@@ -220,10 +233,9 @@
                     </div>
                     <div class="relative w-full md:w-80">
                         <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
-                        <input type="text" id="search-historico" onkeyup="filtrarHistoricoBusca()" placeholder="Buscar por Nick..." class="w-full glass-input rounded-lg pl-11 pr-4 py-2.5 text-sm font-medium">
+                        <input type="text" id="search-historico" onkeyup="filtrarHistoricoBuscaDebounced()" placeholder="Buscar por Nick..." class="w-full glass-input rounded-lg pl-11 pr-4 py-2.5 text-sm font-medium">
                     </div>
                 </div>
-
                 <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl relative z-10">
                     <div class="overflow-x-auto pb-2">
                         <table class="w-full text-left border-collapse min-w-full text-sm">
@@ -243,8 +255,10 @@
                 </div>
             </div>
 
+            <!-- DROPDOWN FILTRO MÊS (compartilhado) -->
             <div id="menu-filter-meses" class="absolute left-10 md:left-[50px] top-[260px] md:top-[220px] w-56 glass-panel-simple !bg-[#0A0102]/95 rounded-xl opacity-0 invisible translate-y-2 transition-all z-[999] overflow-hidden flex flex-col text-sm border border-white/10 max-h-64 overflow-y-auto custom-scrollbar"></div>
 
+            <!-- TAB: ACESSOS -->
             <div id="tab-acessos" class="tab-content hidden opacity-0 relative z-10">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
@@ -278,6 +292,7 @@
                 </div>
             </div>
 
+            <!-- TAB: LISTA DE MEMBROS -->
             <div id="tab-lista-admin" class="tab-content hidden opacity-0 relative z-10">
                 <div class="mb-10 pb-6 border-b border-white/5">
                     <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
@@ -295,6 +310,7 @@
                 <div id="grid-admin-list-convidados" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10"></div>
             </div>
 
+            <!-- TAB: REGRAS -->
             <div id="tab-regras" class="tab-content hidden opacity-0 relative z-10">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
@@ -312,6 +328,7 @@
                 </div>
             </div>
 
+            <!-- TAB: CONFIG RAIZ -->
             <div id="tab-config" class="tab-content hidden opacity-0 relative z-10">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
@@ -345,33 +362,30 @@
         </div>
     </main>
 
+    <!-- SIDEBAR OVERLAY (mobile) -->
     <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 hidden md:hidden transition-opacity duration-300"></div>
 
+    <!-- MODAL: PERFIL -->
     <div id="modal-perfil" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-perfil')"></div>
         <div class="relative w-full max-w-lg bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-3xl shadow-2xl p-8 transform scale-95 transition-all overflow-hidden flex flex-col items-center">
             <button onclick="toggleModal('modal-perfil')" class="absolute top-6 right-6 text-white/40 hover:text-tre-brand z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
-            
             <div id="modal-perfil-title-container" class="w-full hidden">
                 <h2 class="text-xl font-black tracking-tight text-white uppercase mb-6 flex items-center gap-3 border-b border-white/10 pb-4 w-full">Ficha do Membro</h2>
             </div>
-
             <div class="w-32 h-32 md:w-40 md:h-40 bg-[#0A0102] rounded-full overflow-hidden border-4 border-tre-brand relative mb-4 shadow-vivid flex-shrink-0">
                 <img id="modal-avatar" src="" class="absolute -top-1 left-1/2 -translate-x-1/2 scale-110">
             </div>
             <h3 class="text-3xl font-black text-white mb-1" id="modal-perfil-nick">Nick</h3>
             <span id="modal-perfil-cargo-badge" class="bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6">Cargo</span>
-            
             <div class="w-full space-y-2 mb-6 text-left p-4 rounded-xl bg-white/5 border border-white/10">
                 <p class="text-sm text-white/70"><i class="fa-solid fa-calendar-check text-tre-brand mr-2"></i>Acesso desde: <span class="font-bold text-white" id="modal-perfil-dataRegistro">Carregando...</span></p>
             </div>
-            
             <div class="w-full space-y-1.5 mb-6 text-left">
                 <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Biografia</label>
                 <textarea id="perfil-descricao" rows="3" placeholder="Sem biografia." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium custom-scrollbar"></textarea>
                 <button id="btn-save-perfil" onclick="salvarDescricaoPerfil(event)" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl mt-2 text-xs transition-colors">Salvar Biografia</button>
             </div>
-
             <div id="panel-admin-gerenciar" class="w-full border-t border-white/10 pt-6 mt-2 hidden only-admin">
                 <h4 class="text-[10px] font-black uppercase tracking-widest text-red-500 mb-3"><i class="fa-solid fa-shield-halved"></i> Controles da Administração</h4>
                 <div class="flex gap-2">
@@ -398,12 +412,12 @@
         </div>
     </div>
 
+    <!-- MODAL: LANÇAMENTO MANUAL -->
     <div id="modal-admin-post" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-admin-post')"></div>
         <div class="relative w-full max-w-lg bg-[#0A0102] border border-white/10 rounded-3xl p-8 transform scale-95 transition-all">
             <button onclick="toggleModal('modal-admin-post')" class="absolute top-6 right-6 text-white/40 hover:text-tre-brand"><i class="fa-solid fa-xmark text-xl"></i></button>
             <h2 class="text-xl font-black text-white uppercase mb-6 flex items-center gap-2 border-b border-white/10 pb-4"><i class="fa-solid fa-bolt text-emerald-500"></i> Lançamento Manual</h2>
-            
             <form id="form-admin-post" onsubmit="salvarLancamentoManual(event)" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Nick Favorecido</label><input type="text" id="man-nick" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium"></div>
@@ -425,12 +439,12 @@
         </div>
     </div>
 
+    <!-- MODAL: EDITAR HISTÓRICO -->
     <div id="modal-edit-historico" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-edit-historico')"></div>
         <div class="relative w-full max-w-lg bg-[#0A0102] border border-white/10 rounded-3xl p-8 transform scale-95 transition-all">
             <button onclick="toggleModal('modal-edit-historico')" class="absolute top-6 right-6 text-white/40 hover:text-tre-brand"><i class="fa-solid fa-xmark text-xl"></i></button>
             <h2 class="text-xl font-black text-white uppercase mb-6 flex items-center gap-2 border-b border-white/10 pb-4"><i class="fa-solid fa-pen-to-square text-amber-500"></i> Editar Registro</h2>
-            
             <form id="form-edit-historico" onsubmit="salvarEdicaoHistorico(event)" class="space-y-4">
                 <input type="hidden" id="edith-id">
                 <div class="grid grid-cols-2 gap-4">
@@ -454,6 +468,7 @@
         </div>
     </div>
 
+    <!-- MODAL: REJEITAR POSTAGEM -->
     <div id="modal-reject-atividades" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-reject-atividades')"></div>
         <div class="relative w-full max-w-md bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-3xl shadow-2xl p-8 transform scale-95 transition-all text-center">
@@ -469,12 +484,12 @@
         </div>
     </div>
 
+    <!-- MODAL: CONFIG ATIVIDADE -->
     <div id="modal-config-atividade" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleModal('modal-config-atividade')"></div>
         <div class="relative w-full max-w-md bg-[#0A0102] border border-white/10 rounded-3xl p-8 transform scale-95 transition-all">
             <button onclick="toggleModal('modal-config-atividade')" class="absolute top-6 right-6 text-white/40 hover:text-tre-brand"><i class="fa-solid fa-xmark text-xl"></i></button>
             <h2 class="text-xl font-black text-white uppercase mb-6 flex items-center gap-2 border-b border-white/10 pb-4"><i class="fa-solid fa-layer-group text-amber-500"></i> Gerenciar Atividade</h2>
-            
             <form id="form-config-atividade" onsubmit="salvarConfigAtividade(event)" class="space-y-4">
                 <input type="hidden" id="config-id">
                 <div class="space-y-1.5"><label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Atividade</label><input type="text" id="config-nome" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm"></div>
@@ -496,527 +511,874 @@
         </div>
     </div>
 
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container"></div>
+
+    <!-- SCRIPTS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
-    
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
     <script>
-        // ==========================================
-        // 1. INFRAESTRUTURA E VARIÁVEIS GLOBAIS
-        // ==========================================
-        const firebaseConfig = { apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0", authDomain: "tre-ranking.firebaseapp.com", projectId: "tre-ranking", storageBucket: "tre-ranking.firebasestorage.app", messagingSenderId: "1008986456536", appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad" };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
+    // ==========================================
+    // 1. CONSTANTES, INFRAESTRUTURA E VARIÁVEIS GLOBAIS
+    // ==========================================
 
-        let currentUserNick = "USUARIO"; 
-        let currentUserRole = "Convidado"; 
-        let quadroPontosGlobal = []; 
-        let editorRegrasQuill; 
+    // Roles imutáveis — evita typos silenciosos em todo o sistema
+    const ROLES = Object.freeze({ ADMIN: "Admin", CONVIDADO: "Convidado" });
 
-        function getAvatarUrl(nick, size = 'l') { return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${nick}&action=std&direction=2&head_direction=2&gesture=sml&size=${size}`; }
+    const firebaseConfig = {
+        apiKey: "AIzaSyCJqoHClBg9c6SuRlbFO2YxYTdpxGsDEe0",
+        authDomain: "tre-ranking.firebaseapp.com",
+        projectId: "tre-ranking",
+        storageBucket: "tre-ranking.firebasestorage.app",
+        messagingSenderId: "1008986456536",
+        appId: "1:1008986456536:web:a6e1c735b8a1d07081f2ad"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
 
-        // ==========================================
-        // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA 
-        // ==========================================
-        auth.onAuthStateChanged((user) => {
-            const loader = document.getElementById('auth-loader');
-            if (user) {
-                db.collection("solicitacoes_acesso").doc(user.uid).get().then((doc) => {
+    // Estado da sessão
+    let currentUserNick = "USUARIO";
+    let currentUserRole = ROLES.CONVIDADO;
+    let quadroPontosGlobal = [];
+    let editorRegrasQuill;
+
+    // Referências dos listeners reativos — essencial para evitar memory leak
+    let unsubDashboard = null;
+    let unsubHistorico = null;
+
+    // ── Utilitários ──────────────────────────────────────────────────────────
+
+    /** Sanitiza strings do Firestore antes de injetar em innerHTML (anti-XSS) */
+    function sanitize(str) {
+        if (str === null || str === undefined) return '';
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(String(str)));
+        return div.innerHTML;
+    }
+
+    /** Gera URL do avatar Habbo */
+    function getAvatarUrl(nick, size = 'l') {
+        return `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${encodeURIComponent(nick)}&action=std&direction=2&head_direction=2&gesture=sml&size=${size}`;
+    }
+
+    /** Exibe toast não-bloqueante (substitui todos os alert()) */
+    function mostrarToast(mensagem, tipo = 'success', duracao = 3500) {
+        const container = document.getElementById('toast-container');
+        const iconMap = { success: 'check-circle', error: 'triangle-exclamation', info: 'bolt' };
+        const toast = document.createElement('div');
+        toast.className = `toast ${tipo}`;
+        toast.innerHTML = `<i class="fa-solid fa-${iconMap[tipo] || 'info-circle'}"></i> ${sanitize(mensagem)}`;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, duracao);
+    }
+
+    /** Debounce — evita chamadas excessivas em eventos de teclado */
+    function debounce(fn, delay = 300) {
+        let timer;
+        return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), delay); };
+    }
+    const filtrarHistoricoBuscaDebounced = debounce(filtrarHistoricoBusca, 250);
+
+    /** Trava/desTrava botão durante operação assíncrona */
+    function setBtnLoading(btn, isLoading) {
+        if (!btn) return;
+        if (isLoading) {
+            btn.disabled = true;
+            btn.dataset.originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            btn.classList.add('opacity-70');
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = btn.dataset.originalHtml || btn.innerHTML;
+            btn.classList.remove('opacity-70');
+        }
+    }
+
+    // ==========================================
+    // 2. MOTOR DE AUTENTICAÇÃO E HIERARQUIA
+    // ==========================================
+    auth.onAuthStateChanged((user) => {
+        const loader = document.getElementById('auth-loader');
+        if (user) {
+            db.collection("solicitacoes_acesso").doc(user.uid).get()
+                .then((doc) => {
                     if (doc.exists && doc.data().status === "Aprovado") {
                         currentUserNick = doc.data().nick || "Admin";
-                        
-                        let rawRole = doc.data().role;
+                        const rawRole = doc.data().role;
+
+                        // Normalização de role — escrita condicional (não escreve se já correto)
                         if (rawRole === "SuperAdmin") {
-                            currentUserRole = "Admin";
-                            db.collection("solicitacoes_acesso").doc(user.uid).update({ role: "Admin" });
-                        } else if (!rawRole) {
-                            currentUserRole = "Convidado";
-                            db.collection("solicitacoes_acesso").doc(user.uid).update({ role: "Convidado" });
+                            currentUserRole = ROLES.ADMIN;
+                            db.collection("solicitacoes_acesso").doc(user.uid).update({ role: ROLES.ADMIN });
+                        } else if (!rawRole || rawRole === "") {
+                            currentUserRole = ROLES.CONVIDADO;
+                            db.collection("solicitacoes_acesso").doc(user.uid).update({ role: ROLES.CONVIDADO });
                         } else {
-                            currentUserRole = rawRole; 
+                            // Role válida e conhecida — zero escrita desnecessária
+                            currentUserRole = rawRole;
                         }
 
                         document.getElementById('admin-user-nick').innerText = currentUserNick.toUpperCase();
-                        document.getElementById('admin-user-role').innerText = currentUserRole === "Admin" ? "MINISTÉRIO (ADMIN)" : "CONVIDADO";
+                        document.getElementById('admin-user-role').innerText = currentUserRole === ROLES.ADMIN ? "MINISTÉRIO (ADMIN)" : "CONVIDADO";
                         document.getElementById('sidebar-avatar').src = getAvatarUrl(currentUserNick, 'm');
-                        
+
                         aplicarPermissoesUI();
-                        
-                        gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
-                        
+
+                        gsap.to(loader, {
+                            opacity: 0, duration: 0.5,
+                            onComplete: () => loader.classList.add('hidden')
+                        });
+
                         inicializarEditorQuill();
-                        carregarConfiguracoesSistema(() => { iniciarEscutasGlobais(); atualizarDashboardAnalitico(); });
+                        carregarConfiguracoesSistema(() => {
+                            iniciarEscutasGlobais();
+                            atualizarDashboardAnalitico();
+                        });
                     } else {
-                        auth.signOut().then(() => { alert("Acesso Negado ou Revogado."); window.location.href = 'index.html'; });
+                        auth.signOut().then(() => {
+                            mostrarToast("Acesso Negado ou Revogado.", 'error');
+                            setTimeout(() => window.location.href = 'index.html', 1500);
+                        });
                     }
-                }).catch((error) => { auth.signOut().then(() => window.location.href = 'index.html'); });
+                })
+                .catch(() => {
+                    auth.signOut().then(() => window.location.href = 'index.html');
+                });
+        } else {
+            window.location.href = 'index.html';
+        }
+    });
+
+    function logout() {
+        auth.signOut().then(() => { window.location.href = 'index.html'; });
+    }
+
+    function aplicarPermissoesUI() {
+        if (currentUserRole === ROLES.ADMIN) document.body.classList.remove('role-convidado');
+        else document.body.classList.add('role-convidado');
+    }
+    function isAdmin() { return currentUserRole === ROLES.ADMIN; }
+
+    // ==========================================
+    // 3. UI, NAVEGAÇÃO E DROPDOWNS COMPARTILHADOS
+    // ==========================================
+    function toggleSidebar() {
+        const sb = document.getElementById('sidebar');
+        const ov = document.getElementById('sidebar-overlay');
+        sb.classList.toggle('-translate-x-full');
+        ov.classList.toggle('hidden');
+    }
+
+    function toggleModal(id) {
+        const m = document.getElementById(id);
+        const c = m.querySelector('div.relative.transform');
+        if (m.classList.contains('opacity-0')) {
+            m.classList.remove('opacity-0', 'invisible');
+            setTimeout(() => c.classList.replace('scale-95', 'scale-100'), 10);
+        } else {
+            c.classList.replace('scale-100', 'scale-95');
+            setTimeout(() => m.classList.add('opacity-0', 'invisible'), 200);
+        }
+    }
+
+    function switchTab(tabId, btnElement) {
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        btnElement.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(el => {
+            el.classList.add('hidden');
+            el.classList.remove('block');
+            el.classList.add('opacity-0');
+        });
+        const target = document.getElementById('tab-' + tabId);
+        target.classList.remove('hidden');
+        target.classList.add('block');
+        gsap.fromTo(target, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
+        if (window.innerWidth < 768) toggleSidebar();
+    }
+
+    // Datas e filtro de mês
+    const mesesNomes = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+    const dataAtualGlobal = new Date();
+    let mesAtualStr = `${mesesNomes[dataAtualGlobal.getMonth()]} ${dataAtualGlobal.getFullYear()}`;
+
+    function formatarDataHora(fsTimestamp) {
+        if (!fsTimestamp || typeof fsTimestamp.toDate !== 'function') return '---';
+        const d = fsTimestamp.toDate();
+        return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} às ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    }
+    function formatarMesAno(data) {
+        return `${mesesNomes[data.getMonth()]} ${data.getFullYear()}`;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const menuMeses = document.getElementById('menu-filter-meses');
+        const textoDash  = document.getElementById('texto-filter-mes-dash');
+        const textoHist  = document.getElementById('texto-filter-mes-hist');
+        if (textoDash) textoDash.innerText = mesAtualStr;
+        if (textoHist) textoHist.innerText = mesAtualStr;
+        if (menuMeses) {
+            menuMeses.innerHTML = '';
+            for (let i = 0; i < 12; i++) {
+                const d = new Date(dataAtualGlobal.getFullYear(), dataAtualGlobal.getMonth() - i, 1);
+                const n = `${mesesNomes[d.getMonth()]} ${d.getFullYear()}`;
+                menuMeses.innerHTML += `<button onclick="selecionarFilterMes(this)" class="px-5 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full font-medium">${n}</button>`;
+            }
+        }
+    });
+
+    function toggleFilterDropdown() {
+        const m  = document.getElementById('menu-filter-meses');
+        const sd = document.getElementById('icone-filter-seta-dash');
+        const sh = document.getElementById('icone-filter-seta-hist');
+        m.classList.toggle('opacity-0');
+        m.classList.toggle('invisible');
+        m.classList.toggle('translate-y-2');
+        if (sd) sd.classList.toggle('rotate-180');
+        if (sh) sh.classList.toggle('rotate-180');
+    }
+
+    function selecionarFilterMes(el) {
+        mesAtualStr = el.innerText;
+        const tDash = document.getElementById('texto-filter-mes-dash');
+        const tHist = document.getElementById('texto-filter-mes-hist');
+        if (tDash) tDash.innerText = mesAtualStr;
+        if (tHist) tHist.innerText = mesAtualStr;
+        toggleFilterDropdown();
+        carregarTabelaHistorico();     // cancela listener anterior antes de criar novo
+        atualizarDashboardAnalitico(); // cancela listener anterior antes de criar novo
+    }
+
+    function filtrarHistoricoBusca() {
+        const t = document.getElementById('search-historico').value.toLowerCase();
+        document.querySelectorAll('#table-historico-list tr').forEach(r => {
+            const nickCell = r.querySelector('.nick-cell');
+            if (nickCell) r.style.display = nickCell.innerText.toLowerCase().includes(t) ? '' : 'none';
+        });
+    }
+
+    // ==========================================
+    // 4. EDITOR DE REGRAS (QUILLJS)
+    // ==========================================
+    function inicializarEditorQuill() {
+        editorRegrasQuill = new Quill('#editor-regras', {
+            theme: 'snow',
+            placeholder: 'Escreva e formate as regras do sistema aqui...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'align': [] }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    ['link', 'clean']
+                ]
+            }
+        });
+
+        db.collection("configuracoes").doc("regras_sistema").onSnapshot(doc => {
+            if (doc.exists && doc.data().conteudoHTML) {
+                // Só atualiza o editor se a aba não estiver ativa (evita sobreescrever edição em andamento)
+                if (document.getElementById('tab-regras').classList.contains('hidden')) {
+                    editorRegrasQuill.root.innerHTML = doc.data().conteudoHTML;
+                }
+            }
+        });
+    }
+
+    function salvarRegrasWord() {
+        const btn = document.getElementById('btn-salvar-regras');
+        setBtnLoading(btn, true);
+        const htmlContent = editorRegrasQuill.root.innerHTML;
+        db.collection("configuracoes").doc("regras_sistema").set({
+            conteudoHTML: htmlContent,
+            atualizadoPor: currentUserNick,
+            dataAtualizacao: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+            mostrarToast("Regras do site atualizadas com sucesso!");
+            setBtnLoading(btn, false);
+        }).catch(() => {
+            mostrarToast("Erro ao salvar as regras. Tente novamente.", 'error');
+            setBtnLoading(btn, false);
+        });
+    }
+
+    // ==========================================
+    // 5. CONFIGURAÇÕES RAIZ (Atividades e Quadro de Pontos)
+    // ==========================================
+    function carregarConfiguracoesSistema(callback) {
+        db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
+            if (doc.exists && doc.data().atividades) {
+                quadroPontosGlobal = doc.data().atividades;
             } else {
-                window.location.href = 'index.html';
+                quadroPontosGlobal = [{ id: "cfg_1", nome: "Destaque Semanal", grupo: "Destaques", pontos: 4, responsavel: "LIDERANÇA" }];
+                db.collection("configuracoes").doc("quadro_pontos").set({ atividades: quadroPontosGlobal });
             }
+            renderizarTabelaConfig();
+            atualizarDropdownsDeAtividade();
+            if (callback) { callback(); callback = null; } // garante callback só na primeira carga
         });
+    }
 
-        function logout() { auth.signOut().then(() => { window.location.href = 'index.html'; }); }
+    function atualizarDropdownsDeAtividade() {
+        let html = '<option value="">Selecione uma atividade...</option>';
+        [...quadroPontosGlobal]
+            .sort((a, b) => a.nome.localeCompare(b.nome))
+            .forEach(a => {
+                html += `<option value="${sanitize(a.nome)}" class="text-black">${sanitize(a.nome)} (${a.pontos > 0 ? '+' + a.pontos : a.pontos})</option>`;
+            });
+        document.getElementById('man-categoria').innerHTML = html;
+        document.getElementById('edith-categoria').innerHTML = html;
+    }
 
-        function aplicarPermissoesUI() {
-            if(currentUserRole === "Admin") document.body.classList.remove('role-convidado');
-            else document.body.classList.add('role-convidado');
-        }
-        function isAdmin() { return currentUserRole === "Admin"; }
-
-        // ==========================================
-        // 3. UI E NAVEGAÇÃO E DROPDOWNS COMPARTILHADOS
-        // ==========================================
-        function toggleSidebar() { const sb = document.getElementById('sidebar'), ov = document.getElementById('sidebar-overlay'); sb.classList.toggle('-translate-x-full'); ov.classList.toggle('hidden'); }
-        function toggleModal(id) { const m = document.getElementById(id), c = m.querySelector('div.relative.transform'); if (m.classList.contains('opacity-0')) { m.classList.remove('opacity-0', 'invisible'); setTimeout(() => c.classList.replace('scale-95', 'scale-100'), 10); } else { c.classList.replace('scale-100', 'scale-95'); setTimeout(() => m.classList.add('opacity-0', 'invisible'), 200); } }
-        function switchTab(tabId, btnElement) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); btnElement.classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(el => { el.classList.add('hidden'); el.classList.remove('block'); el.classList.add('opacity-0'); });
-            const target = document.getElementById('tab-' + tabId); target.classList.remove('hidden'); target.classList.add('block');
-            gsap.fromTo(target, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
-            if(window.innerWidth < 768) toggleSidebar(); 
-        }
-
-        const mesesNomes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-        const dataAtualGlobal = new Date();
-        let mesAtualStr = `${mesesNomes[dataAtualGlobal.getMonth()]} ${dataAtualGlobal.getFullYear()}`;
-
-        function formatarDataHora(fsTimestamp) {
-            if(!fsTimestamp) return '---';
-            const d = fsTimestamp.toDate();
-            return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')} às ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-        }
-        function formatarMesAno(data) {
-            return `${mesesNomes[data.getMonth()]} ${data.getFullYear()}`;
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const menuMeses = document.getElementById('menu-filter-meses');
-            const textoDash = document.getElementById('texto-filter-mes-dash');
-            const textoHist = document.getElementById('texto-filter-mes-hist');
-
-            if(menuMeses) {
-                if(textoDash) textoDash.innerText = mesAtualStr;
-                if(textoHist) textoHist.innerText = mesAtualStr;
-                menuMeses.innerHTML = '';
-                for(let i = 0; i < 12; i++) {
-                    let d = new Date(dataAtualGlobal.getFullYear(), dataAtualGlobal.getMonth() - i, 1);
-                    let n = `${mesesNomes[d.getMonth()]} ${d.getFullYear()}`;
-                    menuMeses.innerHTML += `<button onclick="selecionarFilterMes(this)" class="px-5 py-3 text-left hover:bg-white/10 transition-colors text-white/70 hover:text-white border-b border-white/5 w-full font-medium">${n}</button>`;
-                }
-            }
+    function renderizarTabelaConfig() {
+        const list = document.getElementById('table-config-list');
+        list.innerHTML = '';
+        [...quadroPontosGlobal].sort((a, b) => a.grupo.localeCompare(b.grupo)).forEach(a => {
+            const p   = a.pontos > 0 ? `+${a.pontos}` : a.pontos;
+            const cor = a.pontos > 0 ? 'emerald' : 'red';
+            list.innerHTML += `<tr class="group border-b border-white/5 hover:bg-white/5 transition-colors text-white/80">
+                <td class="p-4 px-6 font-bold text-[11px] uppercase tracking-wider text-white/50 group-hover:text-white">[${sanitize(a.grupo)}]</td>
+                <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${sanitize(a.nome)}</td>
+                <td class="p-4 text-center"><span class="inline-flex items-center point-badge point-${cor}">${p}</span></td>
+                <td class="p-4 text-xs font-semibold uppercase">${sanitize(a.responsavel)}</td>
+                <td class="p-4 text-right whitespace-nowrap">
+                    <button onclick="editarAtividadeConfig('${sanitize(a.id)}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
+                    <button onclick="excluirAtividadeConfig('${sanitize(a.id)}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>`;
         });
+    }
 
-        function toggleFilterDropdown() { 
-            const m = document.getElementById('menu-filter-meses'); 
-            const sd = document.getElementById('icone-filter-seta-dash'); 
-            const sh = document.getElementById('icone-filter-seta-hist'); 
-            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2'); 
-            if(sd) sd.classList.toggle('rotate-180'); 
-            if(sh) sh.classList.toggle('rotate-180'); 
+    function abrirModalConfigAtividade() {
+        document.getElementById('form-config-atividade').reset();
+        document.getElementById('config-id').value = "";
+        toggleModal('modal-config-atividade');
+    }
+
+    function editarAtividadeConfig(id) {
+        const a = quadroPontosGlobal.find(q => q.id === id);
+        if (a) {
+            document.getElementById('config-id').value = a.id;
+            document.getElementById('config-nome').value = a.nome;
+            document.getElementById('config-grupo').value = a.grupo;
+            document.getElementById('config-pontos').value = a.pontos;
+            document.getElementById('config-responsavel').value = a.responsavel;
+            toggleModal('modal-config-atividade');
         }
-        
-        function selecionarFilterMes(el) { 
-            mesAtualStr = el.innerText; 
-            const tDash = document.getElementById('texto-filter-mes-dash');
-            const tHist = document.getElementById('texto-filter-mes-hist');
-            if(tDash) tDash.innerText = mesAtualStr; 
-            if(tHist) tHist.innerText = mesAtualStr; 
-            toggleFilterDropdown(); 
-            carregarTabelaHistorico(); 
-            atualizarDashboardAnalitico(); 
+    }
+
+    function salvarConfigAtividade(e) {
+        e.preventDefault();
+        const idInput = document.getElementById('config-id').value;
+        const novaAtividade = {
+            id: idInput ? idInput : "cfg_" + Date.now(),
+            nome: document.getElementById('config-nome').value.trim(),
+            grupo: document.getElementById('config-grupo').value,
+            pontos: parseInt(document.getElementById('config-pontos').value),
+            responsavel: document.getElementById('config-responsavel').value
+        };
+        let lista = [...quadroPontosGlobal];
+        if (idInput) {
+            const idx = lista.findIndex(q => q.id === idInput);
+            if (idx > -1) lista[idx] = novaAtividade;
+        } else {
+            lista.push(novaAtividade);
         }
+        db.collection("configuracoes").doc("quadro_pontos").update({ atividades: lista })
+            .then(() => { toggleModal('modal-config-atividade'); mostrarToast("Atividade salva com sucesso!"); })
+            .catch(() => mostrarToast("Erro ao salvar atividade.", 'error'));
+    }
 
-        function filtrarHistoricoBusca() { const t = document.getElementById('search-historico').value.toLowerCase(); document.querySelectorAll('#table-historico-list tr').forEach(r => { r.style.display = r.querySelector('.nick-cell').innerText.toLowerCase().includes(t) ? '' : 'none'; }); }
+    function excluirAtividadeConfig(id) {
+        if (confirm("Excluir permanentemente esta atividade?")) {
+            db.collection("configuracoes").doc("quadro_pontos")
+                .update({ atividades: quadroPontosGlobal.filter(q => q.id !== id) })
+                .then(() => mostrarToast("Atividade removida."))
+                .catch(() => mostrarToast("Erro ao remover atividade.", 'error'));
+        }
+    }
 
-        // ==========================================
-        // 4. EDITOR DE REGRAS (TIPO WORD - QUILLJS)
-        // ==========================================
-        function inicializarEditorQuill() {
-            editorRegrasQuill = new Quill('#editor-regras', {
-                theme: 'snow',
-                placeholder: 'Escreva e formate as regras do sistema aqui...',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'align': [] }],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['link', 'clean']
-                    ]
+    // ==========================================
+    // 6. DASHBOARD ANALÍTICO EM TEMPO REAL (com unsubscribe)
+    // ==========================================
+    function atualizarDashboardAnalitico() {
+        // Cancela listener anterior antes de criar um novo — evita empilhamento
+        if (unsubDashboard) unsubDashboard();
+
+        unsubDashboard = db.collection("postagens").onSnapshot(snapshot => {
+            let postsFiltrados = [];
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const dataBase = data.dataJulgamento || data.dataEnvio;
+                if (dataBase && typeof dataBase.toDate === 'function') {
+                    if (formatarMesAno(dataBase.toDate()) === mesAtualStr) postsFiltrados.push(data);
                 }
             });
 
-            db.collection("configuracoes").doc("regras_sistema").onSnapshot(doc => {
-                if (doc.exists && doc.data().conteudoHTML) {
-                    if(document.getElementById('tab-regras').classList.contains('hidden')){
-                        editorRegrasQuill.root.innerHTML = doc.data().conteudoHTML;
-                    }
+            const totalPostagens = postsFiltrados.length;
+            const aprovados = postsFiltrados.filter(p => p.status === 'Aprovado');
+            const taxaAprovacao = totalPostagens > 0 ? Math.round((aprovados.length / totalPostagens) * 100) : 0;
+
+            let totalPontosGerados = 0;
+            let mapaTreinadores = {};
+
+            aprovados.forEach(p => {
+                let pts = p.pontosOverride;
+                if (pts === undefined) {
+                    const cfg = quadroPontosGlobal.find(q => q.nome === p.categoria);
+                    pts = cfg ? cfg.pontos : 0;
                 }
-            });
-        }
-
-        function salvarRegrasWord() {
-            const btn = document.getElementById('btn-salvar-regras');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
-            const htmlContent = editorRegrasQuill.root.innerHTML;
-            db.collection("configuracoes").doc("regras_sistema").set({ 
-                conteudoHTML: htmlContent, atualizadoPor: currentUserNick, dataAtualizacao: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => { 
-                alert("As regras do site foram atualizadas com sucesso!"); 
-                btn.innerHTML = '<i class="fa-solid fa-save"></i> Salvar Regras';
-            }).catch(err => { 
-                alert("Erro ao salvar regras."); 
-                btn.innerHTML = '<i class="fa-solid fa-save"></i> Salvar Regras';
-            });
-        }
-
-        // ==========================================
-        // 5. CONFIGURAÇÕES RAIZ (Atividades)
-        // ==========================================
-        function carregarConfiguracoesSistema(callback) {
-            db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
-                if (doc.exists && doc.data().atividades) { quadroPontosGlobal = doc.data().atividades; } 
-                else { quadroPontosGlobal = [{ id: "cfg_1", nome: "Destaque Semanal", grupo: "Destaques", pontos: 4, responsavel: "LIDERANÇA" }]; db.collection("configuracoes").doc("quadro_pontos").set({ atividades: quadroPontosGlobal }); }
-                renderizarTabelaConfig(); atualizarDropdownsDeAtividade();
-                if(callback) callback(); 
-            });
-        }
-
-        function atualizarDropdownsDeAtividade() {
-            let html = '<option value="">Selecione uma atividade...</option>';
-            [...quadroPontosGlobal].sort((a,b) => a.nome.localeCompare(b.nome)).forEach(a => html += `<option value="${a.nome}" class="text-black">${a.nome} (${a.pontos > 0 ? '+'+a.pontos : a.pontos})</option>`);
-            document.getElementById('man-categoria').innerHTML = html; document.getElementById('edith-categoria').innerHTML = html;
-        }
-
-        function renderizarTabelaConfig() {
-            const list = document.getElementById('table-config-list'); list.innerHTML = '';
-            [...quadroPontosGlobal].sort((a, b) => a.grupo.localeCompare(b.grupo)).forEach(a => {
-                let p = a.pontos > 0 ? `+${a.pontos}` : a.pontos; let cor = a.pontos > 0 ? 'emerald' : 'red';
-                list.innerHTML += `<tr class="group border-b border-white/5 hover:bg-white/5 transition-colors text-white/80">
-                    <td class="p-4 px-6 font-bold text-[11px] uppercase tracking-wider text-white/50 group-hover:text-white">[${a.grupo}]</td>
-                    <td class="p-4 font-semibold text-tre-brand leading-tight group-hover:text-tre-brandHover">${a.nome}</td>
-                    <td class="p-4 text-center"><span class="inline-flex items-center point-badge point-${cor}">${p}</span></td>
-                    <td class="p-4 text-xs font-semibold uppercase">${a.responsavel}</td>
-                    <td class="p-4 text-right whitespace-nowrap">
-                        <button onclick="editarAtividadeConfig('${a.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="excluirAtividadeConfig('${a.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
-                    </td></tr>`;
-            });
-        }
-
-        function abrirModalConfigAtividade() { document.getElementById('form-config-atividade').reset(); document.getElementById('config-id').value = ""; toggleModal('modal-config-atividade'); }
-        function editarAtividadeConfig(id) { const a = quadroPontosGlobal.find(q => q.id === id); if(a) { document.getElementById('config-id').value = a.id; document.getElementById('config-nome').value = a.nome; document.getElementById('config-grupo').value = a.grupo; document.getElementById('config-pontos').value = a.pontos; document.getElementById('config-responsavel').value = a.responsavel; toggleModal('modal-config-atividade'); } }
-        function salvarConfigAtividade(e) {
-            e.preventDefault(); const idInput = document.getElementById('config-id').value;
-            const n = { id: idInput ? idInput : "cfg_" + Date.now(), nome: document.getElementById('config-nome').value.trim(), grupo: document.getElementById('config-grupo').value, pontos: parseInt(document.getElementById('config-pontos').value), responsavel: document.getElementById('config-responsavel').value };
-            let l = [...quadroPontosGlobal]; if(idInput) { const idx = l.findIndex(q => q.id === idInput); if(idx > -1) l[idx] = n; } else { l.push(n); }
-            db.collection("configuracoes").doc("quadro_pontos").update({ atividades: l }).then(() => toggleModal('modal-config-atividade')).catch(err => alert("Erro ao salvar atividade."));
-        }
-        function excluirAtividadeConfig(id) { if(confirm("Excluir permanentemente?")) db.collection("configuracoes").doc("quadro_pontos").update({ atividades: quadroPontosGlobal.filter(q => q.id !== id) }); }
-
-        // ==========================================
-        // 6. DASHBOARD ANALÍTICO EM TEMPO REAL
-        // ==========================================
-        function atualizarDashboardAnalitico() {
-            db.collection("postagens").onSnapshot(snapshot => {
-                let postsFiltrados = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    let dataBase = data.dataJulgamento || data.dataEnvio;
-                    if(dataBase && typeof dataBase.toDate === 'function') {
-                        const mesAnoPost = formatarMesAno(dataBase.toDate());
-                        if(mesAnoPost === mesAtualStr) postsFiltrados.push(data);
-                    }
-                });
-
-                const totalPostagens = postsFiltrados.length;
-                const aprovados = postsFiltrados.filter(p => p.status === 'Aprovado');
-                const taxaAprovacao = totalPostagens > 0 ? Math.round((aprovados.length / totalPostagens) * 100) : 0;
-                
-                let totalPontosGerados = 0;
-                let mapaTreinadores = {};
-                
-                aprovados.forEach(p => {
-                    let pts = p.pontosOverride;
-                    if(pts === undefined) {
-                        const cfg = quadroPontosGlobal.find(q => q.nome === p.categoria);
-                        pts = cfg ? cfg.pontos : 0;
-                    }
-                    totalPontosGerados += pts;
-                    mapaTreinadores[p.nick] = (mapaTreinadores[p.nick] || 0) + pts;
-                });
-
-                let topNick = "Nenhum";
-                let topPts = -1;
-                Object.keys(mapaTreinadores).forEach(nick => {
-                    if(mapaTreinadores[nick] > topPts) {
-                        topPts = mapaTreinadores[nick];
-                        topNick = nick;
-                    }
-                });
-
-                const elTotal = document.getElementById('dash-total');
-                const elTaxa = document.getElementById('dash-taxa');
-                const elPontos = document.getElementById('dash-pontos');
-                const elTop1 = document.getElementById('dash-top1');
-
-                if(elTotal) elTotal.innerText = totalPostagens;
-                if(elTaxa) elTaxa.innerText = taxaAprovacao + '%';
-                if(elPontos) elPontos.innerText = totalPontosGerados;
-                if(elTop1) elTop1.innerText = topNick;
-            });
-        }
-
-        // ==========================================
-        // 7. ESCUTAS GLOBAIS E AUDITORIA
-        // ==========================================
-        function iniciarEscutasGlobais() {
-            db.collection("postagens").where("status", "==", "Pendente").onSnapshot((snap) => {
-                const grid = document.getElementById('grid-atividades'); const empty = document.getElementById('empty-atividades');
-                document.getElementById('count-atividades').innerText = `${snap.size} Pendentes`; grid.innerHTML = ''; 
-                if (snap.empty) { empty.classList.replace('hidden', 'flex'); } else { empty.classList.replace('flex', 'hidden');
-                    snap.forEach((doc) => { const d = doc.data(); 
-                        grid.innerHTML += `<div class="glass-card p-5 flex flex-col h-full" id="card-${doc.id}">
-                            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5"><div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0"><img src="${getAvatarUrl(d.nick,'m')}" class="absolute -top-2 left-1/2 -translate-x-1/2"></div><div><h4 class="font-bold text-white tracking-wide">${d.nick}</h4><p class="text-[10px] text-white/40 uppercase tracking-widest"><i class="fa-regular fa-clock"></i> ${formatarDataHora(d.dataEnvio)}</p></div></div>
-                            <div class="flex-grow mb-5"><span class="inline-block bg-white/5 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white/40 uppercase mb-2">Categoria</span><p class="text-sm font-semibold text-tre-brand leading-tight">${d.categoria}</p></div>
-                            <div class="flex flex-col gap-2 mt-auto">
-                                <a href="${d.prova}" target="_blank" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-bold py-2.5 rounded-lg flex justify-center items-center gap-2"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Prova</a>
-                                <div class="flex gap-2 only-admin">
-                                    <button onclick="julgarDoc('${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg"><i class="fa-solid fa-check"></i> Aprovar</button>
-                                    <button onclick="iniciarRejeicao('${doc.id}')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg"><i class="fa-solid fa-xmark"></i> Rejeitar</button>
-                                </div>
-                            </div></div>`;
-                    });
-                }
+                totalPontosGerados += pts;
+                mapaTreinadores[p.nick] = (mapaTreinadores[p.nick] || 0) + pts;
             });
 
-            db.collection("solicitacoes_acesso").where("status", "==", "Pendente").onSnapshot((snap) => {
-                const grid = document.getElementById('grid-acessos'); const empty = document.getElementById('empty-acessos'); grid.innerHTML = '';
-                if (snap.empty) { empty.classList.replace('hidden', 'flex'); } else { empty.classList.replace('flex', 'hidden');
-                    snap.forEach((doc) => { const d = doc.data();
-                        grid.innerHTML += `<div class="glass-card p-5 flex flex-col h-full" id="card-${doc.id}">
-                            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5"><div class="w-10 h-10 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0"><img src="${getAvatarUrl(d.nick,'m')}" class="absolute -top-2 left-1/2 -translate-x-1/2"></div><h4 class="font-bold text-white tracking-wide">${d.nick}</h4></div>
-                            <p class="text-sm text-white/70 mb-5 flex-grow">Solicitou acesso restrito.</p>
-                            <div class="flex gap-2 mt-auto only-admin">
-                                <button onclick="julgarAcesso('${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg">Liberar</button>
-                                <button onclick="julgarAcesso('${doc.id}', 'Rejeitado')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg">Negar</button>
-                            </div></div>`;
-                    });
-                }
+            let topNick = "Nenhum", topPts = -1;
+            Object.keys(mapaTreinadores).forEach(nick => {
+                if (mapaTreinadores[nick] > topPts) { topPts = mapaTreinadores[nick]; topNick = nick; }
             });
 
-            db.collection("solicitacoes_acesso").onSnapshot((snap) => {
-                const tb = document.getElementById('table-acessos-historico'); tb.innerHTML = '';
-                let hist = []; snap.forEach(doc => hist.push(doc.data()));
-                hist.sort((a,b) => b.dataSolicitacao?.toDate() - a.dataSolicitacao?.toDate()).forEach(d => {
-                    let dt = formatarDataHora(d.dataSolicitacao);
-                    let st = d.status === 'Aprovado' ? 'emerald' : d.status === 'Rejeitado' || d.status === 'Revogado' ? 'red' : 'amber';
-                    let crg = d.role === "Admin" ? "Ministério (Admin)" : d.role === "Convidado" ? "Convidado" : "---";
-                    tb.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 text-white/80"><td class="p-4 px-6 font-bold flex items-center gap-3"><img src="${getAvatarUrl(d.nick,'s')}" class="w-6 h-6 rounded-full">${d.nick}</td><td class="p-4 text-center"><span class="point-badge point-${st}">${d.status}</span></td><td class="p-4 text-xs font-semibold">${crg}</td><td class="p-4 text-[10px] font-mono opacity-50">${dt}</td></tr>`;
-                });
-            });
+            document.getElementById('dash-total').innerText = totalPostagens;
+            document.getElementById('dash-taxa').innerText = taxaAprovacao + '%';
+            document.getElementById('dash-pontos').innerText = totalPontosGerados;
+            document.getElementById('dash-top1').innerText = topNick;
+        });
+    }
 
-            db.collection("solicitacoes_acesso").where("status", "==", "Aprovado").onSnapshot((snap) => {
-                const gridAdmins = document.getElementById('grid-admin-list-admins'); gridAdmins.innerHTML = '';
-                const gridConvidados = document.getElementById('grid-admin-list-convidados'); gridConvidados.innerHTML = '';
-                
-                snap.forEach((doc) => { 
+    // ==========================================
+    // 7. ESCUTAS GLOBAIS: AUDITORIA E ACESSOS
+    // ==========================================
+    function iniciarEscutasGlobais() {
+        // ── Fila de Auditoria (Postagens Pendentes) ──
+        db.collection("postagens").where("status", "==", "Pendente").onSnapshot((snap) => {
+            const grid  = document.getElementById('grid-atividades');
+            const empty = document.getElementById('empty-atividades');
+            document.getElementById('count-atividades').innerText = `${snap.size} Pendentes`;
+            grid.innerHTML = '';
+
+            if (snap.empty) {
+                empty.classList.replace('hidden', 'flex');
+            } else {
+                empty.classList.replace('flex', 'hidden');
+                snap.forEach((doc) => {
                     const d = doc.data();
-                    let stLogo = d.role === "Admin" ? '<i class="fa-solid fa-star text-amber-500 absolute -top-2 -right-2 text-sm bg-[#0A0102] rounded-full p-1 border border-amber-500/50 shadow-vivid z-10"></i>' : '';
-                    let isAdm = d.role === "Admin";
-                    let cardHtml = `<button onclick="abrirPerfil('${doc.id}')" class="vivid-perfil h-32 glass-card p-4 flex flex-col items-center justify-center text-center gap-3 border border-white/5 group">
-                        <div class="relative w-16 h-16 flex-shrink-0">
-                            <div class="w-full h-full rounded-full bg-[#0A0102] border border-white/10 group-hover:border-tre-brand overflow-hidden relative z-0">
-                                <img src="${getAvatarUrl(d.nick,'m')}" class="avatar-img absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500 w-14">
+                    grid.innerHTML += `<div class="glass-card p-5 flex flex-col h-full" id="card-${doc.id}">
+                        <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5">
+                            <div class="w-10 h-10 rounded-full bg-[#0A0102] overflow-hidden border border-white/10 relative flex-shrink-0">
+                                <img src="${getAvatarUrl(d.nick,'m')}" class="absolute -top-2 left-1/2 -translate-x-1/2">
                             </div>
-                            ${stLogo}
+                            <div>
+                                <h4 class="font-bold text-white tracking-wide">${sanitize(d.nick)}</h4>
+                                <p class="text-[10px] text-white/40 uppercase tracking-widest"><i class="fa-regular fa-clock"></i> ${formatarDataHora(d.dataEnvio)}</p>
+                            </div>
                         </div>
-                        <div class="w-full">
-                            <p class="text-sm font-black text-white group-hover:text-tre-brand truncate w-full">${d.nick}</p>
-                            <p class="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">${isAdm ? 'Ministério' : 'Convidado'}</p>
+                        <div class="flex-grow mb-5">
+                            <span class="inline-block bg-white/5 border border-white/10 rounded px-2 py-1 text-[10px] font-bold text-white/40 uppercase mb-2">Categoria</span>
+                            <p class="text-sm font-semibold text-tre-brand leading-tight">${sanitize(d.categoria)}</p>
                         </div>
-                    </button>`;
-
-                    if(isAdm) gridAdmins.innerHTML += cardHtml; else gridConvidados.innerHTML += cardHtml;
+                        <div class="flex flex-col gap-2 mt-auto">
+                            <a href="${sanitize(d.prova)}" target="_blank" rel="noopener noreferrer" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-bold py-2.5 rounded-lg flex justify-center items-center gap-2">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Prova
+                            </a>
+                            <div class="flex gap-2 only-admin">
+                                <button onclick="julgarDoc('${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg"><i class="fa-solid fa-check"></i> Aprovar</button>
+                                <button onclick="iniciarRejeicao('${doc.id}')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg"><i class="fa-solid fa-xmark"></i> Rejeitar</button>
+                            </div>
+                        </div>
+                    </div>`;
                 });
+            }
+        });
+
+        // ── Fila de Aprovação de Acessos ──
+        db.collection("solicitacoes_acesso").where("status", "==", "Pendente").onSnapshot((snap) => {
+            const grid  = document.getElementById('grid-acessos');
+            const empty = document.getElementById('empty-acessos');
+            grid.innerHTML = '';
+
+            if (snap.empty) {
+                empty.classList.replace('hidden', 'flex');
+            } else {
+                empty.classList.replace('flex', 'hidden');
+                snap.forEach((doc) => {
+                    const d = doc.data();
+                    grid.innerHTML += `<div class="glass-card p-5 flex flex-col h-full" id="card-${doc.id}">
+                        <div class="flex items-center gap-3 mb-4 pb-4 border-b border-white/5">
+                            <div class="w-10 h-10 rounded-full bg-[#0A0102] border border-white/10 overflow-hidden relative flex-shrink-0">
+                                <img src="${getAvatarUrl(d.nick,'m')}" class="absolute -top-2 left-1/2 -translate-x-1/2">
+                            </div>
+                            <h4 class="font-bold text-white tracking-wide">${sanitize(d.nick)}</h4>
+                        </div>
+                        <p class="text-sm text-white/70 mb-5 flex-grow">Solicitou acesso restrito.</p>
+                        <div class="flex gap-2 mt-auto only-admin">
+                            <button onclick="julgarAcesso('${doc.id}', 'Aprovado')" class="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-lg">Liberar</button>
+                            <button onclick="julgarAcesso('${doc.id}', 'Rejeitado')" class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 text-xs font-bold py-2.5 rounded-lg">Negar</button>
+                        </div>
+                    </div>`;
+                });
+            }
+        });
+
+        // ── Histórico de Credenciais ──
+        db.collection("solicitacoes_acesso").onSnapshot((snap) => {
+            const tb = document.getElementById('table-acessos-historico');
+            tb.innerHTML = '';
+            let hist = [];
+            snap.forEach(doc => hist.push(doc.data()));
+            hist.sort((a, b) => (b.dataSolicitacao?.toDate() || 0) - (a.dataSolicitacao?.toDate() || 0))
+                .forEach(d => {
+                    const dt  = formatarDataHora(d.dataSolicitacao);
+                    const st  = d.status === 'Aprovado' ? 'emerald' : (d.status === 'Rejeitado' || d.status === 'Revogado') ? 'red' : 'amber';
+                    const crg = d.role === ROLES.ADMIN ? "Ministério (Admin)" : d.role === ROLES.CONVIDADO ? "Convidado" : "---";
+                    tb.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 text-white/80">
+                        <td class="p-4 px-6 font-bold flex items-center gap-3">
+                            <img src="${getAvatarUrl(d.nick,'s')}" class="w-6 h-6 rounded-full">${sanitize(d.nick)}
+                        </td>
+                        <td class="p-4 text-center"><span class="point-badge point-${st}">${sanitize(d.status)}</span></td>
+                        <td class="p-4 text-xs font-semibold">${crg}</td>
+                        <td class="p-4 text-[10px] font-mono opacity-50">${dt}</td>
+                    </tr>`;
+                });
+        });
+
+        // ── Lista de Membros com Acesso ──
+        db.collection("solicitacoes_acesso").where("status", "==", "Aprovado").onSnapshot((snap) => {
+            const gridAdmins    = document.getElementById('grid-admin-list-admins');
+            const gridConvidados = document.getElementById('grid-admin-list-convidados');
+            gridAdmins.innerHTML = '';
+            gridConvidados.innerHTML = '';
+
+            snap.forEach((doc) => {
+                const d = doc.data();
+                const isAdm   = d.role === ROLES.ADMIN;
+                const stLogo  = isAdm ? '<i class="fa-solid fa-star text-amber-500 absolute -top-2 -right-2 text-sm bg-[#0A0102] rounded-full p-1 border border-amber-500/50 z-10"></i>' : '';
+                const cardHtml = `<button onclick="abrirPerfil('${doc.id}')" class="vivid-perfil h-32 glass-card p-4 flex flex-col items-center justify-center text-center gap-3 border border-white/5 group">
+                    <div class="relative w-16 h-16 flex-shrink-0">
+                        <div class="w-full h-full rounded-full bg-[#0A0102] border border-white/10 group-hover:border-tre-brand overflow-hidden relative z-0">
+                            <img src="${getAvatarUrl(d.nick,'m')}" class="avatar-img absolute -top-1 left-1/2 -translate-x-1/2 transition-transform duration-500 w-14">
+                        </div>
+                        ${stLogo}
+                    </div>
+                    <div class="w-full">
+                        <p class="text-sm font-black text-white group-hover:text-tre-brand truncate w-full">${sanitize(d.nick)}</p>
+                        <p class="text-[9px] text-white/40 uppercase tracking-widest mt-0.5">${isAdm ? 'Ministério' : 'Convidado'}</p>
+                    </div>
+                </button>`;
+                if (isAdm) gridAdmins.innerHTML += cardHtml;
+                else gridConvidados.innerHTML += cardHtml;
             });
+        });
 
-            carregarTabelaHistorico();
-        }
+        // Inicia a tabela de histórico geral
+        carregarTabelaHistorico();
+    }
 
-        // ==========================================
-        // 8. AÇÕES E MOTOR DE JULGAMENTO
-        // ==========================================
-        function julgarDoc(docId, st) { db.collection("postagens").doc(docId).update({ status: st, dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(), julgadoPor: currentUserNick }).catch(e => alert("Erro ao processar.")); }
-        function julgarAcesso(docId, st) { db.collection("solicitacoes_acesso").doc(docId).update({ status: st }).catch(e => alert("Erro de permissão.")); }
+    // ==========================================
+    // 8. AÇÕES E MOTOR DE JULGAMENTO
+    // ==========================================
+    function julgarDoc(docId, st) {
+        // Trava todos os botões do card para evitar duplo clique
+        const card = document.getElementById('card-' + docId);
+        const btns = card ? card.querySelectorAll('button') : [];
+        btns.forEach(b => { b.disabled = true; b.classList.add('opacity-50'); });
 
-        function iniciarRejeicao(id) { document.getElementById('form-reject-docId').value = id; document.getElementById('reject-motivo').value = ''; toggleModal('modal-reject-atividades'); }
-        function confirmarRejeicaoPostagem(e) {
-            e.preventDefault(); const id = document.getElementById('form-reject-docId').value; const m = document.getElementById('reject-motivo').value.trim();
-            if(!m) { alert("Motivo é obrigatório."); return; } toggleModal('modal-reject-atividades');
-            db.collection("postagens").doc(id).update({ status: "Rejeitado", motivoRejeicao: m, dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(), julgadoPor: currentUserNick });
-        }
+        db.collection("postagens").doc(docId).update({
+            status: st,
+            dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(),
+            julgadoPor: currentUserNick
+        }).catch(e => {
+            console.error("Erro ao julgar postagem:", e);
+            btns.forEach(b => { b.disabled = false; b.classList.remove('opacity-50'); });
+            mostrarToast("Erro ao processar. Verifique as permissões.", 'error');
+        });
+    }
 
-        function abrirModalLancamentoManual() { document.getElementById('form-admin-post').reset(); toggleModal('modal-admin-post'); }
-        function salvarLancamentoManual(e) {
-            e.preventDefault(); const n = document.getElementById('man-nick').value.trim(); const p = document.getElementById('man-prova').value; const c = document.getElementById('man-categoria').value; const s = document.getElementById('man-status').value;
-            if(!c) { alert("Escolha a atividade"); return; }
-            const docData = { nick: n, categoria: c, prova: p, status: s, dataEnvio: firebase.firestore.FieldValue.serverTimestamp() };
-            if(s === "Aprovado") { docData.dataJulgamento = firebase.firestore.FieldValue.serverTimestamp(); docData.julgadoPor = currentUserNick + " (Manual)"; }
-            db.collection("postagens").add(docData).then(()=> { toggleModal('modal-admin-post'); alert("Lançamento efetuado!"); });
-        }
+    function julgarAcesso(docId, st) {
+        const card = document.getElementById('card-' + docId);
+        const btns = card ? card.querySelectorAll('button') : [];
+        btns.forEach(b => { b.disabled = true; b.classList.add('opacity-50'); });
 
-        function apagarHistorico(id) { if(confirm("ALERTA: Essa postagem sumirá do ranking. Confirmar exclusão permanente?")) db.collection("postagens").doc(id).delete(); }
-        function iniciarEdicaoHistorico(id) {
-            db.collection("postagens").doc(id).get().then(doc => {
-                const d = doc.data(); document.getElementById('edith-id').value = id; document.getElementById('edith-nick').value = d.nick; document.getElementById('edith-categoria').value = d.categoria; document.getElementById('edith-status').value = d.status; document.getElementById('edith-pontos').value = d.pontosOverride || ""; toggleModal('modal-edit-historico');
+        db.collection("solicitacoes_acesso").doc(docId).update({ status: st })
+            .then(() => mostrarToast(st === 'Aprovado' ? "Acesso liberado com sucesso!" : "Acesso negado."))
+            .catch(e => {
+                console.error("Erro ao julgar acesso:", e);
+                btns.forEach(b => { b.disabled = false; b.classList.remove('opacity-50'); });
+                mostrarToast("Erro de permissão.", 'error');
             });
-        }
-        function salvarEdicaoHistorico(e) {
-            e.preventDefault(); const id = document.getElementById('edith-id').value; const pts = document.getElementById('edith-pontos').value;
-            const update = { nick: document.getElementById('edith-nick').value, categoria: document.getElementById('edith-categoria').value, status: document.getElementById('edith-status').value, editadoPor: currentUserNick, dataEdicao: firebase.firestore.FieldValue.serverTimestamp() };
-            if(pts !== "") update.pontosOverride = parseInt(pts); else update.pontosOverride = firebase.firestore.FieldValue.delete();
-            db.collection("postagens").doc(id).update(update).then(()=> { toggleModal('modal-edit-historico'); alert("Registro Atualizado."); });
+    }
+
+    function iniciarRejeicao(id) {
+        document.getElementById('form-reject-docId').value = id;
+        document.getElementById('reject-motivo').value = '';
+        toggleModal('modal-reject-atividades');
+    }
+
+    function confirmarRejeicaoPostagem(e) {
+        e.preventDefault();
+        const id = document.getElementById('form-reject-docId').value;
+        const m  = document.getElementById('reject-motivo').value.trim();
+        if (!m) { mostrarToast("Motivo é obrigatório.", 'error'); return; }
+        toggleModal('modal-reject-atividades');
+        db.collection("postagens").doc(id).update({
+            status: "Rejeitado",
+            motivoRejeicao: m,
+            dataJulgamento: firebase.firestore.FieldValue.serverTimestamp(),
+            julgadoPor: currentUserNick
+        }).catch(() => mostrarToast("Erro ao rejeitar postagem.", 'error'));
+    }
+
+    function abrirModalLancamentoManual() {
+        document.getElementById('form-admin-post').reset();
+        toggleModal('modal-admin-post');
+    }
+
+    function salvarLancamentoManual(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btn-save-man');
+        setBtnLoading(btn, true);
+
+        const n = document.getElementById('man-nick').value.trim();
+        const p = document.getElementById('man-prova').value;
+        const c = document.getElementById('man-categoria').value;
+        const s = document.getElementById('man-status').value;
+
+        if (!c) { mostrarToast("Escolha a atividade.", 'error'); setBtnLoading(btn, false); return; }
+
+        const docData = { nick: n, categoria: c, prova: p, status: s, dataEnvio: firebase.firestore.FieldValue.serverTimestamp() };
+        if (s === "Aprovado") {
+            docData.dataJulgamento = firebase.firestore.FieldValue.serverTimestamp();
+            docData.julgadoPor = currentUserNick + " (Manual)";
         }
 
-        // ==========================================
-        // 9. RENDERIZAÇÃO DO HISTÓRICO GERAL (Com Carimbos)
-        // ==========================================
-        function carregarTabelaHistorico() {
-            const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...</td></tr>';
-            db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado", "Pendente"]).onSnapshot((snap) => {
-                let filtrados = []; 
-                snap.forEach(doc => { 
-                    const d = doc.data(); d.id = doc.id; 
-                    let dataBase = d.dataJulgamento || d.dataEnvio;
-                    if(dataBase && typeof dataBase.toDate === 'function') { 
-                        d.mesAnoStr = formatarMesAno(dataBase.toDate()); 
-                        filtrados.push(d); 
-                    } 
+        db.collection("postagens").add(docData)
+            .then(() => { toggleModal('modal-admin-post'); mostrarToast("Lançamento efetuado com sucesso!"); })
+            .catch(() => mostrarToast("Erro ao lançar. Tente novamente.", 'error'))
+            .finally(() => setBtnLoading(btn, false));
+    }
+
+    function apagarHistorico(id) {
+        if (confirm("ALERTA: Essa postagem será removida do ranking permanentemente. Confirmar?")) {
+            db.collection("postagens").doc(id).delete()
+                .then(() => mostrarToast("Registro removido."))
+                .catch(() => mostrarToast("Erro ao remover registro.", 'error'));
+        }
+    }
+
+    function iniciarEdicaoHistorico(id) {
+        db.collection("postagens").doc(id).get().then(doc => {
+            const d = doc.data();
+            document.getElementById('edith-id').value = id;
+            document.getElementById('edith-nick').value = d.nick;
+            document.getElementById('edith-categoria').value = d.categoria;
+            document.getElementById('edith-status').value = d.status;
+            document.getElementById('edith-pontos').value = d.pontosOverride || "";
+            toggleModal('modal-edit-historico');
+        }).catch(() => mostrarToast("Erro ao carregar registro.", 'error'));
+    }
+
+    function salvarEdicaoHistorico(e) {
+        e.preventDefault();
+        const id  = document.getElementById('edith-id').value;
+        const pts = document.getElementById('edith-pontos').value;
+        const update = {
+            nick: document.getElementById('edith-nick').value,
+            categoria: document.getElementById('edith-categoria').value,
+            status: document.getElementById('edith-status').value,
+            editadoPor: currentUserNick,
+            dataEdicao: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        if (pts !== "") update.pontosOverride = parseInt(pts);
+        else update.pontosOverride = firebase.firestore.FieldValue.delete();
+
+        db.collection("postagens").doc(id).update(update)
+            .then(() => { toggleModal('modal-edit-historico'); mostrarToast("Registro atualizado com sucesso!"); })
+            .catch(() => mostrarToast("Erro ao atualizar registro.", 'error'));
+    }
+
+    // ==========================================
+    // 9. HISTÓRICO GERAL (com unsubscribe anti-leak)
+    // ==========================================
+    function carregarTabelaHistorico() {
+        // Cancela listener anterior — evita empilhamento ao trocar de mês
+        if (unsubHistorico) unsubHistorico();
+
+        const list = document.getElementById('table-historico-list');
+        list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...</td></tr>';
+
+        unsubHistorico = db.collection("postagens")
+            .where("status", "in", ["Aprovado", "Rejeitado", "Pendente"])
+            .onSnapshot((snap) => {
+                let filtrados = [];
+                snap.forEach(doc => {
+                    const d = doc.data(); d.id = doc.id;
+                    const dataBase = d.dataJulgamento || d.dataEnvio;
+                    if (dataBase && typeof dataBase.toDate === 'function') {
+                        d.mesAnoStr = formatarMesAno(dataBase.toDate());
+                        filtrados.push(d);
+                    }
                 });
-                
-                filtrados = filtrados.filter(p => p.mesAnoStr === mesAtualStr).sort((a, b) => {
-                    let dateA = a.dataJulgamento || a.dataEnvio;
-                    let dateB = b.dataJulgamento || b.dataEnvio;
-                    return dateB.toDate() - dateA.toDate();
-                });
+
+                filtrados = filtrados
+                    .filter(p => p.mesAnoStr === mesAtualStr)
+                    .sort((a, b) => {
+                        const dA = a.dataJulgamento || a.dataEnvio;
+                        const dB = b.dataJulgamento || b.dataEnvio;
+                        return dB.toDate() - dA.toDate();
+                    });
 
                 list.innerHTML = '';
-                if(filtrados.length === 0) { list.innerHTML = '<tr><td colspan="6" class="p-10 text-center opacity-40">Mês sem registros.</td></tr>'; return; }
-                
+                if (filtrados.length === 0) {
+                    list.innerHTML = '<tr><td colspan="6" class="p-10 text-center opacity-40">Mês sem registros.</td></tr>';
+                    return;
+                }
+
                 filtrados.forEach(d => {
-                    let envStr = formatarDataHora(d.dataEnvio); let julgStr = formatarDataHora(d.dataJulgamento); let edStr = formatarDataHora(d.dataEdicao);
-                    
-                    let pts = "-"; 
-                    if(d.status === "Aprovado") {
-                        if(d.pontosOverride !== undefined) pts = d.pontosOverride > 0 ? `+${d.pontosOverride}` : d.pontosOverride;
+                    const envStr  = formatarDataHora(d.dataEnvio);
+                    const julgStr = formatarDataHora(d.dataJulgamento);
+                    const edStr   = formatarDataHora(d.dataEdicao);
+
+                    let pts = "-";
+                    if (d.status === "Aprovado") {
+                        if (d.pontosOverride !== undefined) pts = d.pontosOverride > 0 ? `+${d.pontosOverride}` : d.pontosOverride;
                         else { const c = quadroPontosGlobal.find(q => q.nome === d.categoria); pts = c ? (c.pontos > 0 ? `+${c.pontos}` : c.pontos) : "??"; }
                     } else if (d.status === "Rejeitado") pts = "0";
-                    let stCl = d.status === "Aprovado" ? "emerald" : d.status === "Rejeitado" ? "red" : "amber"; let ic = d.status === "Aprovado" ? "check" : d.status === "Rejeitado" ? "xmark" : "clock";
-                    
-                    let detalhesProcesso = `<div class="space-y-1.5 min-w-[220px]">
+
+                    const stCl = d.status === "Aprovado" ? "emerald" : d.status === "Rejeitado" ? "red" : "amber";
+                    const ic   = d.status === "Aprovado" ? "check"   : d.status === "Rejeitado" ? "xmark" : "clock";
+
+                    const detalhesProcesso = `<div class="space-y-1.5 min-w-[220px]">
                         <p class="text-white/70"><i class="fa-solid fa-paper-plane text-white/20 w-4"></i> Enviado: <span class="font-mono text-[10px] text-white/50 ml-1">${envStr}</span></p>
-                        ${d.status !== 'Pendente' ? `<p class="text-white/70"><i class="fa-solid fa-gavel text-amber-500/50 w-4"></i> Análise: <span class="font-bold text-white">${d.julgadoPor || 'Sistema'}</span> <span class="font-mono text-[10px] text-white/50 ml-1">(${julgStr})</span></p>` : ''}
-                        ${d.editadoPor ? `<p class="text-emerald-400/90"><i class="fa-solid fa-pen text-emerald-400/50 w-4"></i> Editado: <span class="font-bold">${d.editadoPor}</span> <span class="font-mono text-[10px] text-emerald-400/60 ml-1">(${edStr})</span></p>` : ''}
+                        ${d.status !== 'Pendente' ? `<p class="text-white/70"><i class="fa-solid fa-gavel text-amber-500/50 w-4"></i> Análise: <span class="font-bold text-white">${sanitize(d.julgadoPor || 'Sistema')}</span> <span class="font-mono text-[10px] text-white/50 ml-1">(${julgStr})</span></p>` : ''}
+                        ${d.editadoPor ? `<p class="text-emerald-400/90"><i class="fa-solid fa-pen text-emerald-400/50 w-4"></i> Editado: <span class="font-bold">${sanitize(d.editadoPor)}</span> <span class="font-mono text-[10px] text-emerald-400/60 ml-1">(${edStr})</span></p>` : ''}
                     </div>`;
 
-                    let btns = `<button onclick="iniciarEdicaoHistorico('${d.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button><button onclick="apagarHistorico('${d.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>`;
+                    const btns = `<button onclick="iniciarEdicaoHistorico('${d.id}')" class="bg-white/5 hover:bg-white/20 text-white w-8 h-8 rounded-lg transition-colors mr-1"><i class="fa-solid fa-pen"></i></button>
+                                  <button onclick="apagarHistorico('${d.id}')" class="bg-red-500/10 hover:bg-red-500/30 text-red-500 w-8 h-8 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>`;
 
                     list.innerHTML += `<tr class="border-b border-white/5 hover:bg-white/5 text-white/80 filter-row">
-                        <td class="p-4 px-6 font-bold nick-cell flex items-center gap-3"><img src="${getAvatarUrl(d.nick,'s')}" class="w-6 h-6 rounded-full bg-black/40"> ${d.nick}</td>
-                        <td class="p-4 font-semibold text-tre-brand">${d.categoria}</td>
+                        <td class="p-4 px-6 font-bold nick-cell flex items-center gap-3">
+                            <img src="${getAvatarUrl(d.nick,'s')}" class="w-6 h-6 rounded-full bg-black/40"> ${sanitize(d.nick)}
+                        </td>
+                        <td class="p-4 font-semibold text-tre-brand">${sanitize(d.categoria)}</td>
                         <td class="p-4 text-center font-black text-lg text-${stCl}-400">${pts}</td>
-                        <td class="p-4 text-center"><span class="point-badge point-${stCl} text-${stCl}-400"><i class="fa-solid fa-${ic}"></i> ${d.status}</span></td>
+                        <td class="p-4 text-center"><span class="point-badge point-${stCl} text-${stCl}-400"><i class="fa-solid fa-${ic}"></i> ${sanitize(d.status)}</span></td>
                         <td class="p-4 text-xs font-medium">${detalhesProcesso}</td>
                         <td class="p-4 text-right only-admin">${btns}</td>
                     </tr>`;
                 });
-                filtrarHistoricoBusca(); aplicarPermissoesUI();
+
+                filtrarHistoricoBusca();
+                aplicarPermissoesUI();
             });
-        }
+    }
 
-        // ==========================================
-        // 10. GESTÃO DE PERFIL NO MODAL
-        // ==========================================
-        function toggleCargoDropdown() {
-            const menu = document.getElementById('menu-cargo-dropdown');
-            const seta = document.getElementById('icone-cargo-seta');
-            menu.classList.toggle('opacity-0'); 
-            menu.classList.toggle('invisible'); 
-            menu.classList.toggle('translate-y-2');
-            seta.classList.toggle('rotate-180');
-        }
+    // ==========================================
+    // 10. GESTÃO DE PERFIL NO MODAL
+    // ==========================================
+    function toggleCargoDropdown() {
+        const menu = document.getElementById('menu-cargo-dropdown');
+        const seta = document.getElementById('icone-cargo-seta');
+        menu.classList.toggle('opacity-0');
+        menu.classList.toggle('invisible');
+        menu.classList.toggle('translate-y-2');
+        seta.classList.toggle('rotate-180');
+    }
 
-        function selecionarCargoMenu(valor, texto) {
-            document.getElementById('select-mudar-cargo').value = valor;
-            document.getElementById('texto-cargo-selecionado').innerText = texto;
-            toggleCargoDropdown();
-        }
+    function selecionarCargoMenu(valor, texto) {
+        document.getElementById('select-mudar-cargo').value = valor;
+        document.getElementById('texto-cargo-selecionado').innerText = texto;
+        toggleCargoDropdown();
+    }
 
-        function abrirMeuPerfil() { abrirPerfil(auth.currentUser.uid); }
-        
-        function abrirPerfil(uid) {
-            db.collection("solicitacoes_acesso").doc(uid).get().then(doc => {
+    function abrirMeuPerfil() { abrirPerfil(auth.currentUser.uid); }
+
+    function abrirPerfil(uid) {
+        db.collection("solicitacoes_acesso").doc(uid).get()
+            .then(doc => {
+                if (!doc.exists) { mostrarToast("Perfil não encontrado.", 'error'); return; }
                 const d = doc.data();
-                document.getElementById('modal-perfil-nick').innerText = d.nick; 
+
+                document.getElementById('modal-perfil-nick').innerText = d.nick;
                 document.getElementById('modal-avatar').src = getAvatarUrl(d.nick, 'l');
-                
+
                 const bdg = document.getElementById('modal-perfil-cargo-badge');
-                bdg.innerText = d.role === "Admin" ? "ADMINISTRAÇÃO (Ministério)" : "CONVIDADO (Leitura)";
-                bdg.className = d.role === "Admin" ? "bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6" : "bg-white/10 text-white/60 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6";
-                
-                const txt = document.getElementById('perfil-descricao'); 
-                txt.value = d.descricao || "";
+                bdg.innerText  = d.role === ROLES.ADMIN ? "ADMINISTRAÇÃO (Ministério)" : "CONVIDADO (Leitura)";
+                bdg.className  = d.role === ROLES.ADMIN
+                    ? "bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6"
+                    : "bg-white/10 text-white/60 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6";
+
+                document.getElementById('perfil-descricao').value = d.descricao || "";
                 document.getElementById('modal-perfil-uid').value = uid;
 
                 let dataStr = "Data não registrada";
-                if(d.dataSolicitacao) { 
-                    const dateObj = d.dataSolicitacao.toDate(); 
-                    dataStr = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth()+1).padStart(2, '0')}/${dateObj.getFullYear()}`; 
+                if (d.dataSolicitacao && typeof d.dataSolicitacao.toDate === 'function') {
+                    const dateObj = d.dataSolicitacao.toDate();
+                    dataStr = `${String(dateObj.getDate()).padStart(2,'0')}/${String(dateObj.getMonth()+1).padStart(2,'0')}/${dateObj.getFullYear()}`;
                 }
                 const campoData = document.getElementById('modal-perfil-dataRegistro');
-                if(campoData) campoData.innerText = dataStr;
+                if (campoData) campoData.innerText = dataStr;
 
-                if (uid === auth.currentUser.uid) {
-                    txt.readOnly = false; 
-                    document.getElementById('btn-save-perfil').classList.remove('hidden'); 
-                    document.getElementById('modal-perfil-title-container').classList.add('hidden'); 
+                const isSelf = uid === auth.currentUser.uid;
+                const txt    = document.getElementById('perfil-descricao');
+
+                if (isSelf) {
+                    txt.readOnly = false;
+                    document.getElementById('btn-save-perfil').classList.remove('hidden');
+                    document.getElementById('modal-perfil-title-container').classList.add('hidden');
                     document.getElementById('panel-admin-gerenciar').classList.add('hidden');
                 } else {
-                    txt.readOnly = true; 
-                    document.getElementById('btn-save-perfil').classList.add('hidden'); 
+                    txt.readOnly = true;
+                    document.getElementById('btn-save-perfil').classList.add('hidden');
                     document.getElementById('modal-perfil-title-container').classList.remove('hidden');
-                    if (isAdmin()) { 
-                        document.getElementById('panel-admin-gerenciar').classList.remove('hidden'); 
-                        let cargoMembro = d.role || "Convidado";
-                        document.getElementById('select-mudar-cargo').value = cargoMembro; 
-                        document.getElementById('texto-cargo-selecionado').innerText = cargoMembro === "Admin" ? "Admin (Acesso Total)" : "Convidado (Leitura Restrita)";
-                    } else { 
-                        document.getElementById('panel-admin-gerenciar').classList.add('hidden'); 
+                    if (isAdmin()) {
+                        document.getElementById('panel-admin-gerenciar').classList.remove('hidden');
+                        const cargoMembro = d.role || ROLES.CONVIDADO;
+                        document.getElementById('select-mudar-cargo').value = cargoMembro;
+                        document.getElementById('texto-cargo-selecionado').innerText = cargoMembro === ROLES.ADMIN ? "Admin (Acesso Total)" : "Convidado (Leitura Restrita)";
+                    } else {
+                        document.getElementById('panel-admin-gerenciar').classList.add('hidden');
                     }
                 }
+
                 toggleModal('modal-perfil');
-            });
-        }
+            })
+            .catch(() => mostrarToast("Erro ao carregar perfil.", 'error'));
+    }
 
-        function salvarDescricaoPerfil(e) {
-            e.preventDefault(); const t = document.getElementById('perfil-descricao').value.trim();
-            db.collection("solicitacoes_acesso").doc(auth.currentUser.uid).update({ descricao: t }).then(()=> { toggleModal('modal-perfil'); alert("Salvo."); });
-        }
+    function salvarDescricaoPerfil(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btn-save-perfil');
+        const t   = document.getElementById('perfil-descricao').value.trim();
+        setBtnLoading(btn, true);
+        db.collection("solicitacoes_acesso").doc(auth.currentUser.uid).update({ descricao: t })
+            .then(() => { toggleModal('modal-perfil'); mostrarToast("Biografia salva com sucesso!"); })
+            .catch(() => mostrarToast("Erro ao salvar biografia.", 'error'))
+            .finally(() => setBtnLoading(btn, false));
+    }
 
-        function mudarCargoUsuario() {
-            const uid = document.getElementById('modal-perfil-uid').value; const r = document.getElementById('select-mudar-cargo').value;
-            db.collection("solicitacoes_acesso").doc(uid).update({ role: r }).then(()=> { toggleModal('modal-perfil'); alert("Nível Atualizado."); });
+    function mudarCargoUsuario() {
+        const uid = document.getElementById('modal-perfil-uid').value;
+        const r   = document.getElementById('select-mudar-cargo').value;
+        db.collection("solicitacoes_acesso").doc(uid).update({ role: r })
+            .then(() => { toggleModal('modal-perfil'); mostrarToast("Nível de acesso atualizado!"); })
+            .catch(() => mostrarToast("Erro ao atualizar nível.", 'error'));
+    }
+
+    function expulsarUsuario() {
+        const uid = document.getElementById('modal-perfil-uid').value;
+        if (confirm("Revogar credencial? O membro perderá acesso total imediatamente.")) {
+            db.collection("solicitacoes_acesso").doc(uid).update({ status: "Revogado", role: "---" })
+                .then(() => { toggleModal('modal-perfil'); mostrarToast("Acesso revogado com sucesso."); })
+                .catch(() => mostrarToast("Erro ao revogar acesso.", 'error'));
         }
-        function expulsarUsuario() {
-            const uid = document.getElementById('modal-perfil-uid').value;
-            if(confirm("Revogar credencial? O membro perderá acesso total imediatamente.")) { db.collection("solicitacoes_acesso").doc(uid).update({ status: "Revogado", role: "---" }).then(()=> { toggleModal('modal-perfil'); alert("Acesso Revogado."); }); }
-        }
+    }
     </script>
 </body>
 </html>
