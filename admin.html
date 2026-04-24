@@ -298,7 +298,9 @@
             </div>
             <h3 class="text-3xl font-black text-white mb-1" id="modal-perfil-nick">Nick</h3>
             <span id="modal-perfil-cargo-badge" class="bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6">Cargo</span>
-            
+            <div class="w-full space-y-2 mb-6 text-left p-4 rounded-xl bg-white/5 border border-white/10">
+                <p class="text-sm text-white/70"><i class="fa-solid fa-calendar-check text-tre-brand mr-2"></i>Membro desde: <span class="font-bold text-white" id="modal-perfil-dataRegistro">Carregando...</span></p>
+            </div>
             <div class="w-full space-y-1.5 mb-6 text-left">
                 <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Biografia Profissional</label>
                 <textarea id="perfil-descricao" rows="3" placeholder="Sem biografia." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium custom-scrollbar"></textarea>
@@ -743,6 +745,14 @@
                 bdg.className = d.role === "Admin" ? "bg-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6" : "bg-white/10 text-white/60 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded mb-6";
                 const txt = document.getElementById('perfil-descricao'); txt.value = d.descricao || "";
                 document.getElementById('modal-perfil-uid').value = uid;
+                // Formata e exibe a data de registro
+                let dataStr = "Data não registrada";
+                if(d.dataSolicitacao) { 
+                    const dateObj = d.dataSolicitacao.toDate(); 
+                    dataStr = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth()+1).padStart(2, '0')}/${dateObj.getFullYear()}`; 
+                }
+                const campoData = document.getElementById('modal-perfil-dataRegistro');
+                if(campoData) campoData.innerText = dataStr;
 
                 if (uid === auth.currentUser.uid) {
                     txt.readOnly = false; document.getElementById('btn-save-perfil').classList.remove('hidden'); document.getElementById('modal-perfil-title-container').classList.add('hidden'); document.getElementById('panel-admin-gerenciar').classList.add('hidden');
