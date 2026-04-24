@@ -52,30 +52,10 @@
         #auth-loader { z-index: 9999; }
         body.role-convidado .only-admin { display: none !important; }
 
-        /* Estilos customizados para o Editor Word (QuillJS) no tema Glassmorphism */
-        .ql-toolbar.ql-snow {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            border-radius: 1rem 1rem 0 0;
-            padding: 12px;
-        }
-        .ql-container.ql-snow {
-            background: rgba(10, 1, 2, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            border-top: none !important;
-            border-radius: 0 0 1rem 1rem;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            min-height: 400px;
-        }
-        .ql-snow .ql-stroke { stroke: rgba(255, 255, 255, 0.7); }
-        .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill { fill: rgba(255, 255, 255, 0.7); }
-        .ql-snow .ql-picker { color: rgba(255, 255, 255, 0.7); }
-        .ql-snow .ql-picker-options { background-color: #0A0102; border-color: rgba(255,255,255,0.1); }
-        .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke { stroke: #D31522; }
-        .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill { fill: #D31522; }
-        .ql-editor p { margin-bottom: 0.75em; }
+        .ql-toolbar.ql-snow { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 1rem 1rem 0 0; padding: 12px; }
+        .ql-container.ql-snow { background: rgba(10, 1, 2, 0.6); border: 1px solid rgba(255, 255, 255, 0.1) !important; border-top: none !important; border-radius: 0 0 1rem 1rem; color: white; font-family: 'Inter', sans-serif; font-size: 14px; min-height: 400px; }
+        .ql-snow .ql-stroke { stroke: rgba(255, 255, 255, 0.7); } .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill { fill: rgba(255, 255, 255, 0.7); } .ql-snow .ql-picker { color: rgba(255, 255, 255, 0.7); } .ql-snow .ql-picker-options { background-color: #0A0102; border-color: rgba(255,255,255,0.1); }
+        .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke { stroke: #D31522; } .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill { fill: #D31522; }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand flex h-screen role-convidado">
@@ -98,7 +78,10 @@
         </div>
 
         <nav class="flex-grow py-6 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
-            <button onclick="switchTab('auditoria', this)" class="nav-item active w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
+            <button onclick="switchTab('dashboard', this)" class="nav-item active w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
+                <i class="fa-solid fa-chart-pie w-5 text-center text-emerald-400"></i> Visão Geral
+            </button>
+            <button onclick="switchTab('auditoria', this)" class="nav-item w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
                 <i class="fa-solid fa-clipboard-check w-5 text-center"></i> Auditoria Pendente
             </button>
             <button onclick="switchTab('historico', this)" class="nav-item w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
@@ -113,11 +96,11 @@
             </button>
             
             <button onclick="switchTab('regras', this)" class="nav-item only-admin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
-                <i class="fa-solid fa-file-contract w-5 text-center text-blue-400"></i> Editar Regras
+                <i class="fa-solid fa-file-contract w-5 text-center text-blue-400"></i> Regras do Sistema
             </button>
 
             <button onclick="switchTab('config', this)" class="nav-item only-admin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
-                <i class="fa-solid fa-sliders w-5 text-center text-amber-500"></i> Editar Atividades
+                <i class="fa-solid fa-sliders w-5 text-center text-amber-500"></i> Configurações Raiz
             </button>
         </nav>
 
@@ -153,7 +136,42 @@
                 <i class="fa-solid fa-arrow-left"></i> Voltar ao Site Principal
             </a>
 
-            <div id="tab-auditoria" class="tab-content block relative z-10">
+            <div id="tab-dashboard" class="tab-content block relative z-10">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5 relative z-10">
+                    <div>
+                        <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
+                            <i class="fa-solid fa-chart-pie text-tre-brand"></i> Visão Geral
+                        </h2>
+                        <p class="text-white/40 text-xs md:text-sm">Inteligência de Dados e KPIs da Companhia no mês atual.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-6 flex flex-col items-start border-l-4 border-l-blue-500">
+                        <i class="fa-solid fa-layer-group text-blue-500 text-2xl mb-4"></i>
+                        <p class="text-[10px] uppercase tracking-widest text-white/50 font-bold mb-1">Total de Envios</p>
+                        <h3 class="text-4xl font-black text-white" id="dash-total">0</h3>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-start border-l-4 border-l-emerald-500">
+                        <i class="fa-solid fa-percent text-emerald-500 text-2xl mb-4"></i>
+                        <p class="text-[10px] uppercase tracking-widest text-white/50 font-bold mb-1">Taxa de Aprovação</p>
+                        <h3 class="text-4xl font-black text-white" id="dash-taxa">0%</h3>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-start border-l-4 border-l-tre-brand">
+                        <i class="fa-solid fa-bolt text-tre-brand text-2xl mb-4"></i>
+                        <p class="text-[10px] uppercase tracking-widest text-white/50 font-bold mb-1">Pontos Distribuídos</p>
+                        <h3 class="text-4xl font-black text-white" id="dash-pontos">0</h3>
+                    </div>
+                    <div class="glass-card p-6 flex flex-col items-start border-l-4 border-l-amber-500 relative overflow-hidden">
+                        <i class="fa-solid fa-crown text-amber-500 text-2xl mb-4"></i>
+                        <p class="text-[10px] uppercase tracking-widest text-white/50 font-bold mb-1">Treinador Destaque</p>
+                        <h3 class="text-2xl font-black text-white truncate w-full" id="dash-top1">Nenhum</h3>
+                        <i class="fa-solid fa-trophy absolute -bottom-4 -right-4 text-6xl text-amber-500/10"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-auditoria" class="tab-content hidden opacity-0 relative z-10">
                 <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
@@ -171,7 +189,9 @@
                         </div>
                     </div>
                 </div>
+
                 <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                
                 <div id="empty-atividades" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
                     <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
                     <h3 class="text-xl font-black uppercase text-white tracking-widest">Fila Limpa!</h3>
@@ -185,7 +205,7 @@
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                             <i class="fa-solid fa-box-archive text-tre-brand"></i> Histórico Geral
                         </h2>
-                        <p class="text-white/40 text-xs md:text-sm">Arquivo de atividades.</p>
+                        <p class="text-white/40 text-xs md:text-sm">Arquivo de atividades com controle total de edição para Admins.</p>
                     </div>
                 </div>
 
@@ -227,7 +247,7 @@
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                             <i class="fa-solid fa-user-lock text-tre-brand"></i> Acessos
                         </h2>
-                        <p class="text-white/40 text-xs md:text-sm">Gestão de credenciais e histórico de acessos.</p>
+                        <p class="text-white/40 text-xs md:text-sm">Gestão de credenciais e histórico de entradas no Ministério.</p>
                     </div>
                 </div>
 
@@ -261,7 +281,7 @@
                     <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                         <i class="fa-solid fa-users text-tre-brand"></i> Membros com Acesso
                     </h2>
-                    <p class="text-white/40 text-xs md:text-sm">Lista de usuários cadastrados.</p>
+                    <p class="text-white/40 text-xs md:text-sm">Lista de usuários cadastrados divididos por poder administrativo.</p>
                 </div>
 
                 <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-widest mb-5 mt-2 flex items-center gap-3">
@@ -287,7 +307,6 @@
                         <i class="fa-solid fa-save"></i> Salvar Regras
                     </button>
                 </div>
-                
                 <div class="bg-[#0A0102] rounded-2xl shadow-3xl">
                     <div id="editor-regras"></div>
                 </div>
@@ -349,7 +368,7 @@
             </div>
             
             <div class="w-full space-y-1.5 mb-6 text-left">
-                <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Biografia</label>
+                <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Biografia Profissional</label>
                 <textarea id="perfil-descricao" rows="3" placeholder="Sem biografia." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium custom-scrollbar"></textarea>
                 <button id="btn-save-perfil" onclick="salvarDescricaoPerfil(event)" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl mt-2 text-xs transition-colors">Salvar Biografia</button>
             </div>
@@ -362,7 +381,6 @@
                             <span id="texto-cargo-selecionado">Carregando...</span>
                             <i id="icone-cargo-seta" class="fa-solid fa-chevron-up text-[10px] text-white/40 transition-transform duration-300"></i>
                         </button>
-                        
                         <div id="menu-cargo-dropdown" class="absolute left-0 bottom-full mb-2 w-full glass-panel-simple !bg-[#0A0102]/95 rounded-xl opacity-0 invisible translate-y-2 transition-all duration-300 overflow-hidden flex flex-col text-xs shadow-2xl z-50 border border-white/10">
                             <button type="button" onclick="selecionarCargoMenu('Admin', 'Admin (Acesso Total)')" class="px-4 py-3 text-left hover:bg-white/10 transition-colors text-white hover:text-amber-400 border-b border-white/5 font-bold w-full flex items-center justify-between">
                                 Admin (Acesso Total) <i class="fa-solid fa-star text-amber-500"></i>
@@ -373,7 +391,6 @@
                         </div>
                     </div>
                     <input type="hidden" id="select-mudar-cargo" value="Convidado">
-                    
                     <button onclick="mudarCargoUsuario()" class="bg-amber-500/20 hover:bg-amber-500/40 text-amber-500 font-bold px-4 py-2.5 rounded-xl transition-colors text-xs border border-amber-500/30">Atualizar Nível</button>
                 </div>
                 <button onclick="expulsarUsuario()" class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 font-bold py-2.5 rounded-xl mt-3 text-xs transition-all border border-red-500/20"><i class="fa-solid fa-ban"></i> Revogar Acesso / Expulsar</button>
@@ -398,7 +415,7 @@
                     <select id="man-categoria" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium appearance-none custom-scrollbar"></select>
                 </div>
                 <div class="space-y-1.5">
-                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Status Final</label>
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Status Final do Lançamento</label>
                     <select id="man-status" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-bold text-emerald-400 bg-emerald-500/10 appearance-none">
                         <option value="Aprovado" class="text-black">Aprovado (Lançar Pontos Agora)</option>
                         <option value="Pendente" class="text-black">Pendente (Enviar p/ Auditoria)</option>
@@ -533,7 +550,7 @@
                         gsap.to(loader, { opacity: 0, duration: 0.5, onComplete: () => loader.classList.add('hidden') });
                         
                         inicializarEditorQuill();
-                        carregarConfiguracoesSistema(() => { iniciarEscutasGlobais(); });
+                        carregarConfiguracoesSistema(() => { iniciarEscutasGlobais(); atualizarDashboardAnalitico(); });
                     } else {
                         auth.signOut().then(() => { alert("Acesso Negado ou Revogado."); window.location.href = 'index.html'; });
                     }
@@ -762,6 +779,69 @@
             });
 
             carregarTabelaHistorico();
+            
+            // NOVO: Chama a atualização do Dashboard de KPIs quando a página inicia
+            atualizarDashboardAnalitico();
+        }
+
+        // ==========================================
+        // DASHBOARD ANALÍTICO DE INTELIGÊNCIA (NOVO)
+        // ==========================================
+        function atualizarDashboardAnalitico() {
+            db.collection("postagens").onSnapshot(snapshot => {
+                let postsFiltrados = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if(data.dataJulgamento || data.dataEnvio) {
+                        const dataBase = data.dataJulgamento || data.dataEnvio;
+                        const mesAnoPost = formatarMesAno(dataBase.toDate());
+                        if(mesAnoPost === mesAtualStr) postsFiltrados.push(data);
+                    }
+                });
+
+                const totalPostagens = postsFiltrados.length;
+                const aprovados = postsFiltrados.filter(p => p.status === 'Aprovado');
+                const taxaAprovacao = totalPostagens > 0 ? Math.round((aprovados.length / totalPostagens) * 100) : 0;
+                
+                let totalPontosGerados = 0;
+                let mapaTreinadores = {};
+                
+                aprovados.forEach(p => {
+                    let pts = p.pontosOverride !== undefined ? p.pontosOverride : 0;
+                    if(pts === 0 && p.pontosOverride === undefined) {
+                        const cfg = quadroPontosGlobal.find(q => q.nome === p.categoria);
+                        pts = cfg ? cfg.pontos : 0;
+                    }
+                    totalPontosGerados += pts;
+                    mapaTreinadores[p.nick] = (mapaTreinadores[p.nick] || 0) + pts;
+                });
+
+                let topNick = "Nenhum";
+                let topPts = -1;
+                Object.keys(mapaTreinadores).forEach(nick => {
+                    if(mapaTreinadores[nick] > topPts) {
+                        topPts = mapaTreinadores[nick];
+                        topNick = nick;
+                    }
+                });
+
+                const elTotal = document.getElementById('dash-total');
+                const elTaxa = document.getElementById('dash-taxa');
+                const elPontos = document.getElementById('dash-pontos');
+                const elTop1 = document.getElementById('dash-top1');
+
+                if(elTotal) elTotal.innerText = totalPostagens;
+                if(elTaxa) elTaxa.innerText = taxaAprovacao + '%';
+                if(elPontos) elPontos.innerText = totalPontosGerados;
+                if(elTop1) elTop1.innerText = topNick;
+            });
+        }
+
+        // Toda vez que o mês mudar, atualiza o Dashboard também
+        const selecionarFilterMesOriginal = selecionarFilterMes;
+        selecionarFilterMes = function(el) {
+            selecionarFilterMesOriginal(el);
+            atualizarDashboardAnalitico();
         }
 
         // ==========================================
