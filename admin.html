@@ -113,11 +113,11 @@
             </button>
             
             <button onclick="switchTab('regras', this)" class="nav-item only-admin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
-                <i class="fa-solid fa-file-contract w-5 text-center text-blue-400"></i> Regras do Sistema
+                <i class="fa-solid fa-file-contract w-5 text-center text-blue-400"></i> Editar Regras
             </button>
 
             <button onclick="switchTab('config', this)" class="nav-item only-admin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
-                <i class="fa-solid fa-sliders w-5 text-center text-amber-500"></i> Configurações Raiz
+                <i class="fa-solid fa-sliders w-5 text-center text-amber-500"></i> Editar Atividades
             </button>
         </nav>
 
@@ -185,7 +185,7 @@
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                             <i class="fa-solid fa-box-archive text-tre-brand"></i> Histórico Geral
                         </h2>
-                        <p class="text-white/40 text-xs md:text-sm">Arquivo de atividades com controle total de edição para Admins.</p>
+                        <p class="text-white/40 text-xs md:text-sm">Arquivo de atividades.</p>
                     </div>
                 </div>
 
@@ -227,7 +227,7 @@
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                             <i class="fa-solid fa-user-lock text-tre-brand"></i> Acessos
                         </h2>
-                        <p class="text-white/40 text-xs md:text-sm">Gestão de credenciais e histórico de entradas no Ministério.</p>
+                        <p class="text-white/40 text-xs md:text-sm">Gestão de credenciais e histórico de acessos.</p>
                     </div>
                 </div>
 
@@ -261,7 +261,7 @@
                     <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                         <i class="fa-solid fa-users text-tre-brand"></i> Membros com Acesso
                     </h2>
-                    <p class="text-white/40 text-xs md:text-sm">Lista de usuários cadastrados divididos por poder administrativo.</p>
+                    <p class="text-white/40 text-xs md:text-sm">Lista de usuários cadastrados.</p>
                 </div>
 
                 <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-widest mb-5 mt-2 flex items-center gap-3">
@@ -349,7 +349,7 @@
             </div>
             
             <div class="w-full space-y-1.5 mb-6 text-left">
-                <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Biografia Profissional</label>
+                <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Biografia</label>
                 <textarea id="perfil-descricao" rows="3" placeholder="Sem biografia." class="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium custom-scrollbar"></textarea>
                 <button id="btn-save-perfil" onclick="salvarDescricaoPerfil(event)" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl mt-2 text-xs transition-colors">Salvar Biografia</button>
             </div>
