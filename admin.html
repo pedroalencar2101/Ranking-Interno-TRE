@@ -52,10 +52,12 @@
         #auth-loader { z-index: 9999; }
         body.role-convidado .only-admin { display: none !important; }
 
+        /* Estilos do QuillJS adaptados para o tema Escuro/Vidro */
         .ql-toolbar.ql-snow { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 1rem 1rem 0 0; padding: 12px; }
         .ql-container.ql-snow { background: rgba(10, 1, 2, 0.6); border: 1px solid rgba(255, 255, 255, 0.1) !important; border-top: none !important; border-radius: 0 0 1rem 1rem; color: white; font-family: 'Inter', sans-serif; font-size: 14px; min-height: 400px; }
         .ql-snow .ql-stroke { stroke: rgba(255, 255, 255, 0.7); } .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill { fill: rgba(255, 255, 255, 0.7); } .ql-snow .ql-picker { color: rgba(255, 255, 255, 0.7); } .ql-snow .ql-picker-options { background-color: #0A0102; border-color: rgba(255,255,255,0.1); }
         .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke { stroke: #D31522; } .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill { fill: #D31522; }
+        .ql-editor p { margin-bottom: 0.75em; }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand flex h-screen role-convidado">
@@ -94,11 +96,9 @@
             <button onclick="switchTab('lista-admin', this)" class="nav-item w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
                 <i class="fa-solid fa-users w-5 text-center"></i> Membros com Acesso
             </button>
-            
             <button onclick="switchTab('regras', this)" class="nav-item only-admin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
                 <i class="fa-solid fa-file-contract w-5 text-center text-blue-400"></i> Regras do Sistema
             </button>
-
             <button onclick="switchTab('config', this)" class="nav-item only-admin w-full text-left px-6 py-3.5 text-sm font-semibold text-white/70 flex items-center gap-3.5">
                 <i class="fa-solid fa-sliders w-5 text-center text-amber-500"></i> Configurações Raiz
             </button>
@@ -114,7 +114,6 @@
                     <p class="text-[9px] text-amber-500 font-bold uppercase tracking-widest mt-0.5" id="admin-user-role">...</p>
                 </div>
             </button>
-
             <button onclick="logout()" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white text-xs font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Encerrar Sessão
             </button>
@@ -142,7 +141,13 @@
                         <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white uppercase mb-1 flex items-center gap-4">
                             <i class="fa-solid fa-chart-pie text-tre-brand"></i> Visão Geral
                         </h2>
-                        <p class="text-white/40 text-xs md:text-sm">Inteligência de Dados e KPIs da Companhia no mês atual.</p>
+                        <p class="text-white/40 text-xs md:text-sm">Inteligência de Dados e KPIs da Companhia no mês selecionado.</p>
+                    </div>
+                    
+                    <div class="relative z-50">
+                        <button id="btn-filter-mes-dash" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white hover:text-white transition-colors border border-white/10">
+                            <i class="fa-solid fa-calendar-alt text-amber-500"></i> <span id="texto-filter-mes-dash">Carregando...</span> <i id="icone-filter-seta-dash" class="fa-solid fa-chevron-down text-xs ml-1 opacity-40"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -189,9 +194,7 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="grid-atividades" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-                
                 <div id="empty-atividades" class="hidden flex-col items-center justify-center py-24 text-center glass-card p-10 border-dashed border-2 border-white/5">
                     <div class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/10 shadow-vivid"><i class="fa-solid fa-check-double text-4xl text-emerald-400"></i></div>
                     <h3 class="text-xl font-black uppercase text-white tracking-widest">Fila Limpa!</h3>
@@ -211,10 +214,9 @@
 
                 <div class="glass-panel-simple p-5 flex flex-wrap items-center justify-between gap-4 mb-6 rounded-xl border border-white/5 relative z-[100] overflow-visible">
                     <div class="relative">
-                        <button id="btn-filter-mes" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white hover:text-white transition-colors border border-white/10">
-                            <i class="fa-solid fa-calendar-alt text-amber-500"></i> <span id="texto-filter-mes">Carregando...</span> <i id="icone-filter-seta" class="fa-solid fa-chevron-down text-xs ml-1 opacity-40"></i>
+                        <button id="btn-filter-mes-hist" onclick="toggleFilterDropdown()" class="glass-panel-simple !bg-white/5 px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 text-white hover:text-white transition-colors border border-white/10">
+                            <i class="fa-solid fa-calendar-alt text-amber-500"></i> <span id="texto-filter-mes-hist">Carregando...</span> <i id="icone-filter-seta-hist" class="fa-solid fa-chevron-down text-xs ml-1 opacity-40"></i>
                         </button>
-                        <div id="menu-filter-meses" class="absolute left-0 top-full mt-2 w-56 glass-panel-simple !bg-[#0A0102]/95 rounded-lg opacity-0 invisible translate-y-2 transition-all z-50 overflow-hidden flex flex-col text-sm border border-white/10 max-h-64 overflow-y-auto custom-scrollbar"></div>
                     </div>
                     <div class="relative w-full md:w-80">
                         <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/40"></i>
@@ -241,6 +243,8 @@
                 </div>
             </div>
 
+            <div id="menu-filter-meses" class="absolute left-10 md:left-[50px] top-[260px] md:top-[220px] w-56 glass-panel-simple !bg-[#0A0102]/95 rounded-xl opacity-0 invisible translate-y-2 transition-all z-[999] overflow-hidden flex flex-col text-sm border border-white/10 max-h-64 overflow-y-auto custom-scrollbar"></div>
+
             <div id="tab-acessos" class="tab-content hidden opacity-0 relative z-10">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 pb-6 border-b border-white/5">
                     <div>
@@ -250,14 +254,12 @@
                         <p class="text-white/40 text-xs md:text-sm">Gestão de credenciais e histórico de entradas no Ministério.</p>
                     </div>
                 </div>
-
                 <h3 class="text-lg font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2"><i class="fa-solid fa-clock text-amber-500"></i> Fila de Aprovação</h3>
                 <div id="grid-acessos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"></div>
                 <div id="empty-acessos" class="hidden flex-col items-center justify-center py-10 text-center glass-card border-dashed border-2 border-white/5 mb-12">
                     <i class="fa-solid fa-user-shield text-3xl text-white/20 mb-3"></i>
                     <p class="text-sm text-white/50 font-bold">Nenhum pedido pendente.</p>
                 </div>
-
                 <h3 class="text-lg font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2"><i class="fa-solid fa-folder-open text-white/30"></i> Histórico de Credenciais</h3>
                 <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl">
                     <div class="overflow-x-auto pb-2">
@@ -283,12 +285,10 @@
                     </h2>
                     <p class="text-white/40 text-xs md:text-sm">Lista de usuários cadastrados divididos por poder administrativo.</p>
                 </div>
-
                 <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-widest mb-5 mt-2 flex items-center gap-3">
                     <i class="fa-solid fa-star text-amber-500"></i> Administração (Ministério)
                 </h3>
                 <div id="grid-admin-list-admins" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16"></div>
-
                 <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-widest mb-5 flex items-center gap-3 border-t border-white/5 pt-10">
                     <i class="fa-solid fa-user text-white/50"></i> Convidados (Leitura)
                 </h3>
@@ -324,7 +324,6 @@
                         <i class="fa-solid fa-plus"></i> Adicionar Atividade
                     </button>
                 </div>
-
                 <div class="glass-panel-simple rounded-2xl overflow-hidden p-1 shadow-3xl">
                     <div class="overflow-x-auto pb-2">
                         <table class="w-full text-left border-collapse min-w-full text-sm">
@@ -415,7 +414,7 @@
                     <select id="man-categoria" required class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-medium appearance-none custom-scrollbar"></select>
                 </div>
                 <div class="space-y-1.5">
-                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Status Final do Lançamento</label>
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-white/40 ml-1">Status Final</label>
                     <select id="man-status" class="w-full glass-input rounded-xl px-4 py-2.5 text-sm font-bold text-emerald-400 bg-emerald-500/10 appearance-none">
                         <option value="Aprovado" class="text-black">Aprovado (Lançar Pontos Agora)</option>
                         <option value="Pendente" class="text-black">Pendente (Enviar p/ Auditoria)</option>
@@ -569,7 +568,7 @@
         function isAdmin() { return currentUserRole === "Admin"; }
 
         // ==========================================
-        // 3. UI E NAVEGAÇÃO
+        // 3. UI E NAVEGAÇÃO E DROPDOWNS COMPARTILHADOS
         // ==========================================
         function toggleSidebar() { const sb = document.getElementById('sidebar'), ov = document.getElementById('sidebar-overlay'); sb.classList.toggle('-translate-x-full'); ov.classList.toggle('hidden'); }
         function toggleModal(id) { const m = document.getElementById(id), c = m.querySelector('div.relative.transform'); if (m.classList.contains('opacity-0')) { m.classList.remove('opacity-0', 'invisible'); setTimeout(() => c.classList.replace('scale-95', 'scale-100'), 10); } else { c.classList.replace('scale-100', 'scale-95'); setTimeout(() => m.classList.add('opacity-0', 'invisible'), 200); } }
@@ -581,9 +580,6 @@
             if(window.innerWidth < 768) toggleSidebar(); 
         }
 
-        // ==========================================
-        // 4. MOTOR DINÂMICO DE MESES E DATA
-        // ==========================================
         const mesesNomes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
         const dataAtualGlobal = new Date();
         let mesAtualStr = `${mesesNomes[dataAtualGlobal.getMonth()]} ${dataAtualGlobal.getFullYear()}`;
@@ -593,11 +589,19 @@
             const d = fsTimestamp.toDate();
             return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')} às ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
         }
+        function formatarMesAno(data) {
+            return `${mesesNomes[data.getMonth()]} ${data.getFullYear()}`;
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const textoMesBtn = document.getElementById('texto-filter-mes'); const menuMeses = document.getElementById('menu-filter-meses');
-            if(textoMesBtn && menuMeses) {
-                textoMesBtn.innerText = mesAtualStr; menuMeses.innerHTML = '';
+            const menuMeses = document.getElementById('menu-filter-meses');
+            const textoDash = document.getElementById('texto-filter-mes-dash');
+            const textoHist = document.getElementById('texto-filter-mes-hist');
+
+            if(menuMeses) {
+                if(textoDash) textoDash.innerText = mesAtualStr;
+                if(textoHist) textoHist.innerText = mesAtualStr;
+                menuMeses.innerHTML = '';
                 for(let i = 0; i < 12; i++) {
                     let d = new Date(dataAtualGlobal.getFullYear(), dataAtualGlobal.getMonth() - i, 1);
                     let n = `${mesesNomes[d.getMonth()]} ${d.getFullYear()}`;
@@ -606,12 +610,30 @@
             }
         });
 
-        function toggleFilterDropdown() { const m = document.getElementById('menu-filter-meses'); const s = document.getElementById('icone-filter-seta'); m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2'); s.classList.toggle('rotate-180'); }
-        function selecionarFilterMes(el) { mesAtualStr = el.innerText; document.getElementById('texto-filter-mes').innerText = mesAtualStr; toggleFilterDropdown(); carregarTabelaHistorico(); }
+        function toggleFilterDropdown() { 
+            const m = document.getElementById('menu-filter-meses'); 
+            const sd = document.getElementById('icone-filter-seta-dash'); 
+            const sh = document.getElementById('icone-filter-seta-hist'); 
+            m.classList.toggle('opacity-0'); m.classList.toggle('invisible'); m.classList.toggle('translate-y-2'); 
+            if(sd) sd.classList.toggle('rotate-180'); 
+            if(sh) sh.classList.toggle('rotate-180'); 
+        }
+        
+        function selecionarFilterMes(el) { 
+            mesAtualStr = el.innerText; 
+            const tDash = document.getElementById('texto-filter-mes-dash');
+            const tHist = document.getElementById('texto-filter-mes-hist');
+            if(tDash) tDash.innerText = mesAtualStr; 
+            if(tHist) tHist.innerText = mesAtualStr; 
+            toggleFilterDropdown(); 
+            carregarTabelaHistorico(); 
+            atualizarDashboardAnalitico(); 
+        }
+
         function filtrarHistoricoBusca() { const t = document.getElementById('search-historico').value.toLowerCase(); document.querySelectorAll('#table-historico-list tr').forEach(r => { r.style.display = r.querySelector('.nick-cell').innerText.toLowerCase().includes(t) ? '' : 'none'; }); }
 
         // ==========================================
-        // 5. EDITOR DE REGRAS (TIPO WORD - QUILLJS)
+        // 4. EDITOR DE REGRAS (TIPO WORD - QUILLJS)
         // ==========================================
         function inicializarEditorQuill() {
             editorRegrasQuill = new Quill('#editor-regras', {
@@ -641,32 +663,25 @@
         function salvarRegrasWord() {
             const btn = document.getElementById('btn-salvar-regras');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
-            
             const htmlContent = editorRegrasQuill.root.innerHTML;
-
             db.collection("configuracoes").doc("regras_sistema").set({ 
-                conteudoHTML: htmlContent,
-                atualizadoPor: currentUserNick,
-                dataAtualizacao: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => { 
+                conteudoHTML: htmlContent, atualizadoPor: currentUserNick, dataAtualizacao: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => { 
                 alert("As regras do site foram atualizadas com sucesso!"); 
                 btn.innerHTML = '<i class="fa-solid fa-save"></i> Salvar Regras';
-            })
-            .catch(err => { 
+            }).catch(err => { 
                 alert("Erro ao salvar regras."); 
                 btn.innerHTML = '<i class="fa-solid fa-save"></i> Salvar Regras';
             });
         }
 
         // ==========================================
-        // 6. CONFIGURAÇÕES RAIZ (Atividades)
+        // 5. CONFIGURAÇÕES RAIZ (Atividades)
         // ==========================================
         function carregarConfiguracoesSistema(callback) {
             db.collection("configuracoes").doc("quadro_pontos").onSnapshot(doc => {
                 if (doc.exists && doc.data().atividades) { quadroPontosGlobal = doc.data().atividades; } 
                 else { quadroPontosGlobal = [{ id: "cfg_1", nome: "Destaque Semanal", grupo: "Destaques", pontos: 4, responsavel: "LIDERANÇA" }]; db.collection("configuracoes").doc("quadro_pontos").set({ atividades: quadroPontosGlobal }); }
-                
                 renderizarTabelaConfig(); atualizarDropdownsDeAtividade();
                 if(callback) callback(); 
             });
@@ -703,6 +718,59 @@
             db.collection("configuracoes").doc("quadro_pontos").update({ atividades: l }).then(() => toggleModal('modal-config-atividade')).catch(err => alert("Erro ao salvar atividade."));
         }
         function excluirAtividadeConfig(id) { if(confirm("Excluir permanentemente?")) db.collection("configuracoes").doc("quadro_pontos").update({ atividades: quadroPontosGlobal.filter(q => q.id !== id) }); }
+
+        // ==========================================
+        // 6. DASHBOARD ANALÍTICO EM TEMPO REAL
+        // ==========================================
+        function atualizarDashboardAnalitico() {
+            db.collection("postagens").onSnapshot(snapshot => {
+                let postsFiltrados = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    let dataBase = data.dataJulgamento || data.dataEnvio;
+                    if(dataBase && typeof dataBase.toDate === 'function') {
+                        const mesAnoPost = formatarMesAno(dataBase.toDate());
+                        if(mesAnoPost === mesAtualStr) postsFiltrados.push(data);
+                    }
+                });
+
+                const totalPostagens = postsFiltrados.length;
+                const aprovados = postsFiltrados.filter(p => p.status === 'Aprovado');
+                const taxaAprovacao = totalPostagens > 0 ? Math.round((aprovados.length / totalPostagens) * 100) : 0;
+                
+                let totalPontosGerados = 0;
+                let mapaTreinadores = {};
+                
+                aprovados.forEach(p => {
+                    let pts = p.pontosOverride;
+                    if(pts === undefined) {
+                        const cfg = quadroPontosGlobal.find(q => q.nome === p.categoria);
+                        pts = cfg ? cfg.pontos : 0;
+                    }
+                    totalPontosGerados += pts;
+                    mapaTreinadores[p.nick] = (mapaTreinadores[p.nick] || 0) + pts;
+                });
+
+                let topNick = "Nenhum";
+                let topPts = -1;
+                Object.keys(mapaTreinadores).forEach(nick => {
+                    if(mapaTreinadores[nick] > topPts) {
+                        topPts = mapaTreinadores[nick];
+                        topNick = nick;
+                    }
+                });
+
+                const elTotal = document.getElementById('dash-total');
+                const elTaxa = document.getElementById('dash-taxa');
+                const elPontos = document.getElementById('dash-pontos');
+                const elTop1 = document.getElementById('dash-top1');
+
+                if(elTotal) elTotal.innerText = totalPostagens;
+                if(elTaxa) elTaxa.innerText = taxaAprovacao + '%';
+                if(elPontos) elPontos.innerText = totalPontosGerados;
+                if(elTop1) elTop1.innerText = topNick;
+            });
+        }
 
         // ==========================================
         // 7. ESCUTAS GLOBAIS E AUDITORIA
@@ -779,69 +847,6 @@
             });
 
             carregarTabelaHistorico();
-            
-            // NOVO: Chama a atualização do Dashboard de KPIs quando a página inicia
-            atualizarDashboardAnalitico();
-        }
-
-        // ==========================================
-        // DASHBOARD ANALÍTICO DE INTELIGÊNCIA (NOVO)
-        // ==========================================
-        function atualizarDashboardAnalitico() {
-            db.collection("postagens").onSnapshot(snapshot => {
-                let postsFiltrados = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    if(data.dataJulgamento || data.dataEnvio) {
-                        const dataBase = data.dataJulgamento || data.dataEnvio;
-                        const mesAnoPost = formatarMesAno(dataBase.toDate());
-                        if(mesAnoPost === mesAtualStr) postsFiltrados.push(data);
-                    }
-                });
-
-                const totalPostagens = postsFiltrados.length;
-                const aprovados = postsFiltrados.filter(p => p.status === 'Aprovado');
-                const taxaAprovacao = totalPostagens > 0 ? Math.round((aprovados.length / totalPostagens) * 100) : 0;
-                
-                let totalPontosGerados = 0;
-                let mapaTreinadores = {};
-                
-                aprovados.forEach(p => {
-                    let pts = p.pontosOverride !== undefined ? p.pontosOverride : 0;
-                    if(pts === 0 && p.pontosOverride === undefined) {
-                        const cfg = quadroPontosGlobal.find(q => q.nome === p.categoria);
-                        pts = cfg ? cfg.pontos : 0;
-                    }
-                    totalPontosGerados += pts;
-                    mapaTreinadores[p.nick] = (mapaTreinadores[p.nick] || 0) + pts;
-                });
-
-                let topNick = "Nenhum";
-                let topPts = -1;
-                Object.keys(mapaTreinadores).forEach(nick => {
-                    if(mapaTreinadores[nick] > topPts) {
-                        topPts = mapaTreinadores[nick];
-                        topNick = nick;
-                    }
-                });
-
-                const elTotal = document.getElementById('dash-total');
-                const elTaxa = document.getElementById('dash-taxa');
-                const elPontos = document.getElementById('dash-pontos');
-                const elTop1 = document.getElementById('dash-top1');
-
-                if(elTotal) elTotal.innerText = totalPostagens;
-                if(elTaxa) elTaxa.innerText = taxaAprovacao + '%';
-                if(elPontos) elPontos.innerText = totalPontosGerados;
-                if(elTop1) elTop1.innerText = topNick;
-            });
-        }
-
-        // Toda vez que o mês mudar, atualiza o Dashboard também
-        const selecionarFilterMesOriginal = selecionarFilterMes;
-        selecionarFilterMes = function(el) {
-            selecionarFilterMesOriginal(el);
-            atualizarDashboardAnalitico();
         }
 
         // ==========================================
@@ -885,8 +890,22 @@
         function carregarTabelaHistorico() {
             const list = document.getElementById('table-historico-list'); list.innerHTML = '<tr><td colspan="6" class="p-10 text-center"><i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...</td></tr>';
             db.collection("postagens").where("status", "in", ["Aprovado", "Rejeitado", "Pendente"]).onSnapshot((snap) => {
-                let filtrados = []; snap.forEach(doc => { const d = doc.data(); d.id = doc.id; if(d.dataEnvio || d.dataJulgamento) { let t = d.dataJulgamento || d.dataEnvio; d.mesAnoStr = `${mesesNomes[t.toDate().getMonth()]} ${t.toDate().getFullYear()}`; filtrados.push(d); } });
-                filtrados = filtrados.filter(p => p.mesAnoStr === mesAtualStr).sort((a, b) => (b.dataJulgamento||b.dataEnvio).toDate() - (a.dataJulgamento||a.dataEnvio).toDate());
+                let filtrados = []; 
+                snap.forEach(doc => { 
+                    const d = doc.data(); d.id = doc.id; 
+                    let dataBase = d.dataJulgamento || d.dataEnvio;
+                    if(dataBase && typeof dataBase.toDate === 'function') { 
+                        d.mesAnoStr = formatarMesAno(dataBase.toDate()); 
+                        filtrados.push(d); 
+                    } 
+                });
+                
+                filtrados = filtrados.filter(p => p.mesAnoStr === mesAtualStr).sort((a, b) => {
+                    let dateA = a.dataJulgamento || a.dataEnvio;
+                    let dateB = b.dataJulgamento || b.dataEnvio;
+                    return dateB.toDate() - dateA.toDate();
+                });
+
                 list.innerHTML = '';
                 if(filtrados.length === 0) { list.innerHTML = '<tr><td colspan="6" class="p-10 text-center opacity-40">Mês sem registros.</td></tr>'; return; }
                 
@@ -922,7 +941,7 @@
         }
 
         // ==========================================
-        // 10. GESTÃO DE PERFIL E DATAS NO MODAL
+        // 10. GESTÃO DE PERFIL NO MODAL
         // ==========================================
         function toggleCargoDropdown() {
             const menu = document.getElementById('menu-cargo-dropdown');
