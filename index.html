@@ -93,9 +93,7 @@
             opacity: 0.1;
             transition: opacity 0.8s ease;
         }
-        .tilt-card:hover .neon-glow { 
-            opacity: 0.25; 
-        }
+        .tilt-card:hover .neon-glow { opacity: 0.25; }
 
         .z-avatar {
             transform-origin: bottom center; 
@@ -121,72 +119,35 @@
         /* ==========================================
            INPUTS E CARDS DE ATIVIDADE
            ========================================== */
-        .glass-input {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: theme('colors.tre.brand');
-            outline: none;
-            box-shadow: 0 0 15px rgba(211, 21, 34, 0.2);
-        }
+        .glass-input { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
+        .glass-input:focus { background: rgba(255, 255, 255, 0.07); border-color: theme('colors.tre.brand'); outline: none; box-shadow: 0 0 15px rgba(211, 21, 34, 0.2); }
 
-        .activity-grid-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 0.75rem;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        .activity-grid-card:hover {
-            border-color: rgba(211, 21, 34, 0.3);
-            background: rgba(35, 6, 8, 0.5);
-            transform: scale(1.02);
-        }
-        .activity-grid-card.active {
-            border-color: theme('colors.tre.brand');
-            background: rgba(35, 6, 8, 0.8);
-            box-shadow: 0 0 20px rgba(211, 21, 34, 0.3);
-        }
-        .activity-grid-card.active::after {
-            content: ''; 
-            position: absolute; 
-            inset: -1px; 
-            border-radius: inherit; 
-            border: 1px solid transparent;
-            background: linear-gradient(to bottom right, rgba(211, 21, 34, 1), rgba(211, 21, 34, 0)) border-box;
-            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: destination-out; 
-            mask-composite: exclude; 
-            opacity: 0.6;
-        }
+        .activity-grid-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.75rem; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); cursor: pointer; position: relative; overflow: hidden; }
+        .activity-grid-card:hover { border-color: rgba(211, 21, 34, 0.3); background: rgba(35, 6, 8, 0.5); transform: scale(1.02); }
+        .activity-grid-card.active { border-color: theme('colors.tre.brand'); background: rgba(35, 6, 8, 0.8); box-shadow: 0 0 20px rgba(211, 21, 34, 0.3); }
+        .activity-grid-card.active::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid transparent; background: linear-gradient(to bottom right, rgba(211, 21, 34, 1), rgba(211, 21, 34, 0)) border-box; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; opacity: 0.6; }
 
-        .point-badge { 
-            font-family: 'Inter', sans-serif; 
-            font-weight: 800; 
-            font-size: 10px; 
-            padding: 2px 6px; 
-            border-radius: 4px; 
-            letter-spacing: -0.02em; 
-        }
+        .point-badge { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 4px; letter-spacing: -0.02em; }
         .point-plus { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
         .point-minus { background: rgba(239, 68, 68, 0.2); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        /* ==========================================
-           SCROLLBARS ESTILIZADAS
-           ========================================== */
+        /* SCROLLBARS ESTILIZADAS */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0A0102; }
         ::-webkit-scrollbar-thumb { background: #D31522; border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+        /* FORMATADOR DE TEXTO PARA AS REGRAS (WORD) */
+        .regras-html-format { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.6; }
+        .regras-html-format h1 { font-size: 1.5em; font-weight: 800; color: white; margin-bottom: 0.5em; }
+        .regras-html-format h2 { font-size: 1.2em; font-weight: 700; color: white; margin-bottom: 0.5em; }
+        .regras-html-format p { margin-bottom: 0.8em; }
+        .regras-html-format strong { color: white; font-weight: 800; }
+        .regras-html-format ol { list-style-type: decimal; margin-left: 1.5em; margin-bottom: 1em; }
+        .regras-html-format ul { list-style-type: disc; margin-left: 1.5em; margin-bottom: 1em; }
+        .regras-html-format a { color: #3b82f6; text-decoration: underline; }
     </style>
 </head>
 <body class="antialiased selection:bg-tre-brand selection:text-white flex flex-col" id="topo">
@@ -407,14 +368,14 @@
 
     <div id="modal-regras" class="fixed inset-0 z-[100] flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-md" onclick="toggleModal('modal-regras')"></div>
-        <div class="relative w-full max-w-2xl bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl p-6 shadow-2xl transform scale-95 transition-all">
-            <h2 class="text-xl font-black text-white uppercase border-b border-white/10 pb-4 mb-4">Regras do Ranking</h2>
+        <div class="relative w-full max-w-3xl bg-gradient-to-b from-[#1A0305] to-[#0A0102] border border-white/10 rounded-2xl p-8 shadow-2xl transform scale-95 transition-all">
+            <h2 class="text-xl font-black text-white uppercase border-b border-white/10 pb-4 mb-6"><i class="fa-solid fa-file-contract text-blue-400 mr-2"></i> Regras do Ranking</h2>
             
-            <div id="regras-dinamicas-container" class="custom-scrollbar overflow-y-auto max-h-[50vh] pr-2 text-white/70 text-sm space-y-3">
-                <p class="text-center py-4"><i class="fa-solid fa-spinner fa-spin"></i> Carregando regras do sistema...</p>
+            <div id="regras-dinamicas-container" class="custom-scrollbar overflow-y-auto max-h-[55vh] pr-4 regras-html-format">
+                <p class="text-center py-10 text-white/30"><i class="fa-solid fa-spinner fa-spin"></i> Carregando sistema de regras...</p>
             </div>
 
-            <button onclick="toggleModal('modal-regras')" class="mt-6 w-full bg-white/5 py-2 rounded-lg text-white font-bold border border-white/10 text-xs">Fechar</button>
+            <button onclick="toggleModal('modal-regras')" class="mt-8 w-full bg-white/5 py-3 rounded-lg text-white font-bold border border-white/10 text-sm hover:bg-white/10 transition-colors">Fechar Entendido</button>
         </div>
     </div>
 
@@ -506,18 +467,16 @@
         }
 
         // ==========================================
-        // CARREGAMENTO DINÂMICO DE REGRAS (NOVO)
+        // CARREGAMENTO DINÂMICO DO EDITOR DE REGRAS 
         // ==========================================
         db.collection("configuracoes").doc("regras_sistema").onSnapshot(doc => {
             const container = document.getElementById('regras-dinamicas-container');
             if (container) {
-                if (doc.exists && doc.data().regras && doc.data().regras.length > 0) {
-                    container.innerHTML = '';
-                    doc.data().regras.forEach(regra => {
-                        container.innerHTML += `<p>• ${regra}</p>`;
-                    });
+                if (doc.exists && doc.data().conteudoHTML) {
+                    // Injeta o HTML formatado vindo do QuillJS (Painel Admin)
+                    container.innerHTML = doc.data().conteudoHTML;
                 } else {
-                    container.innerHTML = '<p class="text-center text-white/40">Nenhuma regra cadastrada pelo Ministério.</p>';
+                    container.innerHTML = '<p class="text-center text-white/40">O Ministério ainda não definiu as regras do sistema.</p>';
                 }
             }
         });
